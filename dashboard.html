@@ -4,102 +4,380 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Dashboard – Medleymed Network</title>
+<script>(function(){var t;try{t=localStorage.getItem('mm-theme')}catch(e){}if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t)})()</script>
 <script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script>
-tailwind.config={theme:{extend:{colors:{navy:'#06173d',navy2:'#0a2a6b',teal:'#14b8d4',teal2:'#0891b2'},fontFamily:{sans:['Inter','sans-serif']}}}}
+tailwind.config={theme:{extend:{colors:{navy:'#0f1535',navy2:'#2D3691',teal:'#17B7CD',teal2:'var(--link)'},fontFamily:{sans:['Inter','ui-sans-serif','system-ui','sans-serif']}}}}
 </script>
 <style>
-  body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#eaf6fd 0%,#f6fbfe 50%,#e3f3fb 100%);color:#06173d;min-height:100vh}
-  .side{background:linear-gradient(180deg,#041334 0%,#06235a 55%,#0a6fb5 100%)}
+  /* ===== typography system (identical in index.html and dashboard.html) =====
+     one family: Inter 400/500/600/700/800 · headings 800 + tight tracking · labels 600 · body 400/500
+     numbers use tabular digits so counters, tables and totals never jitter */
+  html{-webkit-text-size-adjust:100%}
+  body{font-family:'Inter',ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
+  h1,h2{letter-spacing:-.025em;font-weight:800}
+  h3,h4{letter-spacing:-.01em}
+  html button,html input,html select,html textarea,html kbd{font-family:inherit}
+  .count,#tbl,.tabular,[id^="v-"],#salesTotal,#donutTotal{font-variant-numeric:tabular-nums}
+  :root{--sw:16rem}
+  body.collapsed{--sw:5rem}
+  body{color:#0f1535;min-height:100vh;
+    background:radial-gradient(900px 500px at 90% -10%,#cdeefb 0,transparent 60%),radial-gradient(700px 500px at -10% 40%,#dbeafe 0,transparent 55%),#f3f9fd}
+  @media(min-width:1024px){.shell{padding-left:var(--sw);transition:padding .3s}}
+  /* sidebar */
+  .side{background:var(--side-bg);width:16rem;transition:transform .3s,width .3s}
+  @media(min-width:1024px){body.collapsed .side{width:5rem}body.collapsed .lbl,body.collapsed .side-promo,body.collapsed .brand-txt{display:none}body.collapsed .nav-item{justify-content:center;padding-inline:0}}
   .nav-item{display:flex;align-items:center;gap:.9rem;padding:.7rem 1rem;border-radius:.9rem;color:#d3e2f7;font-size:.9rem;font-weight:500;transition:background .2s,transform .2s,color .2s}
-  .nav-item:hover{background:rgba(255,255,255,.1);color:#fff;transform:translateX(4px)}
+  .nav-item:hover{background:rgba(255,255,255,.1);color:#fff}
   .nav-item.active{background:linear-gradient(90deg,#1aa7d8,#2bc4e4);color:#fff;box-shadow:0 8px 24px rgba(34,211,238,.4)}
-  .card{background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.9);border-radius:1.4rem;box-shadow:0 10px 35px rgba(20,120,190,.10);transition:transform .3s,box-shadow .3s}
-  .card:hover{transform:translateY(-4px);box-shadow:0 18px 45px rgba(20,150,210,.2)}
-  .grad{background:linear-gradient(90deg,#22d3ee,#14b8d4);-webkit-background-clip:text;background-clip:text;color:transparent}
+  /* cards */
+  .card{background:rgba(255,255,255,.88);backdrop-filter:blur(10px);border:1px solid #fff;border-radius:1.4rem;box-shadow:0 1px 2px rgba(10,60,120,.04),0 12px 32px rgba(20,120,190,.09)}
+  .hov{transition:transform .3s,box-shadow .3s}.hov:hover{transform:translateY(-4px);box-shadow:0 18px 44px rgba(20,150,210,.2)}
+  .grad{background:linear-gradient(90deg,#22d3ee,#5eead4);-webkit-background-clip:text;background-clip:text;color:transparent}
   .spark path.line{stroke-dasharray:400;stroke-dashoffset:400;animation:draw 1.8s .3s ease forwards}
   @keyframes draw{to{stroke-dashoffset:0}}
   .rise{opacity:0;transform:translateY(24px);animation:rise .7s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:var(--d,0s)}
   @keyframes rise{to{opacity:1;transform:none}}
-  .badge{padding:.2rem .7rem;border-radius:999px;font-size:.72rem;font-weight:600;white-space:nowrap}
-  .b-Pending{background:#ffe8cf;color:#d97706}.b-Delivered{background:#d3f7e0;color:#16a34a}.b-Cancelled{background:#fde0e0;color:#dc2626}
-  .ctl{background:#fff;border:1px solid #dbe8f3;border-radius:.8rem;padding:.55rem .9rem;font-size:.8rem;outline:none;transition:border .2s,box-shadow .2s;width:100%}
-  .ctl:focus{border-color:#14b8d4;box-shadow:0 0 0 3px rgba(20,184,212,.2)}
-  tbody tr{transition:background .2s}tbody tr:hover{background:#eef8fd}
-  .qa{background:#fff;border-radius:1.1rem;box-shadow:0 8px 22px rgba(20,120,190,.12);transition:transform .25s,box-shadow .25s}
-  .qa:hover{transform:translateY(-6px);box-shadow:0 16px 32px rgba(20,184,212,.3)}
-  .qa:hover .arrow{background:#14b8d4;color:#fff}
   @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
   .floaty{animation:floaty 5s ease-in-out infinite}
-  .banner-img{-webkit-mask-image:linear-gradient(to right,transparent 0,#000 38%),linear-gradient(to left,transparent 0,#000 4%),linear-gradient(to bottom,transparent 0,#000 10%,#000 88%,transparent 100%);-webkit-mask-composite:source-in;
-    mask-image:linear-gradient(to right,transparent 0,#000 38%),linear-gradient(to left,transparent 0,#000 4%),linear-gradient(to bottom,transparent 0,#000 10%,#000 88%,transparent 100%);mask-composite:intersect}
+  @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+  .banner-img{-webkit-mask-image:linear-gradient(to right,transparent 0,#000 24%),linear-gradient(to left,transparent 0,#000 3%),linear-gradient(to bottom,transparent 0,#000 10%,#000 88%,transparent 100%);-webkit-mask-composite:source-in;
+    mask-image:linear-gradient(to right,transparent 0,#000 24%),linear-gradient(to left,transparent 0,#000 3%),linear-gradient(to bottom,transparent 0,#000 10%,#000 88%,transparent 100%);mask-composite:intersect}
+  .wave{animation:wave 2.4s ease-in-out infinite}
+  @keyframes wave{0%,60%,100%{transform:rotate(0)}10%,30%{transform:rotate(16deg)}20%,40%{transform:rotate(-10deg)}50%{transform:rotate(8deg)}}
+  .orb{animation:orb 9s ease-in-out infinite}.orb2{animation:orb 11s ease-in-out infinite reverse}
+  @keyframes orb{50%{transform:translate(30px,18px) scale(1.15)}}
+  .wspark{stroke-dasharray:90;stroke-dashoffset:90;animation:draw 1.6s .6s ease forwards}
+  /* ===== design system: buttons (one primary colour, one secondary style) ===== */
+  .btn-primary,.btn-secondary{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;font-weight:600;font-size:.875rem;line-height:1.25rem;border-radius:.8rem;padding:.6rem 1.4rem;border:1px solid transparent;cursor:pointer;transition:background .2s,border-color .2s,box-shadow .2s,transform .2s,color .2s;white-space:nowrap}
+  .btn-primary{background:var(--primary);color:#fff;box-shadow:0 8px 18px -8px rgba(23,183,205,.7)}
+  .btn-primary:hover{background:var(--primary-hover);transform:translateY(-1px)}
+  .btn-secondary{background:#fff;color:var(--primary);border-color:#b7e1ec}
+  .btn-secondary:hover{background:var(--primary-soft);border-color:var(--primary)}
+  .btn-primary:focus-visible,.btn-secondary:focus-visible{outline:0;box-shadow:0 0 0 3px rgba(23,183,205,.3)}
+  .btn-lg{padding:.65rem 2rem}
+  .btn-sm{padding:.35rem .9rem;font-size:.75rem;border-radius:999px}
+  .btn-attached{border-radius:0 .8rem .8rem 0;padding:0 1rem;box-shadow:none}
+  .btn-attached:hover{transform:none}
+  .pg-on{background:var(--primary);color:#fff;box-shadow:0 6px 14px -6px rgba(23,183,205,.7)}
+  .pg-off{background:#fff;border:1px solid #e2e8f0}.pg-off:hover{border-color:var(--primary);color:var(--primary)}
+  /* date-range picker */
+  .rp-pop{position:absolute;left:0;top:100%;margin-top:.5rem;z-index:40;background:#fff;border:1px solid #d9e3ec;border-radius:.9rem;box-shadow:0 22px 55px rgba(10,40,90,.28);display:flex;overflow:hidden;max-width:calc(100vw - 2rem);color:#1f2d3d;text-align:left}
+  .rp-pop.hidden{display:none}.rp-pop.rp-right{left:auto;right:0}
+  .rp-side{width:9.5rem;flex-shrink:0;border-right:1px solid #e5edf4;padding:.4rem 0}
+  .rp-side button{display:block;width:100%;text-align:left;padding:.65rem 1rem;font-size:.82rem;color:#334e68;transition:background .15s}
+  .rp-side button:hover{background:#f1f7fb}.rp-side button.on{background:var(--primary);color:#fff;font-weight:600}
+  .rp-cals{display:flex;gap:1.2rem;padding:.9rem 1rem .4rem}
+  .rp-cal{width:15.5rem}
+  .rp-h{display:flex;align-items:center;justify-content:space-between;font-weight:700;font-size:.82rem;color:#52667a;margin-bottom:.35rem}
+  .rp-nav{width:1.8rem;height:1.8rem;border-radius:50%;font-size:1.2rem;line-height:1;font-weight:700;color:#1f2d3d;transition:background .15s}
+  .rp-nav:hover{background:var(--primary-soft)}
+  .rp-grid{display:grid;grid-template-columns:repeat(7,1fr)}
+  .rp-w{font-size:.72rem;font-weight:700;color:#52667a;text-align:center;padding:.4rem 0}
+  .rp-d{height:2.05rem;font-size:.8rem;color:#1f2d3d;border-radius:0;transition:background .1s}
+  .rp-d.rp-o{color:#b9c5d1;cursor:default}
+  .rp-d:not(.rp-o):hover{background:var(--primary-soft-2)}
+  .rp-d.rp-in{background:var(--primary-soft)}
+  .rp-d.rp-s,.rp-d.rp-e{background:var(--primary);color:#fff;font-weight:600}
+  .rp-d.rp-s{border-radius:.4rem 0 0 .4rem}.rp-d.rp-e{border-radius:0 .4rem .4rem 0}.rp-d.rp-s.rp-e{border-radius:.4rem}
+  .rp-foot{display:flex;align-items:center;justify-content:flex-end;gap:1.1rem;padding:.7rem 1rem;border-top:1px solid #e5edf4;font-size:.8rem;color:#52667a}
+  .rp-foot .rp-text{margin-right:.4rem}
+  .rp-cancel{font-weight:600;color:#52667a}.rp-cancel:hover{color:#06173d}
+  .rp-apply{background:var(--primary);color:#fff;font-weight:600;border-radius:.6rem;padding:.45rem 1.1rem;transition:background .15s}.rp-apply:hover{background:var(--primary-hover)}
+  @media(min-width:640px){.rp-cal:first-child .rp-next{visibility:hidden}.rp-cal:last-child .rp-prev{visibility:hidden}}
+  .rp-pop.rp-compact .rp-cal:last-child{display:none}.rp-pop.rp-compact .rp-cal:first-child .rp-next{visibility:visible}
+  @media(max-width:639px){
+    .rp-pop{flex-direction:column;left:0;right:0}.rp-pop.rp-right{left:0}
+    .rp-side{width:auto;display:flex;overflow-x:auto;border-right:0;border-bottom:1px solid #e5edf4;padding:.3rem}
+    .rp-side button{width:auto;white-space:nowrap;border-radius:999px;padding:.45rem .85rem}
+    .rp-cals{padding:.7rem}.rp-cal{width:100%}.rp-cal:last-child{display:none}
+  }
+  @media(max-width:639px){.pg-num{display:none}}@media(min-width:640px){.pg-mob{display:none}}
+  /* modern dropdowns */
+  .dd{position:relative;min-width:0}
+  .dd.open{z-index:60}
+  .dd-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:.6rem;text-align:left;background:#fff;border:1px solid #d6e5f1;border-radius:.8rem;padding:.6rem .9rem;font-size:.85rem;color:#06173d;cursor:pointer;transition:border-color .2s,box-shadow .2s,background .2s}
+  .dd-btn:hover{border-color:#8fd3e2}
+  .dd-btn:focus-visible,.dd.open .dd-btn{outline:0;border-color:var(--link);box-shadow:0 0 0 3px rgba(23,183,205,.22)}
+  .dd-lbl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .dd-chev{flex-shrink:0;color:#7a93ad;transition:transform .25s}
+  .dd.open .dd-chev{transform:rotate(180deg);color:var(--link)}
+  .dd-list{position:absolute;left:0;top:calc(100% + .4rem);min-width:100%;width:max-content;max-width:18rem;max-height:15rem;overflow-y:auto;margin:0;padding:.35rem;list-style:none;background:#fff;border:1px solid #dbe8f2;border-radius:.95rem;box-shadow:0 18px 45px rgba(10,40,90,.2);opacity:0;visibility:hidden;transform:translateY(-6px) scale(.97);transform-origin:top;transition:opacity .16s,transform .16s,visibility .16s;z-index:50}
+  .dd.open .dd-list{opacity:1;visibility:visible;transform:none}
+  .dd.up .dd-list{top:auto;bottom:calc(100% + .4rem);transform-origin:bottom;transform:translateY(6px) scale(.97)}
+  .dd.up.open .dd-list{transform:none}
+  .dd-opt{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.55rem .75rem;border-radius:.65rem;font-size:.85rem;color:#334e68;cursor:pointer;transition:background .12s}
+  .dd-opt.act{background:#eef6fb}
+  .dd-opt .dd-check{opacity:0;color:var(--link);flex-shrink:0}
+  .dd-opt.on{color:var(--link);font-weight:600;background:#e6f6fb}
+  .dd-opt.on .dd-check{opacity:1}
+  .dd>select{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;border:0!important;opacity:0!important;pointer-events:none}
+  /* compact (rows per page) */
+  .dd-sm{display:inline-block;min-width:4.6rem}
+  .dd-sm .dd-btn{padding:.38rem .7rem;font-size:.8rem;border-radius:.6rem}
+  .dd-sm .dd-list{min-width:100%;width:100%}
+  /* dark pill (sales range) */
+  .dd-dark{display:inline-block;min-width:8.2rem}
+  .dd-dark .dd-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:999px;padding:.35rem .8rem;font-size:.75rem}
+  .dd-dark .dd-btn:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.5)}
+  .dd-dark .dd-btn:focus-visible,.dd-dark.open .dd-btn{border-color:#5eead4;box-shadow:0 0 0 3px rgba(94,234,212,.25)}
+  .dd-dark .dd-chev{color:#c3d4ef}.dd-dark.open .dd-chev{color:#5eead4}
+  .dd-dark .dd-list{left:auto;right:0;background:#0a2458;border-color:rgba(255,255,255,.16);box-shadow:0 18px 45px rgba(0,0,0,.45)}
+  .dd-dark .dd-opt{color:#d3e2f7}.dd-dark .dd-opt.act{background:rgba(255,255,255,.1)}
+  .dd-dark .dd-opt.on{background:rgba(94,234,212,.14);color:#5eead4}.dd-dark .dd-opt .dd-check{color:#5eead4}
   #chartTip{transition:left .25s,top .25s}
   ::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-thumb{background:#9fc9e0;border-radius:9px}
+  /* controls */
+  .ctl{background:#fff;border:1px solid #d6e5f1;border-radius:.8rem;padding:.6rem .9rem;font-size:.85rem;outline:none;transition:border .2s,box-shadow .2s;width:100%;color:#06173d;color-scheme:light}
+  .ctl:focus,.datebox:focus-within{border-color:var(--link);box-shadow:0 0 0 3px rgba(23,183,205,.2)}
+  .datebox{display:flex;align-items:center;gap:.5rem;background:#fff;border:1px solid #d6e5f1;border-radius:.8rem;padding:.25rem .6rem;transition:border .2s,box-shadow .2s}
+  .datebox input{border:0;outline:0;background:transparent;font-size:.85rem;padding:.4rem .2rem;color:#06173d;min-width:8.8rem;color-scheme:light;font-family:inherit}
+  .datebox span.sep{color:#7a93ad;font-size:.8rem}
+  .chip{padding:.4rem .9rem;border-radius:999px;font-size:.78rem;font-weight:600;border:1px solid #d6e5f1;background:#fff;color:#334e68;transition:all .2s;white-space:nowrap}
+  .chip:hover{border-color:var(--primary)}
+  .chip.on{background:var(--primary);color:#fff;border-color:transparent;box-shadow:0 6px 16px -6px rgba(23,183,205,.7)}
+  .chip small{opacity:.75;margin-left:.3rem}
+  .badge{display:inline-flex;align-items:center;gap:.35rem;padding:.2rem .7rem;border-radius:999px;font-size:.72rem;font-weight:600;white-space:nowrap}
+  .badge::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+  .b-Pending{background:#fff0dc;color:#c26a04}.b-Delivered{background:#d9f7e5;color:#15803d}.b-Cancelled{background:#fde4e4;color:#c81e1e}
+  /* table */
+  #tbl{width:100%;border-collapse:separate;border-spacing:0;font-size:.82rem}
+  #tbl thead th{position:sticky;top:0;background:#eef6fb;color:#4a647c;font-weight:600;text-align:left;padding:.8rem .75rem;white-space:nowrap;font-size:.74rem;text-transform:uppercase;letter-spacing:.04em}
+  #tbl thead th:first-child{border-radius:.9rem 0 0 .9rem}#tbl thead th:last-child{border-radius:0 .9rem .9rem 0}
+  #tbl th.sortable{cursor:pointer;user-select:none}#tbl th.sortable:hover{color:var(--link)}
+  #tbl td{padding:.85rem .75rem;border-bottom:1px solid #edf3f8;vertical-align:middle}
+  #tbl tbody tr{transition:background .15s}#tbl tbody tr:hover{background:#f1f9fe}
+  @media(max-width:1179px){
+    #tbl thead{display:none}#tbl,#tbl tbody{display:block}
+    #tbl tr{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem .9rem;padding:1rem;margin-bottom:.8rem;background:#fff;border-radius:1rem;border:1px solid #e3eef6;box-shadow:0 6px 18px rgba(20,120,190,.07)}
+    #tbl td{display:block;padding:0;border:0}
+    #tbl td::before{content:attr(data-l);display:block;font-size:.64rem;text-transform:uppercase;letter-spacing:.05em;color:#6b8299;font-weight:600;margin-bottom:.1rem}
+    #tbl td.full{grid-column:1/-1}
+    #tbl td.sn{display:none}
+  }
+  @media(min-width:640px) and (max-width:1179px){#tbl tr{grid-template-columns:repeat(3,1fr)}}
+  .qa{background:#fff;border-radius:1.1rem;box-shadow:0 8px 22px rgba(20,120,190,.12);transition:transform .25s,box-shadow .25s}
+  .qa:hover{transform:translateY(-6px);box-shadow:0 16px 32px rgba(23,183,205,.3)}
+  .qa:hover .arrow{background:var(--primary);color:#fff}
+  .donut circle.seg{transition:stroke-dasharray 1.2s cubic-bezier(.2,.8,.2,1)}
+  /* =====================================================================
+     THEME LAYER — brand tokens + light/dark.  Primary #2D3691 · Accent #17B7CD
+     Everything below only reads CSS variables, so a theme switch is one attribute.
+     ===================================================================== */
+  :root{
+    --primary:#2D3691;--primary-hover:#232b78;--primary-soft:#e8eaf8;--primary-soft-2:#d3d7f0;
+    --accent:#17B7CD;--accent-soft:#e0f5f9;--link:#2D3691;
+    --text:#0f1535;--text-2:#38426b;--muted:#667097;
+    --page-bg:radial-gradient(900px 500px at 90% -10%,#dfe3f7 0,transparent 60%),radial-gradient(700px 500px at -10% 40%,#d9f1f6 0,transparent 55%),#f5f7fd;
+    --card:rgba(255,255,255,.92);--card-solid:#fff;--card-border:#fff;--field:#fff;
+    --border:#d9dff0;--border-strong:#b9c0e6;--hover:#eef0fa;--track:#e6e9f6;
+    --thead:#eff1fb;--row-border:#edeff8;--row-hover:#f4f6fd;--header:rgba(255,255,255,.85);
+    --side-bg:linear-gradient(180deg,#131848 0%,#2D3691 100%);
+    --shadow:0 1px 2px rgba(20,30,90,.05),0 12px 32px rgba(45,54,145,.10);--shadow-hover:0 18px 44px rgba(45,54,145,.2);
+    --btn-shadow:0 8px 18px -8px rgba(45,54,145,.65);
+  }
+  html[data-theme=dark]{
+    --primary:#4b57d4;--primary-hover:#6874e0;--primary-soft:rgba(75,87,212,.28);--primary-soft-2:rgba(75,87,212,.45);
+    --accent:#17B7CD;--accent-soft:rgba(23,183,205,.16);--link:#2cc3d8;
+    --text:#e9ecff;--text-2:#c3c9ee;--muted:#9aa2cf;
+    --page-bg:radial-gradient(900px 500px at 90% -10%,rgba(45,54,145,.5) 0,transparent 60%),radial-gradient(700px 500px at -10% 40%,rgba(23,183,205,.12) 0,transparent 55%),#0b0f2a;
+    --card:rgba(22,28,70,.9);--card-solid:#161c46;--card-border:rgba(255,255,255,.07);--field:#121740;
+    --border:#2a3272;--border-strong:#3a44a0;--hover:#1e2658;--track:#262e68;
+    --thead:#1a2152;--row-border:#232b62;--row-hover:#1b2255;--header:rgba(11,15,42,.88);
+    --side-bg:linear-gradient(180deg,#0a0e2e 0%,#1b2263 100%);
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 32px rgba(0,0,0,.35);--shadow-hover:0 18px 44px rgba(0,0,0,.5);
+    --btn-shadow:0 8px 18px -8px rgba(0,0,0,.7);
+    color-scheme:dark;
+  }
+  html{color-scheme:light}
+  html body{color:var(--text);background:var(--page-bg);background-attachment:fixed}
+  html .side{background:var(--side-bg)}
+  html .nav-item.active{background:rgba(255,255,255,.14);color:#fff;box-shadow:inset 3px 0 0 var(--accent)}
+  html .nav-item.active svg{color:var(--accent)}
+  html .side .btn-primary{background:var(--accent);color:#0b1040;box-shadow:none}
+  html .side .btn-primary:hover{background:#3fcce0}
+  html .grad{background:linear-gradient(90deg,#17B7CD,#86e6f2);-webkit-background-clip:text;background-clip:text;color:transparent}
+  /* surfaces */
+  html .card{background:var(--card);border-color:var(--card-border);box-shadow:var(--shadow)}
+  html .hov:hover{box-shadow:var(--shadow-hover)}
+  html .ctl{background:var(--field);border-color:var(--border);color:var(--text);color-scheme:inherit}
+  html .ctl::placeholder{color:var(--muted)}
+  html .ctl:focus{border-color:var(--link);box-shadow:0 0 0 3px rgba(23,183,205,.28)}
+  html #globalSearch{color:var(--text)}html #globalSearch::placeholder{color:var(--muted)}
+  html .dd:not(.dd-dark) .dd-btn{background:var(--field);border-color:var(--border);color:var(--text)}
+  html .dd:not(.dd-dark) .dd-btn:hover{border-color:var(--link)}
+  html .dd:not(.dd-dark) .dd-btn:focus-visible,html .dd.open:not(.dd-dark) .dd-btn{border-color:var(--link);box-shadow:0 0 0 3px rgba(23,183,205,.28)}
+  html .dd:not(.dd-dark) .dd-list{background:var(--card-solid);border-color:var(--border)}
+  html .dd:not(.dd-dark) .dd-opt{color:var(--text-2)}
+  html .dd:not(.dd-dark) .dd-opt.act{background:var(--hover)}
+  html .dd:not(.dd-dark) .dd-opt.on{background:var(--primary-soft);color:var(--link)}
+  html .dd:not(.dd-dark) .dd-chev{color:var(--muted)}html .dd.open:not(.dd-dark) .dd-chev{color:var(--link)}
+  html .dd-dark .dd-list{background:#1b2263}
+  /* buttons */
+  html .btn-primary{background:var(--primary);color:#fff;box-shadow:var(--btn-shadow)}
+  html .btn-primary:hover{background:var(--primary-hover)}
+  html .btn-primary:focus-visible,html .btn-secondary:focus-visible{box-shadow:0 0 0 3px rgba(23,183,205,.4)}
+  html .btn-secondary{background:var(--field);color:var(--link);border-color:var(--border-strong)}
+  html .btn-secondary:hover{background:var(--primary-soft);border-color:var(--link)}
+  html .btn-attached{box-shadow:none}
+  html .chip{background:var(--field);border-color:var(--border);color:var(--text-2)}
+  html .chip:hover{border-color:var(--link)}
+  html .chip.on{background:var(--primary);color:#fff;border-color:transparent;box-shadow:var(--btn-shadow)}
+  html .pg-on{background:var(--primary);color:#fff;box-shadow:var(--btn-shadow)}
+  html .pg-off{background:var(--field);border-color:var(--border);color:var(--text-2)}
+  html .pg-off:hover{border-color:var(--link);color:var(--link)}
+  html .qa{background:var(--card-solid);box-shadow:var(--shadow)}
+  html .qa:hover{box-shadow:var(--shadow-hover)}
+  html .qa:hover .arrow{background:var(--primary);color:#fff}
+  /* table */
+  html #tbl thead th{background:var(--thead);color:var(--muted)}
+  html #tbl th.sortable:hover{color:var(--link)}
+  html #tbl td{border-color:var(--row-border)}
+  html #tbl tbody tr:hover{background:var(--row-hover)}
+  @media(max-width:1179px){html #tbl tr{background:var(--card-solid);border-color:var(--border);box-shadow:var(--shadow)}html #tbl td::before{color:var(--muted)}}
+  /* date-range picker */
+  html .rp-pop{background:var(--card-solid);border-color:var(--border);color:var(--text)}
+  html .rp-side,html .rp-foot{border-color:var(--border)}
+  html .rp-side button{color:var(--text-2)}html .rp-side button:hover{background:var(--hover)}
+  html .rp-side button.on{background:var(--primary);color:#fff}
+  html .rp-h,html .rp-w,html .rp-foot{color:var(--muted)}
+  html .rp-nav,html .rp-d{color:var(--text)}html .rp-nav:hover{background:var(--hover)}
+  html .rp-d.rp-o{color:var(--muted);opacity:.45}
+  html .rp-d:not(.rp-o):hover{background:var(--primary-soft-2)}
+  html .rp-d.rp-in{background:var(--primary-soft)}
+  html .rp-d.rp-s,html .rp-d.rp-e{background:var(--primary);color:#fff}
+  html .rp-cancel{color:var(--text-2)}html .rp-cancel:hover{color:var(--text)}
+  html .rp-apply{background:var(--primary);color:#fff}html .rp-apply:hover{background:var(--primary-hover)}
+  /* utility colours used in markup */
+  html .text-navy{color:var(--text)}
+  html .text-slate-500,html .text-slate-600,html .text-slate-400{color:var(--muted)}
+  html .text-slate-700{color:var(--text-2)}
+  html .text-teal2{color:var(--link)}
+  html .bg-white,html .bg-white\/90{background-color:var(--field)}
+  html .bg-white\/85{background-color:var(--header)}
+  html .bg-slate-100{background-color:var(--track)}
+  html .border-slate-200,html .border-slate-200\/70{border-color:var(--border)}
+  html .bg-cyan-50{background-color:var(--accent-soft)}
+  html .keep-light{background:#fff;color:#0f1535}
+  html .donut circle:first-child{stroke:var(--track)}
+  html[data-theme=dark] .b-Pending{background:rgba(245,158,11,.18);color:#fbbf24}
+  html[data-theme=dark] .b-Delivered{background:rgba(34,197,94,.16);color:#4ade80}
+  html[data-theme=dark] .b-Cancelled{background:rgba(239,68,68,.18);color:#f87171}
+  /* sidebar navigation — modern active state */
+  html .nav-item{position:relative;gap:.75rem;padding:.4rem .6rem .4rem .45rem;border:1px solid transparent;border-radius:.95rem;color:#c3caf0}
+  .nav-ic{width:2.15rem;height:2.15rem;display:grid;place-items:center;flex-shrink:0;border-radius:.7rem;color:#aeb8ea;transition:background .25s,color .25s,box-shadow .25s,transform .25s}
+  html .nav-item:hover{background:rgba(255,255,255,.07);color:#fff;transform:none}
+  html .nav-item:hover .nav-ic{background:rgba(255,255,255,.12);color:#fff}
+  html .nav-item.active{background:linear-gradient(90deg,rgba(23,183,205,.28) 0%,rgba(255,255,255,.05) 85%);border-color:rgba(255,255,255,.14);box-shadow:none;color:#fff;font-weight:600}
+  html .nav-item.active .nav-ic{background:linear-gradient(135deg,#17B7CD,#63dcec);color:#0b1040;box-shadow:0 8px 18px -6px rgba(23,183,205,.8);transform:scale(1.04)}
+  html .nav-item.active .nav-ic svg{color:#0b1040}
+  html .nav-item.active::before{content:"";position:absolute;left:-.75rem;top:20%;bottom:20%;width:4px;border-radius:0 4px 4px 0;background:var(--accent);box-shadow:0 0 14px rgba(23,183,205,.95);animation:navbar .35s cubic-bezier(.3,1.4,.5,1) both}
+  @keyframes navbar{from{transform:scaleY(.2);opacity:0}to{transform:none;opacity:1}}
+  #navList{scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.25) transparent}
+  /* theme toggle */
+  #themeBtn .t-sun{display:none}html[data-theme=dark] #themeBtn .t-sun{display:block}html[data-theme=dark] #themeBtn .t-moon{display:none}
+  #themeBtn svg{transition:transform .5s cubic-bezier(.3,1.5,.5,1)}#themeBtn:hover svg{transform:rotate(25deg) scale(1.1)}
+  html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:background-color .35s,color .35s,border-color .35s,box-shadow .35s!important}
 </style>
 </head>
 <body>
 
-<!-- overlay for mobile sidebar -->
-<div id="overlay" class="fixed inset-0 bg-navy/60 z-30 hidden lg:hidden"></div>
+<div id="overlay" class="fixed inset-0 bg-navy/60 z-[35] hidden lg:hidden"></div>
 
 <!-- ============ SIDEBAR ============ -->
-<aside id="sidebar" class="side fixed inset-y-0 left-0 w-64 z-40 text-white flex flex-col -translate-x-full lg:translate-x-0 transition-transform duration-300 rounded-r-3xl shadow-2xl">
-  <div class="px-6 pt-6 pb-4 flex items-center justify-between">
-    <a href="index.html" class="flex items-center gap-3">
-      <svg width="42" height="42" viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="none" stroke="#22d3ee" stroke-width="3"/><circle cx="24" cy="24" r="16" fill="#0b3b86"/><path d="M14 32V16l10 11 10-11v16" fill="none" stroke="#fff" stroke-width="3.5" stroke-linejoin="round"/></svg>
-      <div class="leading-none"><div class="font-extrabold text-lg">MEDLEYMED</div><div class="text-[9px] tracking-[.5em] text-teal">NETWORK</div><div class="text-[8px] mt-1 text-slate-300">Powering Growth</div></div>
+<aside id="sidebar" class="side fixed inset-y-0 left-0 z-40 text-white flex flex-col -translate-x-full lg:translate-x-0 rounded-r-3xl shadow-2xl">
+  <div class="px-5 pt-6 pb-4 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-3 min-w-0">
+      <svg class="shrink-0" width="42" height="42" viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="none" stroke="#17B7CD" stroke-width="3"/><circle cx="24" cy="24" r="16" fill="#2D3691"/><path d="M14 32V16l10 11 10-11v16" fill="none" stroke="#fff" stroke-width="3.5" stroke-linejoin="round"/></svg>
+      <div class="brand-txt leading-none"><div class="font-extrabold text-lg">MEDLEYMED</div><div class="text-[9px] tracking-[.5em] text-teal">NETWORK</div><div class="text-[8px] mt-1 text-slate-300">Powering Growth</div></div>
     </a>
-    <button id="closeSide" class="lg:hidden text-2xl leading-none">×</button>
+    <button id="closeSide" class="lg:hidden text-2xl leading-none" aria-label="Close menu">×</button>
   </div>
-  <nav id="navList" class="flex-1 overflow-y-auto px-4 py-3 space-y-1"></nav>
-  <div class="m-4 p-4 rounded-2xl bg-white/10 border border-white/20 flex items-center gap-3">
+  <nav id="navList" class="flex-1 overflow-y-auto px-3 py-3 space-y-1"></nav>
+  <div class="side-promo m-4 p-4 rounded-2xl bg-white/10 border border-white/20 flex items-center gap-3">
     <div class="text-4xl floaty">🚀</div>
     <div><div class="font-semibold text-sm">Grow Faster</div><div class="text-xs text-slate-300">with MedleyMed</div>
-      <a href="#" class="inline-block mt-2 bg-teal px-3 py-1 rounded-full text-xs font-semibold hover:bg-teal2 transition">Explore More →</a></div>
+      <a href="#" class="btn-primary btn-sm mt-2">Explore More →</a></div>
   </div>
 </aside>
 
 <!-- ============ MAIN ============ -->
-<div class="lg:pl-64">
-  <!-- top bar -->
-  <header class="sticky top-0 z-20 px-4 sm:px-6 py-3 flex items-center gap-3 backdrop-blur-md bg-white/40">
-    <button id="openSide" class="lg:hidden w-11 h-11 rounded-full bg-white shadow flex items-center justify-center text-lg" aria-label="Menu">☰</button>
-    <div class="relative flex-1 max-w-xl">
-      <span class="absolute left-4 top-1/2 -translate-y-1/2 opacity-60">🔍</span>
-      <input id="globalSearch" class="w-full bg-white/90 rounded-full py-3 pl-11 pr-16 text-sm shadow outline-none focus:ring-2 ring-teal/50" placeholder="Search anything...">
-      <kbd class="hidden sm:block absolute right-4 top-1/2 -translate-y-1/2 text-[11px] bg-slate-100 px-2 py-0.5 rounded-md text-slate-500">⌘ K</kbd>
+<div class="shell">
+  <header class="sticky top-0 z-30 px-4 sm:px-6 py-3 flex items-center gap-2 sm:gap-3 backdrop-blur-xl bg-white/85 border-b border-slate-200/70 shadow-[0_6px_20px_-12px_rgba(10,60,120,.25)]">
+    <button id="menuBtn" class="w-11 h-11 shrink-0 rounded-full bg-white shadow flex items-center justify-center text-lg hover:scale-105 transition" aria-label="Toggle menu"><i data-ic="menu"></i></button>
+    <div class="relative flex-1 max-w-xl min-w-0">
+      <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"><i data-ic="search" data-s="18"></i></span>
+      <input id="globalSearch" class="w-full bg-white/90 rounded-full py-3 pl-11 pr-4 sm:pr-16 text-sm shadow outline-none focus:ring-2 ring-teal/50" placeholder="Search anything...">
+      <kbd class="hidden sm:block absolute right-4 top-1/2 -translate-y-1/2 text-[11px] bg-slate-100 px-2 py-0.5 rounded-md text-slate-500">Ctrl K</kbd>
     </div>
     <div class="flex-1 hidden md:block"></div>
-    <button class="relative w-11 h-11 rounded-full bg-white shadow flex items-center justify-center" aria-label="Notifications">🔔<span class="absolute -top-1 -right-1 bg-rose-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold">3</span></button>
-    <div class="flex items-center gap-3 bg-white/90 rounded-full pl-2 pr-3 sm:pr-4 py-1.5 shadow cursor-pointer">
+    <button id="themeBtn" type="button" class="w-11 h-11 shrink-0 rounded-full bg-white shadow flex items-center justify-center" aria-label="Switch to dark mode" title="Toggle light / dark">
+      <span class="t-moon"><i data-ic="moon"></i></span><span class="t-sun"><i data-ic="sun"></i></span>
+    </button>
+    <button class="relative w-11 h-11 shrink-0 rounded-full bg-white shadow flex items-center justify-center" aria-label="Notifications"><i data-ic="bell"></i><span class="absolute -top-1 -right-1 bg-rose-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold">3</span></button>
+    <div class="flex items-center gap-3 bg-white/90 rounded-full pl-1.5 pr-1.5 sm:pr-4 py-1.5 shadow cursor-pointer shrink-0">
       <div class="relative"><div class="w-9 h-9 rounded-full bg-gradient-to-br from-teal to-navy2 text-white flex items-center justify-center font-bold">A</div><span class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-400 border-2 border-white rounded-full"></span></div>
-      <div class="hidden sm:block leading-tight"><div class="text-sm font-semibold">Hi Azad</div><div class="text-xs text-slate-500">Admin</div></div><span class="text-xs">⌄</span>
+      <div class="hidden sm:block leading-tight"><div class="text-sm font-semibold">Hi Azad</div><div class="text-xs text-slate-500">Admin</div></div><span class="hidden sm:block text-xs">⌄</span>
     </div>
   </header>
 
-  <main class="px-4 sm:px-6 pb-10 space-y-5">
+  <main class="px-4 sm:px-6 pb-10 space-y-5 max-w-[110rem] mx-auto">
     <!-- welcome banner -->
-    <section class="rise relative mt-8 sm:mt-14">
-      <div class="relative rounded-3xl bg-gradient-to-r from-[#041a45] via-[#073a86] to-[#0a6fc0] text-white px-6 sm:px-10 py-8 min-h-[190px] shadow-xl">
-        <div class="relative z-10 max-w-lg">
-          <h1 class="text-3xl sm:text-5xl font-extrabold leading-tight">Welcome back, <span class="grad">Azad!</span></h1>
-          <p class="mt-2 text-base sm:text-lg text-slate-100">Together we're building a healthier India</p>
-          <div class="mt-4 inline-flex items-center gap-3 bg-gradient-to-r from-[#0a4aa0] to-[#2dd4f0] rounded-full pr-5 text-sm font-semibold">
-            <span class="w-10 h-10 rounded-full bg-navy flex items-center justify-center text-teal">↗</span>
-            <span class="text-navy">Your Network is Growing</span><span class="text-navy">↑ +5.75% this Month</span>
+    <section id="welcome" class="rise relative mt-4 md:mt-6">
+      <!-- clipped background layer -->
+      <div class="absolute inset-0 rounded-3xl overflow-hidden bg-[#151a52] border border-white/10 shadow-[0_25px_60px_-15px_rgba(6,60,140,.6)]">
+        <div class="absolute inset-0" style="background:radial-gradient(600px 300px at 85% 20%,rgba(23,183,205,.45),transparent 65%),radial-gradient(500px 320px at 5% 110%,rgba(45,54,145,.85),transparent 60%),linear-gradient(120deg,#151a52 0%,#2D3691 60%,#2a5cae 100%)"></div>
+        <div class="absolute inset-0 opacity-[.18]" style="background-image:linear-gradient(rgba(255,255,255,.35) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.35) 1px,transparent 1px);background-size:36px 36px;-webkit-mask-image:radial-gradient(ellipse at 30% 40%,#000,transparent 75%);mask-image:radial-gradient(ellipse at 30% 40%,#000,transparent 75%)"></div>
+        <div class="orb absolute -top-16 left-1/3 w-56 h-56 rounded-full bg-cyan-400/20 blur-3xl"></div>
+        <div class="orb2 absolute -bottom-20 right-1/4 w-64 h-64 rounded-full bg-indigo-400/25 blur-3xl"></div>
+        <div class="hidden md:block absolute right-10 top-1/2 -translate-y-1/2 w-56 h-56 rounded-full bg-cyan-300/30 blur-3xl"></div>
+        <img id="bannerImg" src="assets/hero.png" alt="Medleymed app with pharmacy cart" class="banner-img hidden md:block absolute right-0 top-0 h-full w-[44%] max-w-[520px] object-cover object-[52%_50%] pointer-events-none select-none transition-transform duration-300 ease-out">
+      </div>
+
+      <div class="relative px-5 sm:px-8 py-3 sm:py-4 min-h-[96px] flex items-center text-white">
+        <div class="relative z-10 min-w-0 md:max-w-[56%]">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/20 backdrop-blur px-2.5 py-0.5 text-[10px] font-medium text-cyan-100">
+              <span class="relative flex w-2 h-2"><span class="absolute inline-flex w-full h-full rounded-full bg-emerald-400 opacity-75 animate-ping"></span><span class="relative w-2 h-2 rounded-full bg-emerald-400"></span></span>
+              <span id="greet">Good day</span><span class="opacity-50">•</span><span id="today"></span>
+            </span>
+            <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-400/15 border border-emerald-300/40 backdrop-blur px-2.5 py-0.5 text-[10px] font-semibold text-emerald-200">↗ +5.75% network growth this month</span>
           </div>
+          <h1 class="mt-2 text-lg sm:text-xl xl:text-2xl font-extrabold leading-tight tracking-tight">Welcome back, <span class="grad">Azad</span> <span class="inline-block wave origin-[70%_70%]">👋</span></h1>
+          <p class="mt-0.5 text-xs sm:text-[13px] text-slate-200">Together we're building a healthier India.</p>
         </div>
-        <img src="assets/hero.png" alt="" class="banner-img hidden md:block absolute right-0 -top-14 lg:-top-20 h-[calc(100%+5.5rem)] lg:h-[calc(100%+7rem)] w-auto max-w-[62%] object-contain object-right pointer-events-none select-none floaty">
       </div>
     </section>
 
-    <!-- stat cards -->
-    <section class="grid sm:grid-cols-2 xl:grid-cols-3 gap-5" id="stats"></section>
+    <!-- dashboard filters -->
+    <section id="filters" class="rise card p-3 sm:p-4 relative z-10" style="--d:.05s">
+      <div class="flex flex-col md:flex-row md:flex-wrap lg:flex-nowrap md:items-center gap-3">
+        <h2 class="font-extrabold text-lg lg:mr-3 shrink-0 text-slate-700">Dashboard</h2>
+        <div class="relative flex-1 min-w-0 md:min-w-[14rem] lg:max-w-md">
+          <div class="flex">
+            <label class="sr-only" for="rangeText">Date range</label>
+            <input id="rangeText" readonly class="ctl !rounded-r-none cursor-pointer !pr-2" aria-haspopup="dialog">
+            <button id="rangeBtn" type="button" aria-label="Choose date range" class="btn-primary btn-attached"><i data-ic="calendar" data-s="18"></i></button>
+          </div>
+          <div id="rangePop" class="rp-pop hidden" role="dialog" aria-label="Date range"></div>
+        </div>
+        <label class="sr-only" for="fState">State</label>
+        <select id="fState" class="ctl md:w-40 lg:w-auto lg:max-w-[14rem]"><option value="">All States</option><option>Telangana</option><option>Andhra Pradesh</option><option>Karnataka</option></select>
+        <div class="grid grid-cols-2 gap-3 md:flex md:ml-auto">
+          <button id="fApply" type="button" class="btn-primary btn-lg">Apply</button>
+          <button id="fReset" type="button" class="btn-secondary btn-lg">Reset</button>
+        </div>
+      </div>
+    </section>
 
-    <!-- sales + orders -->
-    <section class="grid xl:grid-cols-[5fr_8fr] gap-5">
-      <div class="rise rounded-3xl bg-gradient-to-b from-[#071d4d] to-[#0a2d70] text-white p-6 shadow-xl" style="--d:.2s">
+    <!-- overview row (desktop): [stat cards stacked] [Sales Overview] [Order Status] -->
+    <section class="grid gap-5 lg:grid-cols-2 xl:grid-cols-[1fr_1.5fr_1fr]">
+      <div id="stats" class="grid gap-4 sm:gap-5 sm:grid-cols-2 lg:col-span-2 xl:col-span-1 xl:grid-cols-1 xl:auto-rows-fr"></div>
+
+      <div class="rise rounded-3xl bg-gradient-to-b from-[#171c58] to-[#2D3691] text-white p-5 sm:p-6 shadow-xl min-w-0 flex flex-col" style="--d:.2s">
         <div class="flex items-center justify-between gap-3">
           <h3 class="font-semibold flex items-center gap-2"><span class="text-teal">▮▮</span> Sales Overview</h3>
           <select id="range" class="bg-transparent border border-white/30 rounded-full px-3 py-1 text-xs outline-none">
@@ -107,31 +385,67 @@ tailwind.config={theme:{extend:{colors:{navy:'#06173d',navy2:'#0a2a6b',teal:'#14
           </select>
         </div>
         <div class="mt-3 text-3xl font-extrabold" id="salesTotal">₹ 4,25,890</div>
-        <div class="text-xs text-emerald-300 mt-1">↑ 12.5% <span class="text-slate-300">vs last week</span></div>
-        <div class="relative mt-4" id="chartWrap">
-          <svg id="chart" class="w-full h-[240px]" viewBox="0 0 520 240" preserveAspectRatio="none"></svg>
-          <div id="chartTip" class="absolute -translate-x-1/2 bg-white text-navy text-xs font-bold px-3 py-1.5 rounded-full shadow-lg pointer-events-none whitespace-nowrap"></div>
+        <div class="text-xs text-emerald-300 mt-1" id="salesDelta">↑ 12.5% vs last week</div>
+        <div class="relative mt-4 flex-1 min-h-[240px]" id="chartWrap">
+          <svg id="chart" class="absolute inset-0 w-full h-full block" aria-label="Sales chart"></svg>
+          <div id="chartTip" class="keep-light absolute -translate-x-1/2 bg-white text-navy text-xs font-bold px-3 py-1.5 rounded-full shadow-lg pointer-events-none whitespace-nowrap"></div>
         </div>
       </div>
 
-      <div class="rise card p-5 sm:p-6" style="--d:.3s">
-        <div class="flex items-center justify-between">
-          <h3 class="font-semibold flex items-center gap-3"><span class="w-10 h-10 rounded-xl bg-sky-100 flex items-center justify-center">🛍️</span> Recent Orders</h3>
+      <div class="rise card p-5 sm:p-6 min-w-0 flex flex-col" style="--d:.3s">
+        <h3 class="font-semibold flex items-center gap-2"><span class="w-9 h-9 rounded-xl bg-cyan-50 text-teal2 flex items-center justify-center"><i data-ic="pie" data-s="18"></i></span> Order Status</h3>
+        <div class="flex-1 mt-4 flex flex-col md:flex-row lg:flex-col items-center justify-center gap-6 md:gap-10 lg:gap-6">
+          <div class="relative w-44 h-44 shrink-0">
+            <svg class="donut -rotate-90" viewBox="0 0 120 120" id="donut"></svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center"><div class="text-2xl font-extrabold" id="donutTotal">0</div><div class="text-xs text-slate-500">Total Orders</div></div>
+          </div>
+          <ul id="donutLegend" class="space-y-4 text-sm w-full max-w-sm md:flex-1 lg:flex-none"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- single full-width orders table -->
+    <section class="rise card p-4 sm:p-6" style="--d:.35s">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <h3 class="font-semibold text-lg flex items-center gap-3"><span class="w-10 h-10 rounded-xl bg-cyan-50 text-teal2 flex items-center justify-center"><i data-ic="bag"></i></span> Recent Orders</h3>
+        <div class="flex items-center gap-3">
+          <button id="csv" class="btn-secondary btn-sm !text-[.8rem] !px-4 !py-1.5"><i data-ic="download" data-s="16"></i>Export CSV</button>
           <a href="#" class="text-sm text-teal2 font-semibold hover:underline">View All →</a>
         </div>
-        <div class="mt-4 grid sm:grid-cols-[1.4fr_1fr_1.3fr] gap-3">
-          <input id="oSearch" class="ctl" placeholder="🔍  Search orders...">
-          <select id="oState" class="ctl"><option value="">Choose State</option><option>Telangana</option><option>Andhra Pradesh</option><option>Karnataka</option></select>
-          <input id="oDate" class="ctl" value="10/14/2026 - 11/13/2026" readonly>
+      </div>
+
+      <!-- filters -->
+      <div class="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-[1.4fr_1fr_auto]">
+        <div class="relative"><span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"><i data-ic="search" data-s="16"></i></span><input id="oSearch" class="ctl !pl-9" placeholder="Search customer, partner or order ID..."></div>
+        <select id="oState" class="ctl"><option value="">All States</option><option>Telangana</option><option>Andhra Pradesh</option><option>Karnataka</option></select>
+        <div class="relative md:col-span-2 xl:col-span-1 xl:min-w-[17rem]">
+          <div class="flex">
+            <label class="sr-only" for="tRange">Date range</label>
+            <input id="tRange" readonly class="ctl !rounded-r-none cursor-pointer !pr-2" aria-haspopup="dialog">
+            <button id="tRangeBtn" type="button" aria-label="Choose date range" class="btn-primary btn-attached"><i data-ic="calendar" data-s="18"></i></button>
+          </div>
+          <div id="tPop" class="rp-pop hidden" role="dialog" aria-label="Date range"></div>
+          <input type="hidden" id="dFrom" value="2026-10-14"><input type="hidden" id="dTo" value="2026-11-13">
         </div>
-        <div class="flex gap-2 mt-3 text-xs" id="statusFilter"></div>
-        <div class="mt-4 overflow-x-auto rounded-xl bg-white/70">
-          <table class="w-full text-xs sm:text-[13px] min-w-[760px]">
-            <thead><tr class="text-left text-slate-600 bg-slate-100/80">
-              <th class="p-3">S.No</th><th>Customer Name</th><th>Partner Name</th><th>Partner ID</th><th>Order ID</th><th>Order Status</th><th>Time</th><th>Item Number</th><th class="pr-3">Value</th></tr></thead>
-            <tbody id="ordersBody"></tbody>
-          </table>
-          <div id="empty" class="hidden text-center text-slate-500 py-8 text-sm">No orders match your filters.</div>
+      </div>
+      <div class="flex gap-2 mt-4 overflow-x-auto pb-1" id="statusFilter"></div>
+
+      <div class="mt-4">
+        <table id="tbl">
+          <thead><tr>
+            <th>S.No</th><th class="sortable" data-k="cust">Customer Name <i></i></th><th>Partner Name</th><th>Partner ID</th>
+            <th class="sortable" data-k="id">Order ID <i></i></th><th>Status</th><th class="sortable" data-k="time">Date &amp; Time <i></i></th>
+            <th>Items</th><th class="sortable text-right" data-k="val" style="text-align:right">Value <i></i></th></tr></thead>
+          <tbody id="ordersBody"></tbody>
+        </table>
+        <div id="empty" class="hidden text-center text-slate-500 py-10 text-sm">No orders match your filters.</div>
+      </div>
+
+      <div class="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm text-slate-600">
+        <div id="summary"></div>
+        <div class="flex items-center gap-3">
+          <label class="flex items-center gap-2 text-xs">Rows <select id="pageSize" class="ctl !w-auto !py-1.5"><option>5</option><option selected>8</option><option>15</option></select></label>
+          <div id="pager" class="flex items-center gap-1"></div>
         </div>
       </div>
     </section>
@@ -140,15 +454,15 @@ tailwind.config={theme:{extend:{colors:{navy:'#06173d',navy2:'#0a2a6b',teal:'#14
     <section class="grid xl:grid-cols-[2fr_1fr] gap-5">
       <div class="rise card p-5 sm:p-6 flex flex-col lg:flex-row lg:items-center gap-5" style="--d:.4s">
         <div class="lg:pr-6 lg:border-r border-slate-200 shrink-0">
-          <h3 class="text-xl font-bold">Quick Actions</h3><p class="text-sm text-sky-700 mt-1">Manage your business<br class="hidden lg:block"> with ease</p>
+          <h3 class="text-xl font-bold">Quick Actions</h3><p class="text-sm text-slate-500 mt-1">Manage your business with ease</p>
         </div>
         <div id="quick" class="grid grid-cols-2 sm:grid-cols-5 gap-3 flex-1"></div>
       </div>
-      <div class="rise relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#0a3a85] via-[#0a6fc0] to-[#1ec8e6] text-white p-6 flex items-center min-h-[130px] shadow-xl" style="--d:.5s">
+      <div class="rise relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#2D3691] to-[#17B7CD] text-white p-6 flex items-center min-h-[130px] shadow-xl" style="--d:.5s">
         <div class="text-7xl sm:text-8xl absolute -left-2 bottom-0 opacity-90 floaty select-none">🤝</div>
         <div class="relative ml-20 sm:ml-28">
           <h3 class="font-bold text-lg leading-snug">Stronger Partnerships.<br><span class="text-sky-100 font-semibold">Greater Growth.</span></h3>
-          <a href="#" class="inline-block mt-3 bg-white text-navy text-sm font-semibold px-4 py-1.5 rounded-full hover:scale-105 transition">Explore Benefits →</a>
+          <a href="#" class="keep-light inline-block mt-3 bg-white text-navy text-sm font-semibold px-4 py-1.5 rounded-full hover:scale-105 transition">Explore Benefits →</a>
         </div>
       </div>
     </section>
@@ -156,94 +470,391 @@ tailwind.config={theme:{extend:{colors:{navy:'#06173d',navy2:'#0a2a6b',teal:'#14
 </div>
 
 <script>
-const $=s=>document.querySelector(s);
+/* ---------- Icon set (stroke icons, consistent across the UI) ---------- */
+const ICONS={
+ home:'<path d="M3 10.5 12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',
+ users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
+ userRound:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+ user:'<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+ grid:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>',
+ megaphone:'<path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>',
+ sliders:'<path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>',
+ message:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+ file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>',
+ box:'<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="m3.27 6.96 8.73 5.05 8.73-5.05M12 22.08V12"/>',
+ building:'<path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2M10 6h4M10 10h4M10 14h4M10 18h4"/>',
+ tag:'<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><circle cx="7" cy="7" r="1"/>',
+ pin:'<path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/>',
+ cart:'<circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>',
+ rupee:'<path d="M6 3h12M6 8h12M6 13l8.5 8M6 13h3M9 13c6.667 0 6.667-10 0-10"/>',
+ userPlus:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/>',
+ chart:'<path d="M3 3v18h18M18 17V9M13 17V5M8 17v-3"/>',
+ truck:'<path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2M15 18H9M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/>',
+ card:'<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>',
+ calendar:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+ bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
+ search:'<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+ menu:'<path d="M4 6h16M4 12h16M4 18h16"/>',
+ bag:'<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/>',
+ pie:'<path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/>',
+ download:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>',
+ sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>',
+ moon:'<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>',
+ trend:'<path d="m22 7-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/>'
+};
+const svgI=(n,s=20)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0">${ICONS[n]||''}</svg>`;
+document.querySelectorAll('i[data-ic]').forEach(e=>{e.outerHTML=svgI(e.dataset.ic,+e.dataset.s||20)});
 
-/* ---------- Sidebar ---------- */
-const nav=[['🏠','Dashboard'],['👥','Partners'],['🧑‍🤝‍🧑','Customers'],['👤','Users'],['🗂️','Category'],['📣','Marketing'],['⚙️','Configurations'],['💬','Feedback Hub'],['📄','Reports'],['📦','Master Orders'],['🏢','Organisation'],['🔖','Party Codes'],['📍','SFA']];
-nav.forEach(([i,t],k)=>{const a=document.createElement('a');a.href='#';a.className='nav-item'+(k===0?' active':'');a.innerHTML=`<span class="w-6 text-center">${i}</span>${t}`;
+const $=s=>document.querySelector(s),inr=n=>n.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
+
+/* ---------- Light / dark theme ---------- */
+(()=>{const root=document.documentElement,btn=$('#themeBtn');
+  const label=()=>btn.setAttribute('aria-label',root.dataset.theme==='dark'?'Switch to light mode':'Switch to dark mode');
+  label();
+  btn.onclick=()=>{const t=root.dataset.theme==='dark'?'light':'dark';
+    root.classList.add('theme-anim');root.dataset.theme=t;label();
+    try{localStorage.setItem('mm-theme',t)}catch(e){}
+    setTimeout(()=>root.classList.remove('theme-anim'),450)};
+  /* follow the OS setting until the user picks a theme themselves */
+  try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',e=>{if(!localStorage.getItem('mm-theme')){root.dataset.theme=e.matches?'dark':'light';label()}})}catch(e){}
+})();
+
+/* ---------- Welcome banner: greeting, date, parallax ---------- */
+(()=>{const h=new Date().getHours();
+  $('#greet').textContent=h<12?'Good morning':h<17?'Good afternoon':'Good evening';
+  $('#today').textContent=new Date().toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+  const w=$('#welcome'),img=$('#bannerImg');
+  w.addEventListener('mousemove',e=>{const r=w.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+    img.style.transform=`translate(${x*-8}px,${y*-5}px)`});
+  w.addEventListener('mouseleave',()=>img.style.transform='');
+})();
+
+/* ---------- Sidebar (drawer on mobile, collapse on desktop) ---------- */
+const nav=[['home','Dashboard'],['users','Partners'],['userRound','Customers'],['user','Users'],['grid','Category'],['megaphone','Marketing'],['sliders','Configurations'],['message','Feedback Hub'],['file','Reports'],['box','Master Orders'],['building','Organisation'],['tag','Party Codes'],['pin','SFA']];
+nav.forEach(([i,t],k)=>{const a=document.createElement('a');a.href='#';a.title=t;a.className='nav-item'+(k===0?' active':'');a.innerHTML=`<span class="nav-ic">${svgI(i,19)}</span><span class="lbl">${t}</span>`;
   a.onclick=e=>{e.preventDefault();document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));a.classList.add('active');closeSide()};$('#navList').appendChild(a)});
-const side=$('#sidebar'),ov=$('#overlay');
-function openSide(){side.classList.remove('-translate-x-full');ov.classList.remove('hidden')}
-function closeSide(){side.classList.add('-translate-x-full');ov.classList.add('hidden')}
-$('#openSide').onclick=openSide;$('#closeSide').onclick=closeSide;ov.onclick=closeSide;
+const side=$('#sidebar'),ov=$('#overlay'),desk=()=>matchMedia('(min-width:1024px)').matches;
+function closeSide(){if(!desk()){side.classList.add('-translate-x-full');ov.classList.add('hidden')}}
+$('#menuBtn').onclick=()=>{if(desk()){document.body.classList.toggle('collapsed');setTimeout(()=>window._tip&&window._tip(),350)}else{side.classList.remove('-translate-x-full');ov.classList.remove('hidden')}};
+$('#closeSide').onclick=closeSide;ov.onclick=closeSide;
 addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();$('#globalSearch').focus()}});
 
-/* ---------- Stat cards ---------- */
-const stats=[
-  {t:'Total Retailers',v:2629,fmt:n=>n.toLocaleString('en-IN'),g:'0.00%',ic:'👥',bg:'from-blue-100 to-sky-50',c:'#3b82f6',d:'M0 40 L20 38 L40 30 L55 34 L75 18 L95 24 L120 6'},
-  {t:'Total Orders',v:22564,fmt:n=>n.toLocaleString('en-IN'),g:'700.00%',ic:'🛒',bg:'from-cyan-100 to-sky-50',c:'#14b8d4',d:'M0 42 L20 30 L38 36 L58 14 L80 28 L100 12 L120 4'},
-  {t:"Today's Ordered Amount",v:70404.85,fmt:n=>'₹ '+n.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2}),g:'5,731.57%',ic:'₹',bg:'from-sky-200 to-cyan-50',c:'#0ea5e9',d:'M0 44 L22 34 L44 38 L66 16 L88 24 L106 8 L120 4'}
+/* ---------- Data ---------- */
+const orders=[
+ {id:22564,cust:'Aapni Pharmacy',part:'PRINCE PHARMA',pid:13,st:'Pending',t:'2026-11-13T12:32',items:1,val:1352.55,state:'Telangana'},
+ {id:22563,cust:'Sree Gayathri Medical And General Stores',part:'Pharma Plus Distributors Hyderabad',pid:1,st:'Pending',t:'2026-11-13T12:28',items:2,val:24327.72,state:'Telangana'},
+ {id:22562,cust:'Sri Sai Medicals',part:'MedleyMed Network',pid:45,st:'Delivered',t:'2026-11-13T11:45',items:3,val:12450.00,state:'Andhra Pradesh'},
+ {id:22561,cust:'Lakshmi Pharma',part:'Vijaya Distributors',pid:22,st:'Delivered',t:'2026-11-13T11:10',items:4,val:8920.40,state:'Karnataka'},
+ {id:22560,cust:'City Care Chemists',part:'PRINCE PHARMA',pid:13,st:'Cancelled',t:'2026-11-13T10:52',items:1,val:640.00,state:'Telangana'},
+ {id:22559,cust:'Om Sai Medical Hall',part:'Pharma Plus Distributors Hyderabad',pid:1,st:'Delivered',t:'2026-11-12T17:20',items:6,val:31840.10,state:'Telangana'},
+ {id:22558,cust:'Health First Pharmacy',part:'Vijaya Distributors',pid:22,st:'Pending',t:'2026-11-12T15:05',items:2,val:5210.00,state:'Karnataka'},
+ {id:22557,cust:'Venkateswara Medicals',part:'MedleyMed Network',pid:45,st:'Delivered',t:'2026-11-12T12:41',items:5,val:18760.25,state:'Andhra Pradesh'},
+ {id:22556,cust:'Apollo Care Chemist',part:'PRINCE PHARMA',pid:13,st:'Delivered',t:'2026-11-11T16:30',items:3,val:9480.00,state:'Telangana'},
+ {id:22555,cust:'Sunrise Drugs',part:'Vijaya Distributors',pid:22,st:'Cancelled',t:'2026-11-11T10:12',items:1,val:1120.50,state:'Karnataka'},
+ {id:22554,cust:'Balaji Medical & General',part:'Pharma Plus Distributors Hyderabad',pid:1,st:'Delivered',t:'2026-11-10T14:48',items:7,val:42310.75,state:'Telangana'},
+ {id:22553,cust:'Sri Ram Pharmacy',part:'MedleyMed Network',pid:45,st:'Pending',t:'2026-11-09T18:02',items:2,val:3875.00,state:'Andhra Pradesh'},
+ {id:22552,cust:'Gowtham Medicals',part:'PRINCE PHARMA',pid:13,st:'Delivered',t:'2026-11-05T11:37',items:4,val:14290.30,state:'Telangana'},
+ {id:22551,cust:'Lifeline Pharmacy',part:'Vijaya Distributors',pid:22,st:'Delivered',t:'2026-10-28T09:55',items:8,val:27650.00,state:'Karnataka'},
+ {id:22550,cust:'Medico Hub',part:'MedleyMed Network',pid:45,st:'Delivered',t:'2026-10-20T13:15',items:3,val:7430.60,state:'Andhra Pradesh'},
+ {id:22549,cust:'Old Stock Chemists',part:'PRINCE PHARMA',pid:13,st:'Delivered',t:'2026-10-10T10:00',items:2,val:2210.00,state:'Telangana'}
 ];
-stats.forEach((s,i)=>{
-  const el=document.createElement('div');el.className='rise card p-5 flex items-center gap-4 overflow-hidden';el.style.setProperty('--d',(i*.1)+'s');
-  el.innerHTML=`<div class="w-16 h-16 shrink-0 rounded-2xl bg-gradient-to-br ${s.bg} flex items-center justify-center text-3xl font-bold text-sky-600 shadow-inner">${s.ic}</div>
-    <div class="min-w-0 flex-1"><div class="text-sm text-slate-700">${s.t}</div><div class="text-2xl font-extrabold count" data-v="${s.v}">0</div>
-      <div class="text-xs mt-1"><span class="text-emerald-600 font-semibold">↑ ${s.g}</span> <span class="text-slate-500 ml-1">Since last Day</span></div></div>
-    <svg class="spark w-24 sm:w-28 h-14 shrink-0" viewBox="0 0 120 50"><defs><linearGradient id="sg${i}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${s.c}" stop-opacity=".35"/><stop offset="1" stop-color="${s.c}" stop-opacity="0"/></linearGradient></defs>
-      <path d="${s.d} L120 50 L0 50Z" fill="url(#sg${i})"/><path class="line" d="${s.d}" fill="none" stroke="${s.c}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/></svg>`;
-  $('#stats').appendChild(el);
-  const c=el.querySelector('.count');let st=null;
-  const step=t=>{st??=t;const p=Math.min((t-st)/1500,1),e=1-Math.pow(1-p,3);c.textContent=s.fmt(s.v*e);p<1&&requestAnimationFrame(step)};requestAnimationFrame(step);
-});
 
-/* ---------- Sales chart (SVG, hover tooltip) ---------- */
+/* ---------- Dashboard filters + stat cards ---------- */
+const DAY=864e5,toD=x=>new Date(x+'T00:00:00Z'),toS=d=>d.toISOString().slice(0,10),mdy=x=>{const[y,m,d]=x.split('-');return `${m}/${d}/${y}`};
+const maxDate=orders.reduce((m,o)=>o.t.slice(0,10)>m?o.t.slice(0,10):m,'0000'),minDate=orders.reduce((m,o)=>o.t.slice(0,10)<m?o.t.slice(0,10):m,'9999');
+const DEFAULT={from:'2026-10-01',to:maxDate,state:""};
+let draft={...DEFAULT},applied={...DEFAULT};
+const inRange=(o,f,t,st)=>{const d=o.t.slice(0,10);return d>=f&&d<=t&&(!st||o.state===st)};
+function metrics(f,t,st){const r=orders.filter(o=>inRange(o,f,t,st));return{ret:new Set(r.map(o=>o.cust)).size,ord:r.length,amt:r.reduce((a,o)=>a+o.val,0),rows:r}}
+const cardDefs=[
+  {t:'Total Retailers',k:'ret',fmt:n=>Math.round(n).toLocaleString('en-IN'),ic:'users',bg:'from-blue-100 to-sky-50',c:'#17B7CD'},
+  {t:'Total Orders',k:'ord',fmt:n=>Math.round(n).toLocaleString('en-IN'),ic:'cart',bg:'from-cyan-100 to-sky-50',c:'#17B7CD'},
+  {t:'Total Ordered Amount',k:'amt',fmt:n=>'₹ '+inr(n),ic:'rupee',bg:'from-sky-200 to-cyan-50',c:'#17B7CD'}
+];
+const prev={ret:0,ord:0,amt:0};
+cardDefs.forEach((s,i)=>{
+  const el=document.createElement('div');el.className='rise card hov p-5 overflow-hidden'+(i===2?' sm:col-span-2 xl:col-span-1':'');el.style.setProperty('--d',(i*.1+.1)+'s');
+  el.innerHTML=`<div class="flex items-start justify-between gap-3"><div class="text-sm font-medium text-slate-500">${s.t}</div>
+      <div class="w-10 h-10 shrink-0 rounded-xl bg-cyan-50 text-teal2 flex items-center justify-center">${svgI(s.ic,20)}</div></div>
+    <div class="mt-2 text-2xl sm:text-[1.75rem] font-extrabold tracking-tight text-navy count" id="v-${s.k}">0</div>
+    <div class="mt-3 flex items-end justify-between gap-3"><div class="text-xs leading-snug" id="g-${s.k}"></div>
+      <svg class="spark w-24 xl:w-20 h-10 shrink-0" viewBox="0 0 120 50" preserveAspectRatio="none"><defs><linearGradient id="sg${i}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${s.c}" stop-opacity=".35"/><stop offset="1" stop-color="${s.c}" stop-opacity="0"/></linearGradient></defs>
+      <path id="sa-${s.k}" fill="url(#sg${i})"/><path id="sl-${s.k}" class="line" fill="none" stroke="${s.c}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg></div>`;
+  $('#stats').appendChild(el);
+});
+function spark(rows,f,t,k){
+  const n=7,span=(toD(t)-toD(f))/DAY+1,vals=Array(n).fill(0),sets=Array.from({length:n},()=>new Set());
+  rows.forEach(o=>{const idx=Math.min(n-1,Math.floor((toD(o.t.slice(0,10))-toD(f))/DAY/span*n));
+    if(k==='amt')vals[idx]+=o.val;else if(k==='ord')vals[idx]++;else sets[idx].add(o.cust)});
+  if(k==='ret')sets.forEach((x,i)=>vals[i]=x.size);
+  const mn=Math.min(...vals),mx=Math.max(...vals),pts=vals.map((v,i)=>[i*20,mx===mn?30:44-((v-mn)/(mx-mn))*38]);
+  return 'M'+pts.map(p=>p.join(' ')).join(' L');
+}
+function renderStats(){
+  const{from:f,to:t,state:st}=applied,cur=metrics(f,t,st);
+  const L=(toD(t)-toD(f))/DAY+1,pf=toS(new Date(toD(f)-L*DAY)),pt=toS(new Date(toD(f)-DAY)),pm=metrics(pf,pt,st);
+  cardDefs.forEach(s=>{
+    const v=cur[s.k],c=$('#v-'+s.k),from=prev[s.k];prev[s.k]=v;let t0=null;
+    const step=ts=>{t0??=ts;const p=Math.min((ts-t0)/900,1);c.textContent=s.fmt(from+(v-from)*(1-Math.pow(1-p,3)));p<1&&requestAnimationFrame(step)};requestAnimationFrame(step);
+    const b=pm[s.k],pct=b?((v-b)/b*100):(v>0?100:0),up=pct>=0;
+    $('#g-'+s.k).innerHTML=`<span class="${pct===0?'text-slate-500':up?'text-emerald-600':'text-rose-500'} font-semibold">${pct===0?'•':up?'↑':'↓'} ${Math.abs(pct).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2})}%</span> <span class="text-slate-500 ml-1">vs prev. period</span>`;
+    const d=spark(cur.rows,f,t,s.k);$('#sl-'+s.k).setAttribute('d',d);$('#sa-'+s.k).setAttribute('d',d+' L120 50 L0 50Z');
+    const ln=$('#sl-'+s.k);ln.style.animation='none';ln.getBoundingClientRect();ln.style.animation='';
+  });
+}
+/* ---------- Reusable date-range picker (presets + two calendars) ---------- */
+const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],pickers=[];
+const addD=(s,n)=>toS(new Date(toD(s)-(-n)*DAY));
+const monthStart=s=>s.slice(0,8)+'01';
+const monthEnd=s=>{const d=toD(s);return toS(new Date(Date.UTC(d.getUTCFullYear(),d.getUTCMonth()+1,0)))};
+const prevMonthRange=s=>{const e=addD(monthStart(s),-1);return[monthStart(e),e]};
+const PRESETS=[
+  ['Today',()=>[maxDate,maxDate]],
+  ['Yesterday',()=>[addD(maxDate,-1),addD(maxDate,-1)]],
+  ['Last 7 Days',()=>[addD(maxDate,-6),maxDate]],
+  ['Last 30 Days',()=>[addD(maxDate,-29),maxDate]],
+  ['This Month',()=>[monthStart(maxDate),monthEnd(maxDate)]],
+  ['Last Month',()=>prevMonthRange(maxDate)],
+  ['Custom Range',null]
+];
+function RangePicker({pop,input,btn,get,onApply,align}){
+  let sel={s:null,e:null},hover=null,view='2026-01-01',label='Custom Range';
+  const text=(s,e)=>e&&e!==s?`${mdy(s)} - ${mdy(e)}`:mdy(s);
+  const detect=()=>{for(const[l,fn]of PRESETS){if(!fn)continue;const[a,b]=fn();if(a===sel.s&&b===sel.e)return l}return'Custom Range'};
+  const shiftMonth=(s,n)=>{const d=toD(s);return toS(new Date(Date.UTC(d.getUTCFullYear(),d.getUTCMonth()+n,1)))};
+  function cal(first){
+    const d=toD(first),y=d.getUTCFullYear(),m=d.getUTCMonth(),start=addD(first,-d.getUTCDay());
+    let cells='';for(let i=0;i<42;i++){const ds=addD(start,i),o=toD(ds).getUTCMonth()!==m;
+      cells+=`<button type="button" class="rp-d${o?' rp-o':''}" data-d="${ds}" ${o?'tabindex="-1" aria-hidden="true"':''}>${+ds.slice(8)}</button>`}
+    return `<div class="rp-cal"><div class="rp-h"><button type="button" class="rp-nav rp-prev" aria-label="Previous month">‹</button><span>${MONTHS[m]} ${y}</span><button type="button" class="rp-nav rp-next" aria-label="Next month">›</button></div>
+      <div class="rp-grid">${['Su','Mo','Tu','We','Th','Fr','Sa'].map(w=>`<span class="rp-w">${w}</span>`).join('')}${cells}</div></div>`;
+  }
+  function render(){
+    pop.innerHTML=`<div class="rp-side">${PRESETS.map(([l])=>`<button type="button" data-p="${l}" class="${l===label?'on':''}">${l}</button>`).join('')}</div>
+      <div class="rp-main"><div class="rp-cals">${cal(view)}${cal(shiftMonth(view,1))}</div>
+      <div class="rp-foot"><span class="rp-text"></span><button type="button" class="rp-cancel">Cancel</button><button type="button" class="rp-apply">Apply</button></div></div>`;
+    paint();
+  }
+  function range(){const a=sel.s,b=sel.e||hover;if(!a)return[null,null];return b&&b<a?[b,a]:[a,b||a]}
+  function paint(){
+    const[lo,hi]=range(),done=!!sel.e;
+    pop.querySelectorAll('.rp-d:not(.rp-o)').forEach(c=>{const d=c.dataset.d;
+      c.classList.toggle('rp-in',!!lo&&d>lo&&d<hi);c.classList.toggle('rp-s',d===lo);c.classList.toggle('rp-e',d===hi&&(done||!!hover||d===lo))});
+    pop.querySelector('.rp-text').textContent=lo?text(lo,hi):'Select a range';
+  }
+  function place(){
+    pop.classList.remove('rp-right','rp-compact');
+    if(align==='right')pop.classList.add('rp-right');
+    let r=pop.getBoundingClientRect();
+    if(r.right>innerWidth-8){pop.classList.add('rp-right');r=pop.getBoundingClientRect()}
+    if(r.left<8)pop.classList.add('rp-compact');
+  }
+  const api={
+    set(s,e){input.value=text(s,e)},
+    open(){pickers.forEach(p=>p!==api&&p.close());const[s,e]=get();sel={s,e};hover=null;view=monthStart(s);label=detect();render();pop.classList.remove('hidden');place();btn.setAttribute('aria-expanded','true')},
+    close(){pop.classList.add('hidden');btn.setAttribute('aria-expanded','false')},
+    toggle(){pop.classList.contains('hidden')?api.open():api.close()}
+  };
+  pickers.push(api);
+  input.onclick=btn.onclick=e=>{e.stopPropagation();api.toggle()};
+  pop.addEventListener('click',e=>{
+    e.stopPropagation();const t=e.target.closest('button');if(!t)return;
+    if(t.classList.contains('rp-d')){const d=t.dataset.d;
+      if(!sel.s||sel.e){sel={s:d,e:null};hover=null}else{sel.e=d;if(sel.e<sel.s)[sel.s,sel.e]=[sel.e,sel.s];hover=null}
+      label=sel.e?detect():'Custom Range';
+      pop.querySelectorAll('.rp-side button').forEach(b=>b.classList.toggle('on',b.dataset.p===label));paint()}
+    else if(t.classList.contains('rp-prev')){view=shiftMonth(view,-1);render()}
+    else if(t.classList.contains('rp-next')){view=shiftMonth(view,1);render()}
+    else if(t.dataset.p){label=t.dataset.p;const p=PRESETS.find(x=>x[0]===label);if(p[1]){[sel.s,sel.e]=p[1]();hover=null;view=monthStart(sel.s);render()}else{sel={s:sel.s,e:null};render()}}
+    else if(t.classList.contains('rp-cancel'))api.close();
+    else if(t.classList.contains('rp-apply')){const[lo,hi]=range();if(lo){api.set(lo,hi);onApply(lo,hi)}api.close()}
+  });
+  pop.addEventListener('mouseover',e=>{const c=e.target.closest('.rp-d');if(c&&!c.classList.contains('rp-o')&&sel.s&&!sel.e){hover=c.dataset.d;paint()}});
+  return api;
+}
+document.addEventListener('click',()=>pickers.forEach(p=>p.close()));
+addEventListener('keydown',e=>{if(e.key==='Escape')pickers.forEach(p=>p.close())});
+
+/* dashboard filter bar picker */
+const fbPicker=RangePicker({pop:$('#rangePop'),input:$('#rangeText'),btn:$('#rangeBtn'),get:()=>[draft.from,draft.to],onApply:(s,e)=>{draft.from=s;draft.to=e}});
+/* orders-table picker (same component = consistent look) */
+const tPicker=RangePicker({pop:$('#tPop'),input:$('#tRange'),btn:$('#tRangeBtn'),align:'right',get:()=>[$('#dFrom').value,$('#dTo').value],
+  onApply:(s,e)=>{$('#dFrom').value=s;$('#dTo').value=e;page=1;render()}});
+const syncDraft=()=>{fbPicker.set(draft.from,draft.to);$('#fState').value=draft.state};
+$('#fState').onchange=e=>{draft.state=e.target.value};
+function applyFilters(){
+  applied={...draft};renderStats();donut(applied);
+  /* keep the orders table in sync with the dashboard filters */
+  $('#dFrom').value=applied.from;$('#dTo').value=applied.to;$('#oState').value=applied.state;tPicker.set(applied.from,applied.to);page=1;render();
+}
+$('#fApply').onclick=()=>{fbPicker.close();applyFilters()};
+$('#fReset').onclick=()=>{draft={...DEFAULT};syncDraft();fbPicker.close();applyFilters()};
+
+/* ---------- Sales chart ---------- */
 const datasets={
-  7:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],vals:[2.2,2.9,2.55,3.1,2.95,3.806,3.9],total:'₹ 4,25,890',delta:'12.5% vs last week',hi:5},
-  30:{labels:['W1','W2','W3','W4','W5'],vals:[2.4,3.1,2.8,3.6,3.9],total:'₹ 16,82,400',delta:'8.2% vs last month',hi:4}
+  7:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],vals:[2.2,2.9,2.55,3.1,2.95,3.806,3.9],total:'₹ 4,25,890',delta:'12.5%',vs:'vs last week',hi:5},
+  30:{labels:['W1','W2','W3','W4','W5'],vals:[2.4,3.1,2.8,3.6,3.9],total:'₹ 16,82,400',delta:'8.2%',vs:'vs last month',hi:4}
 };
-const W=520,H=240,padL=34,padB=26,padT=10,maxY=4;
+let W=520,H=240;const padL=34,padB=26,padT=10,maxY=4;
 function chart(key){
   const d=datasets[key],svg=$('#chart'),n=d.vals.length;
-  const X=i=>padL+(W-padL-6)*i/(n-1),Y=v=>padT+(H-padB-padT)*(1-v/maxY);
+  /* draw at the real pixel size so text and dots are never stretched */
+  const box=$('#chartWrap').getBoundingClientRect();W=Math.max(280,Math.round(box.width));H=Math.max(220,Math.round(box.height));
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  const X=i=>padL+(W-padL-10)*i/(n-1),Y=v=>padT+(H-padB-padT)*(1-v/maxY);
   let g='';
   for(let k=0;k<=4;k++){const y=Y(k);g+=`<line x1="${padL}" x2="${W}" y1="${y}" y2="${y}" stroke="rgba(255,255,255,.1)"/><text x="0" y="${y+4}" fill="#9fb6dd" font-size="11">${k===0?'0':k+'L'}</text>`}
   d.labels.forEach((l,i)=>g+=`<text x="${X(i)}" y="${H-6}" fill="#c3d4ef" font-size="11" text-anchor="middle">${l}</text>`);
-  // smooth path (catmull-rom -> bezier)
   const P=d.vals.map((v,i)=>[X(i),Y(v)]);let path=`M${P[0][0]} ${P[0][1]}`;
   for(let i=0;i<n-1;i++){const p0=P[i-1]||P[i],p1=P[i],p2=P[i+1],p3=P[i+2]||p2;
     path+=` C${p1[0]+(p2[0]-p0[0])/6} ${p1[1]+(p2[1]-p0[1])/6}, ${p2[0]-(p3[0]-p1[0])/6} ${p2[1]-(p3[1]-p1[1])/6}, ${p2[0]} ${p2[1]}`}
-  g+=`<defs><linearGradient id="ar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#22d3ee" stop-opacity=".45"/><stop offset="1" stop-color="#22d3ee" stop-opacity="0"/></linearGradient></defs>
+  g+=`<defs><linearGradient id="ar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#17B7CD" stop-opacity=".45"/><stop offset="1" stop-color="#17B7CD" stop-opacity="0"/></linearGradient></defs>
      <path d="${path} L${P[n-1][0]} ${H-padB} L${P[0][0]} ${H-padB}Z" fill="url(#ar)"/>
-     <path id="ln" d="${path}" fill="none" stroke="#2dd4f0" stroke-width="3" stroke-linecap="round"/>`;
-  P.forEach((p,i)=>g+=`<circle data-i="${i}" cx="${p[0]}" cy="${p[1]}" r="${i===d.hi?6:4.5}" fill="#0a2d70" stroke="#fff" stroke-width="2.5" style="cursor:pointer"/><rect data-i="${i}" x="${p[0]-22}" y="0" width="44" height="${H}" fill="transparent"/>`);
+     <path id="ln" d="${path}" fill="none" stroke="#17B7CD" stroke-width="3" stroke-linecap="round" vector-effect="non-scaling-stroke"/>`;
+  P.forEach((p,i)=>g+=`<circle cx="${p[0]}" cy="${p[1]}" r="${i===d.hi?6:4.5}" fill="#0a2d70" stroke="#fff" stroke-width="2.5"/><rect data-i="${i}" x="${p[0]-22}" y="0" width="44" height="${H}" fill="transparent" style="cursor:pointer"/>`);
   svg.innerHTML=g;
   const ln=$('#ln'),L=ln.getTotalLength();ln.style.strokeDasharray=L;ln.style.strokeDashoffset=L;ln.getBoundingClientRect();ln.style.transition='stroke-dashoffset 1.4s ease';ln.style.strokeDashoffset=0;
-  const tip=(i)=>{const t=$('#chartTip'),r=svg.getBoundingClientRect(),wr=$('#chartWrap').getBoundingClientRect();
+  const tip=i=>{const t=$('#chartTip'),r=svg.getBoundingClientRect();
     t.textContent='₹ '+Math.round(d.vals[i]*100000).toLocaleString('en-IN');
-    t.style.left=(P[i][0]/W*r.width)+'px';t.style.top=Math.max(0,(P[i][1]/H*r.height)-44)+'px'};
-  svg.querySelectorAll('rect').forEach(r=>r.addEventListener('mouseenter',()=>tip(+r.dataset.i)));
-  svg.querySelectorAll('rect').forEach(r=>r.addEventListener('click',()=>tip(+r.dataset.i)));
-  $('#salesTotal').textContent=d.total;$('#salesTotal').nextElementSibling.innerHTML=`↑ ${d.delta.split(' ')[0]} <span class="text-slate-300">${d.delta.split(' ').slice(1).join(' ')}</span>`;
+    const x=Math.min(Math.max(P[i][0]/W*r.width,40),r.width-40);t.style.left=x+'px';t.style.top=Math.max(0,(P[i][1]/H*r.height)-38)+'px'};
+  svg.querySelectorAll('rect').forEach(r=>{r.addEventListener('mouseenter',()=>tip(+r.dataset.i));r.addEventListener('click',()=>tip(+r.dataset.i))});
+  $('#salesTotal').textContent=d.total;$('#salesDelta').innerHTML=`↑ ${d.delta} <span class="text-slate-300">${d.vs}</span>`;
   tip(d.hi);window._tip=()=>tip(d.hi);
 }
-$('#range').onchange=e=>chart(e.target.value);chart(7);addEventListener('resize',()=>window._tip&&window._tip());
+$('#range').onchange=e=>chart(e.target.value);chart(7);
+let _rt;addEventListener('resize',()=>{clearTimeout(_rt);_rt=setTimeout(()=>chart($('#range').value),150)});
 
-/* ---------- Orders table + filters ---------- */
-const orders=[
-  [1,'Aapni Pharmacy','PRINCE PHARMA','#13',22564,'Pending','Nov. 13, 2026, 12:32 p.m.',1,1352.55,'Telangana'],
-  [2,'Sree Gayathri Medical And General Stores','Pharma Plus Distributors Hyderabad','#1',22563,'Pending','Nov. 13, 2026, 12:28 p.m.',2,24327.72,'Telangana'],
-  [3,'Sri Sai Medicals','MedleyMed Network','#45',22562,'Delivered','Nov. 13, 2026, 11:45 a.m.',3,12450.00,'Andhra Pradesh'],
-  [4,'Lakshmi Pharma','Vijaya Distributors','#22',22561,'Delivered','Nov. 13, 2026, 11:10 a.m.',4,8920.40,'Karnataka'],
-  [5,'City Care Chemists','PRINCE PHARMA','#13',22560,'Cancelled','Nov. 13, 2026, 10:52 a.m.',1,640.00,'Telangana']
-];
-let status='All';
-const sf=$('#statusFilter');
-['All','Pending','Delivered','Cancelled'].forEach(s=>{const b=document.createElement('button');b.textContent=s;b.className='px-3 py-1 rounded-full border border-slate-200 bg-white font-medium transition hover:border-teal';
-  b.onclick=()=>{status=s;[...sf.children].forEach(x=>x.classList.toggle('!bg-teal',x===b));[...sf.children].forEach(x=>x.classList.toggle('!text-white',x===b));render()};sf.appendChild(b);if(s==='All')b.click()});
-function render(){
-  const q=$('#oSearch').value.toLowerCase(),st=$('#oState').value;
-  const rows=orders.filter(o=>(status==='All'||o[5]===status)&&(!st||o[9]===st)&&(!q||(o[1]+o[2]+o[4]).toLowerCase().includes(q)));
-  $('#ordersBody').innerHTML=rows.map((o,i)=>`<tr class="border-t border-slate-100"><td class="p-3">${i+1}</td><td class="pr-2 max-w-[160px]">${o[1]}</td><td class="pr-2 max-w-[160px]">${o[2]}</td><td>${o[3]}</td>
-    <td><a href="#" class="text-sky-600 font-semibold hover:underline">${o[4]}</a></td><td><span class="badge b-${o[5]}">${o[5]}</span></td><td class="pr-2 text-slate-600">${o[6]}</td><td>${o[7]}</td>
-    <td class="pr-3 font-semibold whitespace-nowrap">₹ ${o[8].toLocaleString('en-IN',{minimumFractionDigits:2})}</td></tr>`).join('');
-  $('#empty').classList.toggle('hidden',rows.length>0);
+/* ---------- Order status donut (follows dashboard filters) ---------- */
+function donut(fl){
+  const cols={Delivered:'#22c55e',Pending:'#f59e0b',Cancelled:'#ef4444'};
+  const src=fl?orders.filter(o=>inRange(o,fl.from,fl.to,fl.state)):orders;
+  const cnt={Delivered:0,Pending:0,Cancelled:0};src.forEach(o=>cnt[o.st]++);const total=src.length,R=48,C=2*Math.PI*R;
+  let off=0,svg='<circle cx="60" cy="60" r="48" fill="none" stroke="#e8f1f8" stroke-width="14"/>',leg="";
+  Object.entries(cnt).forEach(([k,v])=>{const len=total?v/total*C:0;
+    svg+=`<circle class="seg" cx="60" cy="60" r="${R}" fill="none" stroke="${cols[k]}" stroke-width="14" stroke-linecap="butt" stroke-dasharray="0 ${C}" data-len="${len}" stroke-dashoffset="${-off}"/>`;off+=len;
+    const pc=total?Math.round(v/total*100):0,amt=src.filter(o=>o.st===k).reduce((x,o)=>x+o.val,0);
+    leg+=`<li><div class="flex items-center justify-between gap-3"><span class="flex items-center gap-2 font-medium"><i class="w-2.5 h-2.5 rounded-full" style="background:${cols[k]}"></i>${k}</span><span class="font-semibold">${v} <span class="text-slate-400 font-normal">(${pc}%)</span></span></div><div class="mt-1.5 h-1.5 rounded-full bg-slate-100 overflow-hidden"><div class="h-full rounded-full transition-all duration-700" style="width:${pc}%;background:${cols[k]}"></div></div><div class="mt-1 text-[11px] text-slate-500">₹ ${inr(amt)}</div></li>`});
+  $('#donut').innerHTML=svg;$('#donutLegend').innerHTML=leg;$('#donutTotal').textContent=total;
+  requestAnimationFrame(()=>setTimeout(()=>document.querySelectorAll('#donut .seg').forEach(c=>c.setAttribute('stroke-dasharray',`${Math.max(c.dataset.len-2,0)} ${C}`)),200));
 }
-$('#oSearch').oninput=render;$('#oState').onchange=render;
+
+/* ---------- Orders table ---------- */
+let status='All',sortK='time',sortD=-1,page=1;
+const fDate=t=>new Date(t).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}),fTime=t=>new Date(t).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true}).toUpperCase();
+function filtered(ignoreStatus){
+  const q=$('#oSearch').value.trim().toLowerCase(),st=$('#oState').value,f=$('#dFrom').value,t=$('#dTo').value;
+  return orders.filter(o=>(ignoreStatus||status==='All'||o.st===status)&&(!st||o.state===st)&&(!f||o.t.slice(0,10)>=f)&&(!t||o.t.slice(0,10)<=t)&&(!q||(o.cust+o.part+o.id).toLowerCase().includes(q)));
+}
+function chips(){
+  const base=filtered(true),sf=$('#statusFilter');sf.innerHTML='';
+  ['All','Pending','Delivered','Cancelled'].forEach(s=>{const n=s==='All'?base.length:base.filter(o=>o.st===s).length;
+    const b=document.createElement('button');b.className='chip'+(s===status?' on':'');b.innerHTML=`${s}<small>${n}</small>`;b.onclick=()=>{status=s;page=1;render()};sf.appendChild(b)});
+}
+function render(){
+  chips();
+  let rows=filtered();const k=sortK;
+  rows.sort((a,b)=>{const A=k==='time'?a.t:k==='cust'?a.cust.toLowerCase():a[k],B=k==='time'?b.t:k==='cust'?b.cust.toLowerCase():b[k];return (A>B?1:A<B?-1:0)*sortD});
+  const size=+$('#pageSize').value,pages=Math.max(1,Math.ceil(rows.length/size));page=Math.min(page,pages);
+  const start=(page-1)*size,view=rows.slice(start,start+size);
+  $('#ordersBody').innerHTML=view.map((o,i)=>`<tr>
+    <td class="sn text-slate-500">${start+i+1}</td>
+    <td data-l="Customer" class="full font-semibold max-w-[16rem]">${o.cust}<div class="text-[11px] text-slate-400 font-normal">${o.state}</div></td>
+    <td data-l="Partner" class="full max-w-[15rem] text-slate-700">${o.part}</td>
+    <td data-l="Partner ID" class="text-slate-600">#${o.pid}</td>
+    <td data-l="Order ID"><a href="#" class="text-teal2 font-semibold hover:underline">${o.id}</a></td>
+    <td data-l="Status"><span class="badge b-${o.st}">${o.st}</span></td>
+    <td data-l="Date &amp; Time" class="whitespace-nowrap"><div class="font-medium">${fDate(o.t)}</div><div class="text-[11px] text-slate-500">${fTime(o.t)}</div></td>
+    <td data-l="Items">${o.items}</td>
+    <td data-l="Value" class="font-bold whitespace-nowrap xl:text-right">₹ ${inr(o.val)}</td></tr>`).join('');
+  $('#empty').classList.toggle('hidden',rows.length>0);
+  const sum=rows.reduce((a,o)=>a+o.val,0);
+  $('#summary').innerHTML=rows.length?`Showing <b>${start+1}–${start+view.length}</b> of <b>${rows.length}</b> orders · Total <b>₹ ${inr(sum)}</b>`:'0 orders';
+  const pg=$('#pager');pg.innerHTML='';
+  const btn=(l,p,on,dis,num)=>{const b=document.createElement('button');b.textContent=l;b.disabled=dis;b.setAttribute('aria-label',num?`Page ${l}`:(l==='‹'?'Previous page':'Next page'));if(on)b.setAttribute('aria-current','page');
+    b.className='min-w-9 h-9 px-2 rounded-lg text-sm font-semibold transition '+(num?'pg-num ':'')+(on?'pg-on':'pg-off')+(dis?' opacity-40 cursor-not-allowed':'');b.onclick=()=>{page=p;render()};pg.appendChild(b)};
+  /* windowed pager: 1 … 4 5 6 … 20  (never more than ~7 buttons, however many pages) */
+  const show=new Set([1,pages,page-1,page,page+1]);if(page<=3)[2,3,4].forEach(x=>show.add(x));if(page>=pages-2)[pages-1,pages-2,pages-3].forEach(x=>show.add(x));
+  const nums=[...show].filter(x=>x>=1&&x<=pages).sort((a,b)=>a-b);
+  btn('‹',page-1,false,page===1);
+  nums.forEach((p,i)=>{if(i&&p-nums[i-1]>1){const e=document.createElement('span');e.textContent='…';e.className='pg-num px-1 text-slate-400 select-none';pg.appendChild(e)}btn(p,p,p===page,false,true)});
+  const pt=document.createElement('span');pt.className='pg-mob text-xs font-medium text-slate-600 px-2';pt.textContent=`Page ${page} of ${pages}`;pg.appendChild(pt);
+  btn('›',page+1,false,page===pages);
+  document.querySelectorAll('#tbl th.sortable').forEach(th=>th.querySelector('i').textContent=th.dataset.k===sortK?(sortD>0?' ▲':' ▼'):'');
+}
+document.querySelectorAll('#tbl th.sortable').forEach(th=>th.onclick=()=>{sortD=sortK===th.dataset.k?-sortD:1;sortK=th.dataset.k;render()});
+['oSearch'].forEach(id=>$('#'+id).oninput=()=>{page=1;render()});
+['oState','dFrom','dTo','pageSize'].forEach(id=>$('#'+id).onchange=()=>{page=1;render()});
+$('#globalSearch').addEventListener('input',e=>{$('#oSearch').value=e.target.value;page=1;render()});
+$('#csv').onclick=()=>{const r=filtered(),h=['Order ID','Customer','Partner','Partner ID','Status','Date','Items','Value'];
+  const csv=[h,...r.map(o=>[o.id,o.cust,o.part,o.pid,o.st,o.t,o.items,o.val])].map(l=>l.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='orders.csv';a.click()};
+render();
+
+/* ---------- Modern dropdowns (progressive enhancement of <select>) ---------- */
+const dds=[];
+const DD_CHEV='<svg class="dd-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+const DD_CHECK='<svg class="dd-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
+function enhanceSelect(sel,variant='light'){
+  const wrap=document.createElement('div');
+  wrap.className='dd dd-'+variant;
+  if(variant==='light'||variant==='sm')[...sel.classList].filter(c=>/^((sm|md|lg|xl):)?(!?w-|max-w-|min-w-|flex-|col-span)/.test(c)).forEach(c=>wrap.classList.add(c));
+  sel.parentNode.insertBefore(wrap,sel);wrap.appendChild(sel);
+  sel.classList.add('sr-only');sel.tabIndex=-1;sel.setAttribute('aria-hidden','true');
+  const lab=document.querySelector(`label[for="${sel.id}"]`),name=lab?lab.textContent.trim():sel.id;
+  const btn=document.createElement('button');btn.type='button';btn.className='dd-btn';
+  btn.setAttribute('aria-haspopup','listbox');btn.setAttribute('aria-expanded','false');btn.setAttribute('aria-label',name);
+  const list=document.createElement('ul');list.className='dd-list';list.setAttribute('role','listbox');list.tabIndex=-1;
+  wrap.append(btn,list);
+  let act=-1;
+  const sync=()=>{
+    const o=sel.options[sel.selectedIndex];
+    btn.innerHTML=`<span class="dd-lbl">${o?o.textContent:''}</span>${DD_CHEV}`;
+    list.querySelectorAll('.dd-opt').forEach((li,i)=>{const on=i===sel.selectedIndex;li.classList.toggle('on',on);li.setAttribute('aria-selected',on)});
+  };
+  list.innerHTML=[...sel.options].map((o,i)=>`<li role="option" class="dd-opt" data-i="${i}"><span>${o.textContent}</span>${DD_CHECK}</li>`).join('');
+  const setAct=i=>{const items=[...list.children];act=Math.max(0,Math.min(items.length-1,i));items.forEach((li,k)=>li.classList.toggle('act',k===act));items[act]&&items[act].scrollIntoView({block:'nearest'})};
+  const api={
+    close(){wrap.classList.remove('open','up');btn.setAttribute('aria-expanded','false')},
+    open(){
+      dds.forEach(d=>d!==api&&d.close());wrap.classList.add('open');btn.setAttribute('aria-expanded','true');
+      const r=wrap.getBoundingClientRect(),h=list.scrollHeight+12;
+      wrap.classList.toggle('up',r.bottom+h>innerHeight&&r.top>h);
+      setAct(sel.selectedIndex);
+    },
+    pick(i){sel.selectedIndex=i;sync();sel.dispatchEvent(new Event('change',{bubbles:true}));api.close();btn.focus()}
+  };
+  dds.push(api);
+  /* keep UI in sync when code sets select.value programmatically */
+  const d=Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype,'value');
+  Object.defineProperty(sel,'value',{get(){return d.get.call(sel)},set(v){d.set.call(sel,v);sync()}});
+  btn.onclick=e=>{e.stopPropagation();wrap.classList.contains('open')?api.close():api.open()};
+  list.onclick=e=>{e.stopPropagation();const li=e.target.closest('.dd-opt');if(li)api.pick(+li.dataset.i)};
+  list.onmousemove=e=>{const li=e.target.closest('.dd-opt');if(li)setAct(+li.dataset.i)};
+  btn.addEventListener('keydown',e=>{
+    const isOpen=wrap.classList.contains('open');
+    if(['ArrowDown','ArrowUp'].includes(e.key)){e.preventDefault();if(!isOpen)api.open();else setAct(act+(e.key==='ArrowDown'?1:-1))}
+    else if(e.key==='Enter'||e.key===' '){e.preventDefault();isOpen?api.pick(act):api.open()}
+    else if(e.key==='Escape'&&isOpen){e.stopPropagation();api.close()}
+    else if(e.key==='Tab')api.close();
+    else if(e.key==='Home'&&isOpen){e.preventDefault();setAct(0)}
+    else if(e.key==='End'&&isOpen){e.preventDefault();setAct(sel.options.length-1)}
+  });
+  sync();return api;
+}
+document.addEventListener('click',()=>dds.forEach(d=>d.close()));
+addEventListener('keydown',e=>{if(e.key==='Escape')dds.forEach(d=>d.close())});
+enhanceSelect($('#fState'),'light');
+enhanceSelect($('#oState'),'light');
+enhanceSelect($('#range'),'dark');
+enhanceSelect($('#pageSize'),'sm');
+
+if(innerWidth<640)$('#pageSize').value='5';
+syncDraft();applyFilters();
 
 /* ---------- Quick actions ---------- */
-[['➕👤','Add Partner'],['📊','View Reports'],['🏷️','Special Deals'],['🚚','Delivery Tie-ups'],['💳','Credit Facilities']].forEach(([i,t])=>{
-  const a=document.createElement('a');a.href='#';a.className='qa p-3 text-center flex flex-col items-center gap-2';
-  a.innerHTML=`<span class="text-2xl">${i}</span><span class="text-xs font-semibold flex items-center gap-1.5">${t}<span class="arrow w-5 h-5 rounded-full bg-sky-100 text-sky-600 flex items-center justify-center text-[10px] transition">›</span></span>`;$('#quick').appendChild(a)});
+[['userPlus','Add Partner'],['chart','View Reports'],['tag','Special Deals'],['truck','Delivery Tie-ups'],['card','Credit Facilities']].forEach(([i,t])=>{
+  const a=document.createElement('a');a.href='#';a.className='qa p-4 text-center flex flex-col items-center gap-3';
+  a.innerHTML=`<span class="w-11 h-11 rounded-xl bg-cyan-50 text-teal2 flex items-center justify-center">${svgI(i,22)}</span><span class="text-xs font-semibold flex items-center gap-1.5">${t}<span class="arrow w-5 h-5 rounded-full bg-cyan-50 text-teal2 flex items-center justify-center text-[11px] transition">›</span></span>`;$('#quick').appendChild(a)});
 </script>
 </body>
 </html>
