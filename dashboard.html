@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard – Medleymed Network</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+tailwind.config={theme:{extend:{colors:{navy:'#06173d',navy2:'#0a2a6b',teal:'#14b8d4',teal2:'#0891b2'},fontFamily:{sans:['Inter','sans-serif']}}}}
+</script>
+<style>
+  body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#eaf6fd 0%,#f6fbfe 50%,#e3f3fb 100%);color:#06173d;min-height:100vh}
+  .side{background:linear-gradient(180deg,#041334 0%,#06235a 55%,#0a6fb5 100%)}
+  .nav-item{display:flex;align-items:center;gap:.9rem;padding:.7rem 1rem;border-radius:.9rem;color:#d3e2f7;font-size:.9rem;font-weight:500;transition:background .2s,transform .2s,color .2s}
+  .nav-item:hover{background:rgba(255,255,255,.1);color:#fff;transform:translateX(4px)}
+  .nav-item.active{background:linear-gradient(90deg,#1aa7d8,#2bc4e4);color:#fff;box-shadow:0 8px 24px rgba(34,211,238,.4)}
+  .card{background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.9);border-radius:1.4rem;box-shadow:0 10px 35px rgba(20,120,190,.10);transition:transform .3s,box-shadow .3s}
+  .card:hover{transform:translateY(-4px);box-shadow:0 18px 45px rgba(20,150,210,.2)}
+  .grad{background:linear-gradient(90deg,#22d3ee,#14b8d4);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .spark path.line{stroke-dasharray:400;stroke-dashoffset:400;animation:draw 1.8s .3s ease forwards}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  .rise{opacity:0;transform:translateY(24px);animation:rise .7s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:var(--d,0s)}
+  @keyframes rise{to{opacity:1;transform:none}}
+  .badge{padding:.2rem .7rem;border-radius:999px;font-size:.72rem;font-weight:600;white-space:nowrap}
+  .b-Pending{background:#ffe8cf;color:#d97706}.b-Delivered{background:#d3f7e0;color:#16a34a}.b-Cancelled{background:#fde0e0;color:#dc2626}
+  .ctl{background:#fff;border:1px solid #dbe8f3;border-radius:.8rem;padding:.55rem .9rem;font-size:.8rem;outline:none;transition:border .2s,box-shadow .2s;width:100%}
+  .ctl:focus{border-color:#14b8d4;box-shadow:0 0 0 3px rgba(20,184,212,.2)}
+  tbody tr{transition:background .2s}tbody tr:hover{background:#eef8fd}
+  .qa{background:#fff;border-radius:1.1rem;box-shadow:0 8px 22px rgba(20,120,190,.12);transition:transform .25s,box-shadow .25s}
+  .qa:hover{transform:translateY(-6px);box-shadow:0 16px 32px rgba(20,184,212,.3)}
+  .qa:hover .arrow{background:#14b8d4;color:#fff}
+  @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+  .floaty{animation:floaty 5s ease-in-out infinite}
+  .banner-img{-webkit-mask-image:linear-gradient(to right,transparent 0,#000 38%),linear-gradient(to left,transparent 0,#000 4%),linear-gradient(to bottom,transparent 0,#000 10%,#000 88%,transparent 100%);-webkit-mask-composite:source-in;
+    mask-image:linear-gradient(to right,transparent 0,#000 38%),linear-gradient(to left,transparent 0,#000 4%),linear-gradient(to bottom,transparent 0,#000 10%,#000 88%,transparent 100%);mask-composite:intersect}
+  #chartTip{transition:left .25s,top .25s}
+  ::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-thumb{background:#9fc9e0;border-radius:9px}
+</style>
+</head>
+<body>
+
+<!-- overlay for mobile sidebar -->
+<div id="overlay" class="fixed inset-0 bg-navy/60 z-30 hidden lg:hidden"></div>
+
+<!-- ============ SIDEBAR ============ -->
+<aside id="sidebar" class="side fixed inset-y-0 left-0 w-64 z-40 text-white flex flex-col -translate-x-full lg:translate-x-0 transition-transform duration-300 rounded-r-3xl shadow-2xl">
+  <div class="px-6 pt-6 pb-4 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-3">
+      <svg width="42" height="42" viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="none" stroke="#22d3ee" stroke-width="3"/><circle cx="24" cy="24" r="16" fill="#0b3b86"/><path d="M14 32V16l10 11 10-11v16" fill="none" stroke="#fff" stroke-width="3.5" stroke-linejoin="round"/></svg>
+      <div class="leading-none"><div class="font-extrabold text-lg">MEDLEYMED</div><div class="text-[9px] tracking-[.5em] text-teal">NETWORK</div><div class="text-[8px] mt-1 text-slate-300">Powering Growth</div></div>
+    </a>
+    <button id="closeSide" class="lg:hidden text-2xl leading-none">×</button>
+  </div>
+  <nav id="navList" class="flex-1 overflow-y-auto px-4 py-3 space-y-1"></nav>
+  <div class="m-4 p-4 rounded-2xl bg-white/10 border border-white/20 flex items-center gap-3">
+    <div class="text-4xl floaty">🚀</div>
+    <div><div class="font-semibold text-sm">Grow Faster</div><div class="text-xs text-slate-300">with MedleyMed</div>
+      <a href="#" class="inline-block mt-2 bg-teal px-3 py-1 rounded-full text-xs font-semibold hover:bg-teal2 transition">Explore More →</a></div>
+  </div>
+</aside>
+
+<!-- ============ MAIN ============ -->
+<div class="lg:pl-64">
+  <!-- top bar -->
+  <header class="sticky top-0 z-20 px-4 sm:px-6 py-3 flex items-center gap-3 backdrop-blur-md bg-white/40">
+    <button id="openSide" class="lg:hidden w-11 h-11 rounded-full bg-white shadow flex items-center justify-center text-lg" aria-label="Menu">☰</button>
+    <div class="relative flex-1 max-w-xl">
+      <span class="absolute left-4 top-1/2 -translate-y-1/2 opacity-60">🔍</span>
+      <input id="globalSearch" class="w-full bg-white/90 rounded-full py-3 pl-11 pr-16 text-sm shadow outline-none focus:ring-2 ring-teal/50" placeholder="Search anything...">
+      <kbd class="hidden sm:block absolute right-4 top-1/2 -translate-y-1/2 text-[11px] bg-slate-100 px-2 py-0.5 rounded-md text-slate-500">⌘ K</kbd>
+    </div>
+    <div class="flex-1 hidden md:block"></div>
+    <button class="relative w-11 h-11 rounded-full bg-white shadow flex items-center justify-center" aria-label="Notifications">🔔<span class="absolute -top-1 -right-1 bg-rose-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold">3</span></button>
+    <div class="flex items-center gap-3 bg-white/90 rounded-full pl-2 pr-3 sm:pr-4 py-1.5 shadow cursor-pointer">
+      <div class="relative"><div class="w-9 h-9 rounded-full bg-gradient-to-br from-teal to-navy2 text-white flex items-center justify-center font-bold">A</div><span class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-400 border-2 border-white rounded-full"></span></div>
+      <div class="hidden sm:block leading-tight"><div class="text-sm font-semibold">Hi Azad</div><div class="text-xs text-slate-500">Admin</div></div><span class="text-xs">⌄</span>
+    </div>
+  </header>
+
+  <main class="px-4 sm:px-6 pb-10 space-y-5">
+    <!-- welcome banner -->
+    <section class="rise relative mt-8 sm:mt-14">
+      <div class="relative rounded-3xl bg-gradient-to-r from-[#041a45] via-[#073a86] to-[#0a6fc0] text-white px-6 sm:px-10 py-8 min-h-[190px] shadow-xl">
+        <div class="relative z-10 max-w-lg">
+          <h1 class="text-3xl sm:text-5xl font-extrabold leading-tight">Welcome back, <span class="grad">Azad!</span></h1>
+          <p class="mt-2 text-base sm:text-lg text-slate-100">Together we're building a healthier India</p>
+          <div class="mt-4 inline-flex items-center gap-3 bg-gradient-to-r from-[#0a4aa0] to-[#2dd4f0] rounded-full pr-5 text-sm font-semibold">
+            <span class="w-10 h-10 rounded-full bg-navy flex items-center justify-center text-teal">↗</span>
+            <span class="text-navy">Your Network is Growing</span><span class="text-navy">↑ +5.75% this Month</span>
+          </div>
+        </div>
+        <img src="assets/hero.png" alt="" class="banner-img hidden md:block absolute right-0 -top-14 lg:-top-20 h-[calc(100%+5.5rem)] lg:h-[calc(100%+7rem)] w-auto max-w-[62%] object-contain object-right pointer-events-none select-none floaty">
+      </div>
+    </section>
+
+    <!-- stat cards -->
+    <section class="grid sm:grid-cols-2 xl:grid-cols-3 gap-5" id="stats"></section>
+
+    <!-- sales + orders -->
+    <section class="grid xl:grid-cols-[5fr_8fr] gap-5">
+      <div class="rise rounded-3xl bg-gradient-to-b from-[#071d4d] to-[#0a2d70] text-white p-6 shadow-xl" style="--d:.2s">
+        <div class="flex items-center justify-between gap-3">
+          <h3 class="font-semibold flex items-center gap-2"><span class="text-teal">▮▮</span> Sales Overview</h3>
+          <select id="range" class="bg-transparent border border-white/30 rounded-full px-3 py-1 text-xs outline-none">
+            <option class="text-navy" value="7">Last 7 Days</option><option class="text-navy" value="30">Last 30 Days</option>
+          </select>
+        </div>
+        <div class="mt-3 text-3xl font-extrabold" id="salesTotal">₹ 4,25,890</div>
+        <div class="text-xs text-emerald-300 mt-1">↑ 12.5% <span class="text-slate-300">vs last week</span></div>
+        <div class="relative mt-4" id="chartWrap">
+          <svg id="chart" class="w-full h-[240px]" viewBox="0 0 520 240" preserveAspectRatio="none"></svg>
+          <div id="chartTip" class="absolute -translate-x-1/2 bg-white text-navy text-xs font-bold px-3 py-1.5 rounded-full shadow-lg pointer-events-none whitespace-nowrap"></div>
+        </div>
+      </div>
+
+      <div class="rise card p-5 sm:p-6" style="--d:.3s">
+        <div class="flex items-center justify-between">
+          <h3 class="font-semibold flex items-center gap-3"><span class="w-10 h-10 rounded-xl bg-sky-100 flex items-center justify-center">🛍️</span> Recent Orders</h3>
+          <a href="#" class="text-sm text-teal2 font-semibold hover:underline">View All →</a>
+        </div>
+        <div class="mt-4 grid sm:grid-cols-[1.4fr_1fr_1.3fr] gap-3">
+          <input id="oSearch" class="ctl" placeholder="🔍  Search orders...">
+          <select id="oState" class="ctl"><option value="">Choose State</option><option>Telangana</option><option>Andhra Pradesh</option><option>Karnataka</option></select>
+          <input id="oDate" class="ctl" value="10/14/2026 - 11/13/2026" readonly>
+        </div>
+        <div class="flex gap-2 mt-3 text-xs" id="statusFilter"></div>
+        <div class="mt-4 overflow-x-auto rounded-xl bg-white/70">
+          <table class="w-full text-xs sm:text-[13px] min-w-[760px]">
+            <thead><tr class="text-left text-slate-600 bg-slate-100/80">
+              <th class="p-3">S.No</th><th>Customer Name</th><th>Partner Name</th><th>Partner ID</th><th>Order ID</th><th>Order Status</th><th>Time</th><th>Item Number</th><th class="pr-3">Value</th></tr></thead>
+            <tbody id="ordersBody"></tbody>
+          </table>
+          <div id="empty" class="hidden text-center text-slate-500 py-8 text-sm">No orders match your filters.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- quick actions + promo -->
+    <section class="grid xl:grid-cols-[2fr_1fr] gap-5">
+      <div class="rise card p-5 sm:p-6 flex flex-col lg:flex-row lg:items-center gap-5" style="--d:.4s">
+        <div class="lg:pr-6 lg:border-r border-slate-200 shrink-0">
+          <h3 class="text-xl font-bold">Quick Actions</h3><p class="text-sm text-sky-700 mt-1">Manage your business<br class="hidden lg:block"> with ease</p>
+        </div>
+        <div id="quick" class="grid grid-cols-2 sm:grid-cols-5 gap-3 flex-1"></div>
+      </div>
+      <div class="rise relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#0a3a85] via-[#0a6fc0] to-[#1ec8e6] text-white p-6 flex items-center min-h-[130px] shadow-xl" style="--d:.5s">
+        <div class="text-7xl sm:text-8xl absolute -left-2 bottom-0 opacity-90 floaty select-none">🤝</div>
+        <div class="relative ml-20 sm:ml-28">
+          <h3 class="font-bold text-lg leading-snug">Stronger Partnerships.<br><span class="text-sky-100 font-semibold">Greater Growth.</span></h3>
+          <a href="#" class="inline-block mt-3 bg-white text-navy text-sm font-semibold px-4 py-1.5 rounded-full hover:scale-105 transition">Explore Benefits →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+
+/* ---------- Sidebar ---------- */
+const nav=[['🏠','Dashboard'],['👥','Partners'],['🧑‍🤝‍🧑','Customers'],['👤','Users'],['🗂️','Category'],['📣','Marketing'],['⚙️','Configurations'],['💬','Feedback Hub'],['📄','Reports'],['📦','Master Orders'],['🏢','Organisation'],['🔖','Party Codes'],['📍','SFA']];
+nav.forEach(([i,t],k)=>{const a=document.createElement('a');a.href='#';a.className='nav-item'+(k===0?' active':'');a.innerHTML=`<span class="w-6 text-center">${i}</span>${t}`;
+  a.onclick=e=>{e.preventDefault();document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));a.classList.add('active');closeSide()};$('#navList').appendChild(a)});
+const side=$('#sidebar'),ov=$('#overlay');
+function openSide(){side.classList.remove('-translate-x-full');ov.classList.remove('hidden')}
+function closeSide(){side.classList.add('-translate-x-full');ov.classList.add('hidden')}
+$('#openSide').onclick=openSide;$('#closeSide').onclick=closeSide;ov.onclick=closeSide;
+addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();$('#globalSearch').focus()}});
+
+/* ---------- Stat cards ---------- */
+const stats=[
+  {t:'Total Retailers',v:2629,fmt:n=>n.toLocaleString('en-IN'),g:'0.00%',ic:'👥',bg:'from-blue-100 to-sky-50',c:'#3b82f6',d:'M0 40 L20 38 L40 30 L55 34 L75 18 L95 24 L120 6'},
+  {t:'Total Orders',v:22564,fmt:n=>n.toLocaleString('en-IN'),g:'700.00%',ic:'🛒',bg:'from-cyan-100 to-sky-50',c:'#14b8d4',d:'M0 42 L20 30 L38 36 L58 14 L80 28 L100 12 L120 4'},
+  {t:"Today's Ordered Amount",v:70404.85,fmt:n=>'₹ '+n.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2}),g:'5,731.57%',ic:'₹',bg:'from-sky-200 to-cyan-50',c:'#0ea5e9',d:'M0 44 L22 34 L44 38 L66 16 L88 24 L106 8 L120 4'}
+];
+stats.forEach((s,i)=>{
+  const el=document.createElement('div');el.className='rise card p-5 flex items-center gap-4 overflow-hidden';el.style.setProperty('--d',(i*.1)+'s');
+  el.innerHTML=`<div class="w-16 h-16 shrink-0 rounded-2xl bg-gradient-to-br ${s.bg} flex items-center justify-center text-3xl font-bold text-sky-600 shadow-inner">${s.ic}</div>
+    <div class="min-w-0 flex-1"><div class="text-sm text-slate-700">${s.t}</div><div class="text-2xl font-extrabold count" data-v="${s.v}">0</div>
+      <div class="text-xs mt-1"><span class="text-emerald-600 font-semibold">↑ ${s.g}</span> <span class="text-slate-500 ml-1">Since last Day</span></div></div>
+    <svg class="spark w-24 sm:w-28 h-14 shrink-0" viewBox="0 0 120 50"><defs><linearGradient id="sg${i}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${s.c}" stop-opacity=".35"/><stop offset="1" stop-color="${s.c}" stop-opacity="0"/></linearGradient></defs>
+      <path d="${s.d} L120 50 L0 50Z" fill="url(#sg${i})"/><path class="line" d="${s.d}" fill="none" stroke="${s.c}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/></svg>`;
+  $('#stats').appendChild(el);
+  const c=el.querySelector('.count');let st=null;
+  const step=t=>{st??=t;const p=Math.min((t-st)/1500,1),e=1-Math.pow(1-p,3);c.textContent=s.fmt(s.v*e);p<1&&requestAnimationFrame(step)};requestAnimationFrame(step);
+});
+
+/* ---------- Sales chart (SVG, hover tooltip) ---------- */
+const datasets={
+  7:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],vals:[2.2,2.9,2.55,3.1,2.95,3.806,3.9],total:'₹ 4,25,890',delta:'12.5% vs last week',hi:5},
+  30:{labels:['W1','W2','W3','W4','W5'],vals:[2.4,3.1,2.8,3.6,3.9],total:'₹ 16,82,400',delta:'8.2% vs last month',hi:4}
+};
+const W=520,H=240,padL=34,padB=26,padT=10,maxY=4;
+function chart(key){
+  const d=datasets[key],svg=$('#chart'),n=d.vals.length;
+  const X=i=>padL+(W-padL-6)*i/(n-1),Y=v=>padT+(H-padB-padT)*(1-v/maxY);
+  let g='';
+  for(let k=0;k<=4;k++){const y=Y(k);g+=`<line x1="${padL}" x2="${W}" y1="${y}" y2="${y}" stroke="rgba(255,255,255,.1)"/><text x="0" y="${y+4}" fill="#9fb6dd" font-size="11">${k===0?'0':k+'L'}</text>`}
+  d.labels.forEach((l,i)=>g+=`<text x="${X(i)}" y="${H-6}" fill="#c3d4ef" font-size="11" text-anchor="middle">${l}</text>`);
+  // smooth path (catmull-rom -> bezier)
+  const P=d.vals.map((v,i)=>[X(i),Y(v)]);let path=`M${P[0][0]} ${P[0][1]}`;
+  for(let i=0;i<n-1;i++){const p0=P[i-1]||P[i],p1=P[i],p2=P[i+1],p3=P[i+2]||p2;
+    path+=` C${p1[0]+(p2[0]-p0[0])/6} ${p1[1]+(p2[1]-p0[1])/6}, ${p2[0]-(p3[0]-p1[0])/6} ${p2[1]-(p3[1]-p1[1])/6}, ${p2[0]} ${p2[1]}`}
+  g+=`<defs><linearGradient id="ar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#22d3ee" stop-opacity=".45"/><stop offset="1" stop-color="#22d3ee" stop-opacity="0"/></linearGradient></defs>
+     <path d="${path} L${P[n-1][0]} ${H-padB} L${P[0][0]} ${H-padB}Z" fill="url(#ar)"/>
+     <path id="ln" d="${path}" fill="none" stroke="#2dd4f0" stroke-width="3" stroke-linecap="round"/>`;
+  P.forEach((p,i)=>g+=`<circle data-i="${i}" cx="${p[0]}" cy="${p[1]}" r="${i===d.hi?6:4.5}" fill="#0a2d70" stroke="#fff" stroke-width="2.5" style="cursor:pointer"/><rect data-i="${i}" x="${p[0]-22}" y="0" width="44" height="${H}" fill="transparent"/>`);
+  svg.innerHTML=g;
+  const ln=$('#ln'),L=ln.getTotalLength();ln.style.strokeDasharray=L;ln.style.strokeDashoffset=L;ln.getBoundingClientRect();ln.style.transition='stroke-dashoffset 1.4s ease';ln.style.strokeDashoffset=0;
+  const tip=(i)=>{const t=$('#chartTip'),r=svg.getBoundingClientRect(),wr=$('#chartWrap').getBoundingClientRect();
+    t.textContent='₹ '+Math.round(d.vals[i]*100000).toLocaleString('en-IN');
+    t.style.left=(P[i][0]/W*r.width)+'px';t.style.top=Math.max(0,(P[i][1]/H*r.height)-44)+'px'};
+  svg.querySelectorAll('rect').forEach(r=>r.addEventListener('mouseenter',()=>tip(+r.dataset.i)));
+  svg.querySelectorAll('rect').forEach(r=>r.addEventListener('click',()=>tip(+r.dataset.i)));
+  $('#salesTotal').textContent=d.total;$('#salesTotal').nextElementSibling.innerHTML=`↑ ${d.delta.split(' ')[0]} <span class="text-slate-300">${d.delta.split(' ').slice(1).join(' ')}</span>`;
+  tip(d.hi);window._tip=()=>tip(d.hi);
+}
+$('#range').onchange=e=>chart(e.target.value);chart(7);addEventListener('resize',()=>window._tip&&window._tip());
+
+/* ---------- Orders table + filters ---------- */
+const orders=[
+  [1,'Aapni Pharmacy','PRINCE PHARMA','#13',22564,'Pending','Nov. 13, 2026, 12:32 p.m.',1,1352.55,'Telangana'],
+  [2,'Sree Gayathri Medical And General Stores','Pharma Plus Distributors Hyderabad','#1',22563,'Pending','Nov. 13, 2026, 12:28 p.m.',2,24327.72,'Telangana'],
+  [3,'Sri Sai Medicals','MedleyMed Network','#45',22562,'Delivered','Nov. 13, 2026, 11:45 a.m.',3,12450.00,'Andhra Pradesh'],
+  [4,'Lakshmi Pharma','Vijaya Distributors','#22',22561,'Delivered','Nov. 13, 2026, 11:10 a.m.',4,8920.40,'Karnataka'],
+  [5,'City Care Chemists','PRINCE PHARMA','#13',22560,'Cancelled','Nov. 13, 2026, 10:52 a.m.',1,640.00,'Telangana']
+];
+let status='All';
+const sf=$('#statusFilter');
+['All','Pending','Delivered','Cancelled'].forEach(s=>{const b=document.createElement('button');b.textContent=s;b.className='px-3 py-1 rounded-full border border-slate-200 bg-white font-medium transition hover:border-teal';
+  b.onclick=()=>{status=s;[...sf.children].forEach(x=>x.classList.toggle('!bg-teal',x===b));[...sf.children].forEach(x=>x.classList.toggle('!text-white',x===b));render()};sf.appendChild(b);if(s==='All')b.click()});
+function render(){
+  const q=$('#oSearch').value.toLowerCase(),st=$('#oState').value;
+  const rows=orders.filter(o=>(status==='All'||o[5]===status)&&(!st||o[9]===st)&&(!q||(o[1]+o[2]+o[4]).toLowerCase().includes(q)));
+  $('#ordersBody').innerHTML=rows.map((o,i)=>`<tr class="border-t border-slate-100"><td class="p-3">${i+1}</td><td class="pr-2 max-w-[160px]">${o[1]}</td><td class="pr-2 max-w-[160px]">${o[2]}</td><td>${o[3]}</td>
+    <td><a href="#" class="text-sky-600 font-semibold hover:underline">${o[4]}</a></td><td><span class="badge b-${o[5]}">${o[5]}</span></td><td class="pr-2 text-slate-600">${o[6]}</td><td>${o[7]}</td>
+    <td class="pr-3 font-semibold whitespace-nowrap">₹ ${o[8].toLocaleString('en-IN',{minimumFractionDigits:2})}</td></tr>`).join('');
+  $('#empty').classList.toggle('hidden',rows.length>0);
+}
+$('#oSearch').oninput=render;$('#oState').onchange=render;
+
+/* ---------- Quick actions ---------- */
+[['➕👤','Add Partner'],['📊','View Reports'],['🏷️','Special Deals'],['🚚','Delivery Tie-ups'],['💳','Credit Facilities']].forEach(([i,t])=>{
+  const a=document.createElement('a');a.href='#';a.className='qa p-3 text-center flex flex-col items-center gap-2';
+  a.innerHTML=`<span class="text-2xl">${i}</span><span class="text-xs font-semibold flex items-center gap-1.5">${t}<span class="arrow w-5 h-5 rounded-full bg-sky-100 text-sky-600 flex items-center justify-center text-[10px] transition">›</span></span>`;$('#quick').appendChild(a)});
+</script>
+</body>
+</html>

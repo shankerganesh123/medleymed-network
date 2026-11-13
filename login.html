@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Login – Medleymed Network</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:wght@700;900&display=swap" rel="stylesheet">
+<script>
+tailwind.config={theme:{extend:{colors:{navy:'#06173d',navy2:'#0a2a6b',teal:'#14b8d4',teal2:'#0891b2'},fontFamily:{sans:['Inter','sans-serif'],serif:['Merriweather','serif']}}}}
+</script>
+<style>
+  body{font-family:'Inter',sans-serif;overflow-x:hidden}
+  .hero-bg{background:radial-gradient(ellipse at 75% 40%,#0b4a9c 0%,#08265f 45%,#051231 100%)}
+  .grad-text{background:linear-gradient(90deg,#22d3ee,#14b8d4);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .eyebrow{letter-spacing:.25em;font-weight:700;font-size:.75rem;text-transform:uppercase}
+  .glass{background:rgba(255,255,255,.1);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.25);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+  .hero-img{
+    -webkit-mask-image:linear-gradient(to right,transparent 5%,#000 40%),linear-gradient(to left,transparent 0,#000 5%),linear-gradient(to bottom,transparent 0,#000 8%,#000 90%,transparent 100%);
+    -webkit-mask-composite:source-in;
+    mask-image:linear-gradient(to right,transparent 5%,#000 40%),linear-gradient(to left,transparent 0,#000 5%),linear-gradient(to bottom,transparent 0,#000 8%,#000 90%,transparent 100%);
+    mask-composite:intersect}
+  .btn{transition:transform .25s,box-shadow .25s}
+  .btn:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(20,184,212,.5)}
+  .field{width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.25);border-radius:.8rem;padding:.8rem 1rem .8rem 2.8rem;color:#fff;outline:none;transition:border .2s,box-shadow .2s}
+  .field::placeholder{color:#a9bddc}
+  .field:focus{border-color:#22d3ee;box-shadow:0 0 0 3px rgba(34,211,238,.25)}
+  .ficon{position:absolute;left:1rem;top:50%;transform:translateY(-50%);font-size:1rem;opacity:.85}
+  .tab.active{background:#14b8d4;color:#fff}
+  .rise{opacity:0;transform:translateY(30px);animation:rise .8s cubic-bezier(.2,.8,.2,1) forwards}
+  @keyframes rise{to{opacity:1;transform:none}}
+  @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+  .floaty{animation:floaty 5s ease-in-out infinite}
+  .shake{animation:shake .4s}
+  @keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+</style>
+</head>
+<body class="hero-bg text-white min-h-screen relative">
+<canvas id="bg" class="fixed inset-0 w-full h-full pointer-events-none"></canvas>
+
+<nav class="relative z-20 max-w-[90rem] mx-auto px-6 lg:px-12 py-5 flex items-center justify-between">
+  <a href="index.html" class="flex items-center gap-3">
+    <svg width="46" height="46" viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="none" stroke="#22d3ee" stroke-width="3"/><circle cx="24" cy="24" r="16" fill="#0b3b86"/><path d="M14 32V16l10 11 10-11v16" fill="none" stroke="#fff" stroke-width="3.5" stroke-linejoin="round"/></svg>
+    <div class="leading-none"><div class="font-extrabold text-xl tracking-wide">MEDLEYMED</div><div class="text-[10px] tracking-[.55em] text-teal">NETWORK</div></div>
+  </a>
+  <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+    <a href="index.html" class="hover:text-teal transition">Home</a>
+    <a href="index.html#about" class="hover:text-teal transition">About Us</a>
+    <a href="index.html#network" class="hover:text-teal transition">Medleymed Network</a>
+    <a href="index.html#contact" class="hover:text-teal transition">Contact Us</a>
+  </div>
+  <a href="login.html" class="btn bg-teal px-6 py-2 rounded-full text-sm font-semibold">Login</a>
+</nav>
+
+<main class="relative z-10 max-w-[90rem] mx-auto px-6 lg:px-12 pb-16 pt-4 grid lg:grid-cols-[5fr_7fr] gap-6 items-center min-h-[calc(100vh-90px)]">
+  <!-- Login card -->
+  <section class="rise glass rounded-3xl p-8 sm:p-10 max-w-md w-full mx-auto lg:mx-0">
+    <div class="eyebrow text-teal flex items-center gap-3 mb-3">Welcome back <span class="h-px w-16 bg-teal/50"></span></div>
+    <h1 class="font-serif text-3xl font-black leading-tight">Login to your <span class="grad-text">Network</span></h1>
+    <p class="text-sm text-slate-200 mt-3">Access orders, deals and partners on India's fastest growing B2B pharmacy network.</p>
+
+    <div class="mt-6 flex bg-white/10 rounded-full p-1 text-sm font-semibold">
+      <button type="button" data-tab="otp" class="tab active flex-1 py-2 rounded-full transition">Mobile OTP</button>
+      <button type="button" data-tab="pwd" class="tab flex-1 py-2 rounded-full transition">Password</button>
+    </div>
+
+    <form id="form" class="mt-6 space-y-4" novalidate>
+      <!-- OTP -->
+      <div data-pane="otp" class="space-y-4">
+        <div class="relative"><span class="ficon">📱</span><input id="mobile" class="field" type="tel" inputmode="numeric" maxlength="10" placeholder="10-digit mobile number"></div>
+        <div id="otpRow" class="hidden">
+          <div class="flex gap-2 justify-between" id="otpBoxes"></div>
+          <div class="text-xs text-slate-300 mt-2 flex justify-between"><span id="otpMsg">OTP sent to your mobile</span><button type="button" id="resend" class="text-teal hover:underline">Resend</button></div>
+        </div>
+      </div>
+      <!-- Password -->
+      <div data-pane="pwd" class="space-y-4 hidden">
+        <div class="relative"><span class="ficon">✉️</span><input id="email" class="field" type="email" placeholder="Email or User ID"></div>
+        <div class="relative"><span class="ficon">🔒</span><input id="pwd" class="field pr-12" type="password" placeholder="Password">
+          <button type="button" id="eye" class="absolute right-4 top-1/2 -translate-y-1/2 text-sm opacity-80 hover:opacity-100">👁</button></div>
+        <div class="flex items-center justify-between text-xs">
+          <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="accent-cyan-400"> Remember me</label>
+          <a href="#" class="text-teal hover:underline">Forgot password?</a>
+        </div>
+      </div>
+      <p id="err" class="text-xs text-rose-300 min-h-[1rem]"></p>
+      <button id="submit" class="btn w-full bg-teal py-3 rounded-full font-semibold">Send OTP →</button>
+    </form>
+
+    <div class="flex items-center gap-3 my-6 text-xs text-slate-300"><span class="h-px flex-1 bg-white/20"></span>OR<span class="h-px flex-1 bg-white/20"></span></div>
+    <div class="flex gap-3">
+      <a href="#" class="flex-1 text-center bg-black border border-white/30 rounded-lg px-3 py-2 text-xs hover:border-teal transition">▶ Google Play</a>
+      <a href="#" class="flex-1 text-center bg-black border border-white/30 rounded-lg px-3 py-2 text-xs hover:border-teal transition"> App Store</a>
+    </div>
+    <p class="text-sm text-slate-200 mt-6 text-center">New to Medleymed? <a href="index.html#contact" class="text-teal font-semibold hover:underline">Become a Partner</a></p>
+  </section>
+
+  <!-- Hero image -->
+  <section class="hidden lg:block relative">
+    <img src="assets/hero.png" alt="Medleymed Network app" class="hero-img w-full h-auto floaty pointer-events-none select-none">
+  </section>
+</main>
+
+<div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-white text-navy px-6 py-3 rounded-full shadow-2xl text-sm font-semibold opacity-0 pointer-events-none transition-opacity"></div>
+
+<script>
+/* ---------- Tabs ---------- */
+let mode='otp',otpSent=false;
+const $=s=>document.querySelector(s),err=$('#err'),btn=$('#submit');
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
+  mode=t.dataset.tab;document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===t));
+  document.querySelectorAll('[data-pane]').forEach(p=>p.classList.toggle('hidden',p.dataset.pane!==mode));
+  err.textContent='';btn.textContent=mode==='otp'?(otpSent?'Verify & Login →':'Send OTP →'):'Login →';
+});
+$('#eye').onclick=()=>{const p=$('#pwd');p.type=p.type==='password'?'text':'password'};
+
+/* ---------- OTP boxes ---------- */
+const boxes=$('#otpBoxes');
+for(let i=0;i<6;i++){const b=document.createElement('input');b.maxLength=1;b.inputMode='numeric';
+  b.className='field !px-0 text-center w-11 h-12 text-lg font-semibold';
+  b.addEventListener('input',()=>{b.value=b.value.replace(/\D/g,'');if(b.value&&b.nextElementSibling)b.nextElementSibling.focus()});
+  b.addEventListener('keydown',e=>{if(e.key==='Backspace'&&!b.value&&b.previousElementSibling)b.previousElementSibling.focus()});
+  boxes.appendChild(b);}
+$('#mobile').addEventListener('input',e=>e.target.value=e.target.value.replace(/\D/g,''));
+
+/* ---------- Submit (demo – wire to your API) ---------- */
+function toast(m){const t=$('#toast');t.textContent=m;t.style.opacity=1;setTimeout(()=>t.style.opacity=0,2600)}
+function fail(m){err.textContent=m;const f=$('#form');f.classList.remove('shake');void f.offsetWidth;f.classList.add('shake')}
+$('#resend').onclick=()=>toast('OTP resent');
+$('#form').addEventListener('submit',e=>{
+  e.preventDefault();err.textContent='';
+  if(mode==='otp'){
+    if(!/^[6-9]\d{9}$/.test($('#mobile').value))return fail('Enter a valid 10-digit mobile number');
+    if(!otpSent){otpSent=true;$('#otpRow').classList.remove('hidden');btn.textContent='Verify & Login →';boxes.firstChild.focus();return toast('OTP sent (demo)');}
+    if([...boxes.children].some(b=>!b.value))return fail('Enter the 6-digit OTP');
+  }else{
+    if(!/\S+@\S+\.\S+|^\w{4,}$/.test($('#email').value))return fail('Enter your email or user ID');
+    if($('#pwd').value.length<6)return fail('Password must be at least 6 characters');
+  }
+  btn.textContent='Signing in…';btn.disabled=true;
+  setTimeout(()=>{btn.disabled=false;btn.textContent='Login →';toast('Login successful (demo)')},1200);
+});
+
+/* ---------- Three.js background: floating pills + particles ---------- */
+(()=>{
+  const cv=$('#bg'),r=new THREE.WebGLRenderer({canvas:cv,alpha:true,antialias:true});r.setPixelRatio(Math.min(devicePixelRatio,2));
+  const s=new THREE.Scene(),c=new THREE.PerspectiveCamera(50,1,.1,100);c.position.z=10;
+  const fit=()=>{r.setSize(innerWidth,innerHeight,false);c.aspect=innerWidth/innerHeight;c.updateProjectionMatrix()};fit();addEventListener('resize',fit);
+  s.add(new THREE.AmbientLight(0xffffff,.8));const l=new THREE.DirectionalLight(0xffffff,1);l.position.set(3,4,5);s.add(l);
+  const cols=[0xff7a59,0xffffff,0x22d3ee,0xffc107,0x7c4dff],pills=[];
+  for(let i=0;i<16;i++){
+    const g=THREE.CapsuleGeometry?new THREE.CapsuleGeometry(.12,.34,6,12):new THREE.CylinderGeometry(.12,.12,.5,12);
+    const m=new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:cols[i%5],roughness:.3,metalness:.2,transparent:true,opacity:.8}));
+    m.position.set((Math.random()-.5)*20,(Math.random()-.5)*11,(Math.random()-.5)*4-2);
+    m.userData={sp:.2+Math.random()*.6,ph:Math.random()*6,y:m.position.y};m.rotation.set(Math.random()*3,Math.random()*3,0);s.add(m);pills.push(m);}
+  const N=300,pg=new THREE.BufferGeometry(),pa=new Float32Array(N*3);for(let i=0;i<N*3;i++)pa[i]=(Math.random()-.5)*24;
+  pg.setAttribute('position',new THREE.BufferAttribute(pa,3));
+  const pts=new THREE.Points(pg,new THREE.PointsMaterial({color:0x7dd3fc,size:.04,transparent:true,opacity:.7}));s.add(pts);
+  let mx=0,my=0;addEventListener('mousemove',e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5});
+  const clock=new THREE.Clock();
+  (function loop(){requestAnimationFrame(loop);const t=clock.getElapsedTime();
+    pills.forEach(p=>{p.rotation.x+=.01*p.userData.sp;p.rotation.y+=.015*p.userData.sp;p.position.y=p.userData.y+Math.sin(t*p.userData.sp*2+p.userData.ph)*.4});
+    pts.rotation.y=t*.02;s.rotation.y=mx*.2;s.rotation.x=my*.12;r.render(s,c)})();
+})();
+</script>
+</body>
+</html>
