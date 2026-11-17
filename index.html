@@ -153,6 +153,7 @@ tailwind.config={
     .hero-bg .bg-img{background-position:70% center}.hero-bg.photo .bg-img{background-position:var(--mpos)}.hero-bg .bg-note{display:none}
   }
   .hero .eyebrow{letter-spacing:.16em;color:#17B7CD;font-size:.82rem;gap:.9rem}.hero .eyebrow::before{display:none}
+  @media(max-width:479px){.hero .eyebrow{font-size:.7rem;letter-spacing:.12em;gap:.6rem;white-space:nowrap}.hero .eyebrow::after{width:2rem}}
   .hero .eyebrow::after{width:5rem;background:rgba(23,183,205,.5);transform-origin:left;animation:lineGrow 1s .4s cubic-bezier(.2,.8,.2,1) both}
   @keyframes lineGrow{from{transform:scaleX(0)}}
   .hero-copy>*{animation:heroIn .8s cubic-bezier(.2,.8,.2,1) both}
@@ -325,14 +326,14 @@ tailwind.config={
       <span class="eyebrow" id="hKick">Pharmacy Digitisation</span>
       <h1 id="hTitle" class="mt-[1.3rem] text-[2rem] leading-[1.12] tracking-[.005em] uppercase text-white min-[400px]:text-4xl sm:text-[2.6rem] lg:text-4xl" aria-label="Healthcare, connected around you."><span class="w" style="--i:0"><span>Healthcare,</span></span><br><span class="w grad" style="--i:1"><span>connected</span></span> <span class="w" style="--i:2"><span>around</span></span> <span class="w" style="--i:3"><span>you.</span></span></h1>
       <p id="hLead" class="mt-6 max-w-lg text-pretty text-base leading-relaxed text-slate-100">Bringing pharmacy, telemedicine, supply chain and patient engagement together.</p>
-      <div class="hero-cta mt-[2.2rem] flex flex-wrap gap-4">
-        <a href="#ecosystem" class="btn btn-accent" id="hCta"><span id="hCtaTx">Explore Telemedicine</span> <span data-ic="arrow" data-s="17"></span></a>
-        <button type="button" class="btn btn-ghost" id="videoBtn"><span class="play-dot"><span data-ic="play" data-s="13" style="fill:currentColor"></span></span>Watch Overview</button>
+      <div class="hero-cta mt-[2.2rem] flex flex-nowrap gap-2.5 sm:gap-4">
+        <a href="#ecosystem" class="btn btn-accent min-w-0 flex-1 justify-center whitespace-nowrap !gap-1.5 !px-3 !py-2.5 !text-[.8rem] min-[480px]:flex-none min-[480px]:!gap-[.55rem] min-[480px]:!px-6 min-[480px]:!py-3 min-[480px]:!text-sm" id="hCta"><span id="hCtaTx">Explore<span class="max-[379px]:hidden"> Telemedicine</span></span><span data-ic="arrow" data-s="16"></span></a>
+        <button type="button" class="btn btn-ghost min-w-0 flex-1 justify-center whitespace-nowrap !gap-1.5 !px-3 !py-2.5 !text-[.8rem] min-[480px]:flex-none min-[480px]:!gap-[.55rem] min-[480px]:!px-6 min-[480px]:!py-3 min-[480px]:!text-sm" id="videoBtn"><span class="play-dot !size-6 min-[480px]:!size-[1.9rem]"><span data-ic="play" data-s="12" style="fill:currentColor"></span></span>Watch<span class="max-[379px]:hidden"> Overview</span></button>
       </div>
       <ul id="hStats" class="hero-stats mt-[2.4rem] flex max-w-[33rem] list-none border-t border-white/[.16] pt-[1.15rem] max-lg:mt-[1.8rem]" aria-label="Highlights">
-        <li class="mr-[1.4rem] flex-1 border-r border-white/[.14] pr-[1.4rem] last:m-0 last:border-0 last:p-0"><b class="block text-2xl font-extrabold leading-none tabular-nums" data-n="10" data-s="K+">10K+</b><small class="mt-2 block text-sm text-slate-200">Pharmacies</small></li>
-        <li class="mr-[1.4rem] flex-1 border-r border-white/[.14] pr-[1.4rem] last:m-0 last:border-0 last:p-0"><b class="block text-2xl font-extrabold leading-none tabular-nums" data-n="500" data-s="+">500+</b><small class="mt-2 block text-sm text-slate-200">Partners</small></li>
-        <li class="mr-[1.4rem] flex-1 border-r border-white/[.14] pr-[1.4rem] last:m-0 last:border-0 last:p-0"><b class="block text-2xl font-extrabold leading-none tabular-nums" data-n="1" data-s="M+">1M+</b><small class="mt-2 block text-sm text-slate-200">Products</small></li>
+        <li class="mr-3 min-w-0 flex-1 border-r border-white/[.14] pr-3 sm:mr-[1.4rem] sm:pr-[1.4rem] last:m-0 last:border-0 last:p-0"><b class="block text-xl font-extrabold leading-none tabular-nums sm:text-2xl" data-n="10" data-s="K+">10K+</b><small class="mt-2 block text-xs text-slate-200 sm:text-sm">Pharmacies</small></li>
+        <li class="mr-3 min-w-0 flex-1 border-r border-white/[.14] pr-3 sm:mr-[1.4rem] sm:pr-[1.4rem] last:m-0 last:border-0 last:p-0"><b class="block text-xl font-extrabold leading-none tabular-nums sm:text-2xl" data-n="500" data-s="+">500+</b><small class="mt-2 block text-xs text-slate-200 sm:text-sm">Partners</small></li>
+        <li class="mr-3 min-w-0 flex-1 border-r border-white/[.14] pr-3 sm:mr-[1.4rem] sm:pr-[1.4rem] last:m-0 last:border-0 last:p-0"><b class="block text-xl font-extrabold leading-none tabular-nums sm:text-2xl" data-n="1" data-s="M+">1M+</b><small class="mt-2 block text-xs text-slate-200 sm:text-sm">Products</small></li>
       </ul>
     </div>
   </div>
@@ -882,7 +883,7 @@ const COPY=[
   {kick:'Patient Engagement',lines:[[['Patients who stay']],[['engaged',1],['and informed.']]],lead:'Reminders and digital tools that keep patients on track.',chips:[['zap','Smart reminders','Keep patients on track'],['users','Connected care','Patients & providers']],
    stats:[['Reminders','','Stay on track'],['Digital','','Care tools'],['Connected','','Patients & providers']]}
 ];
-const STAT_T='flex items-center gap-2 text-lg font-bold leading-none',STAT_B='block text-2xl font-extrabold leading-none tabular-nums',STAT_S='mt-2 block text-sm text-slate-200',STAT_LI='mr-[1.4rem] flex-1 border-r border-white/[.14] pr-[1.4rem] last:m-0 last:border-0 last:p-0';
+const STAT_T='flex items-center gap-1.5 text-base font-bold leading-none sm:gap-2 sm:text-lg',STAT_B='block text-xl font-extrabold leading-none tabular-nums sm:text-2xl',STAT_S='mt-2 block text-xs text-slate-200 sm:text-sm',STAT_LI='mr-3 min-w-0 flex-1 border-r border-white/[.14] pr-3 sm:mr-[1.4rem] sm:pr-[1.4rem] last:m-0 last:border-0 last:p-0';
 const heroCopyEl=$('#heroCopy'),chipsEl=$('#hChips');let abFlip=false,swapTimer;
 function renderCopy(i){
   const c=COPY[i];let w=0;
@@ -912,7 +913,7 @@ const thumbs=[...thumbsEl.querySelectorAll('.thumb')];let cur=-1;let AUTOPLAY=!m
 function setSlide(i,byUser){
   heroCopyEl.setAttribute('aria-live',byUser?'polite':'off');
   i=(i+SLIDES.length)%SLIDES.length;const s=SLIDES[i],first=cur<0;cur=i;
-  $('#hCtaTx').textContent=s.cta;$('#hCount').textContent='0'+(i+1);swapCopy(i,first);
+  {const [f,...r]=s.cta.split(' ');$('#hCtaTx').innerHTML=f+'<span class="max-[379px]:hidden"> '+r.join(' ')+'</span>'}$('#hCount').textContent='0'+(i+1);swapCopy(i,first);
   bgs.forEach((b,k)=>b.classList.toggle('on',k===i));heroFX.color(s.c);
   thumbs.forEach((t,k)=>{const on=k===i;t.setAttribute('aria-selected',on);t.tabIndex=on?0:-1;const b=t.querySelector('.bar');b.classList.remove('run');if(on){void b.offsetWidth;if(AUTOPLAY)b.classList.add('run')}});
   if(!first){ctaEl.classList.remove('swap');void ctaEl.offsetWidth;ctaEl.classList.add('swap')}
