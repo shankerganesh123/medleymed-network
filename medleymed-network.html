@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Medleymed Network – India's Fastest Growing B2B Pharmacy Network</title>
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta name="theme-color" content="#2D3691">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: { extend: {
+    colors: { navy:'#151a52', navy2:'#2D3691', teal:'#17B7CD', teal2:'#2D3691', ice:'#eef0fa' },
+    fontFamily: { sans:['Inter','ui-sans-serif','system-ui','sans-serif'] }
+  }}
+}
+</script>
+<style>
+  /* ===== typography system (identical in index.html and dashboard.html) =====
+     one family: Inter 400/500/600/700/800 · headings 800 + tight tracking · labels 600 · body 400/500
+     numbers use tabular digits so counters, tables and totals never jitter */
+  html{-webkit-text-size-adjust:100%}
+  body{font-family:'Inter',ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
+  h1,h2{letter-spacing:-.025em;font-weight:800}
+  h3,h4{letter-spacing:-.01em}
+  html button,html input,html select,html textarea,html kbd{font-family:inherit}
+  .count,#tbl,.tabular,[id^="v-"],#salesTotal,#donutTotal{font-variant-numeric:tabular-nums}
+  html{scroll-behavior:smooth}
+  body{background:#f5f7fd;color:#0f1535;overflow-x:hidden}
+  .hero-bg{background:radial-gradient(ellipse at 75% 40%,#2D3691 0%,#1b2163 45%,#0c0f33 100%)}
+  .hero-img{
+    -webkit-mask-image:linear-gradient(to right,transparent 12%,#000 42%),linear-gradient(to left,transparent 0,#000 5%),linear-gradient(to bottom,transparent 0,#000 8%,#000 90%,transparent 100%);
+    -webkit-mask-composite:source-in;
+    mask-image:linear-gradient(to right,transparent 12%,#000 42%),linear-gradient(to left,transparent 0,#000 5%),linear-gradient(to bottom,transparent 0,#000 8%,#000 90%,transparent 100%);
+    mask-composite:intersect;
+    animation:heroIn 1.4s ease-out both}
+  @keyframes heroIn{from{opacity:0;transform:scale(1.06) translateX(30px)}to{opacity:1;transform:none}}
+  .grad-text{background:linear-gradient(90deg,#17B7CD,#86e6f2);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .grad-text-dark{background:linear-gradient(90deg,#2D3691,#17B7CD);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .eyebrow{letter-spacing:.25em;font-weight:700;font-size:.75rem;text-transform:uppercase}
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(40px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.8,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+  .reveal-l{opacity:0;transform:translateX(-50px);transition:all .9s cubic-bezier(.2,.8,.2,1)}
+  .reveal-r{opacity:0;transform:translateX(50px);transition:all .9s cubic-bezier(.2,.8,.2,1)}
+  .reveal-l.in,.reveal-r.in{opacity:1;transform:none}
+  /* floating chips */
+  @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+  .floaty{animation:floaty 4s ease-in-out infinite}
+  .floaty2{animation:floaty 5s ease-in-out infinite .8s}
+  .floaty3{animation:floaty 4.5s ease-in-out infinite 1.6s}
+  .glass{background:rgba(255,255,255,.14);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.3);box-shadow:0 10px 40px rgba(0,0,0,.25)}
+  /* Feature cards */
+  .feat{position:relative;background:#fff;border-radius:1.4rem;box-shadow:0 8px 30px rgba(20,120,170,.10);transition:transform .35s,box-shadow .35s;overflow:hidden;transform-style:preserve-3d}
+  .feat::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(23,183,205,.0),rgba(23,183,205,.18));opacity:0;transition:opacity .4s}
+  .feat::after{content:"";position:absolute;top:0;left:-120%;width:60%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.8),transparent);transform:skewX(-20deg)}
+  .feat:hover{box-shadow:0 20px 50px rgba(23,183,205,.35)}
+  .feat:hover::before{opacity:1}
+  .feat:hover::after{left:140%;transition:left .8s}
+  .feat .ico{transition:transform .5s cubic-bezier(.3,1.6,.5,1)}
+  .feat:hover .ico{transform:scale(1.25) rotate(-8deg)}
+  .feat.in .ico{animation:pop .7s cubic-bezier(.3,1.6,.5,1) both;animation-delay:var(--d,0s)}
+  @keyframes pop{0%{transform:scale(0) rotate(-90deg)}100%{transform:scale(1) rotate(0)}}
+  .ring{position:absolute;inset:0;border-radius:inherit;border:2px solid rgba(23,183,205,.5);animation:pulse 2.6s ease-out infinite;animation-delay:var(--d,0s)}
+  @keyframes pulse{0%{transform:scale(.7);opacity:.9}100%{transform:scale(1.6);opacity:0}}
+  .blob{border-radius:60% 40% 55% 45% / 50% 55% 45% 50%;animation:morph 10s ease-in-out infinite}
+  @keyframes morph{50%{border-radius:40% 60% 45% 55% / 55% 45% 55% 45%}}
+  @keyframes dash{to{stroke-dashoffset:0}}
+  .check{stroke-dasharray:24;stroke-dashoffset:24}
+  .in .check,.check.in{animation:dash .6s .3s forwards}
+  .scrim-x{background:linear-gradient(180deg,rgba(12,15,51,.55) 0%,rgba(12,15,51,.35) 100%)}
+  @media(min-width:768px){.scrim-x{background:linear-gradient(90deg,rgba(12,15,51,.9) 0%,rgba(12,15,51,.65) 40%,rgba(12,15,51,0) 65%)}}
+  #heroCanvas{-webkit-mask-image:linear-gradient(to bottom,#000 0,#000 78%,transparent 93%);mask-image:linear-gradient(to bottom,#000 0,#000 78%,transparent 93%)}
+  #otpBoxes input{min-width:0;flex:1;max-width:3rem;height:3rem}
+  #menuBtn[aria-expanded=true] .bar:nth-child(1){transform:translateY(8px) rotate(45deg)}
+  #menuBtn[aria-expanded=true] .bar:nth-child(2){opacity:0}
+  #menuBtn[aria-expanded=true] .bar:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+  @media(max-width:480px){.eyebrow{letter-spacing:.18em}}
+  #home h1{text-shadow:0 2px 24px rgba(12,15,51,.7)}
+  #home .login-card{background:linear-gradient(160deg,rgba(38,46,125,.93),rgba(20,24,78,.95));backdrop-filter:blur(22px);border:1px solid rgba(255,255,255,.22)}
+  #home .login-card .field::placeholder{color:#c3d3ec}
+  #home .login-card .eyebrow{color:#5fd4e6}
+  #home .login-card a.text-teal,#home .login-card button.text-teal{color:#5fd4e6}
+  .login-card{box-shadow:0 20px 60px rgba(0,0,0,.35);animation:loginIn 1s .2s cubic-bezier(.2,.8,.2,1) both}
+  @keyframes loginIn{from{opacity:0;transform:translateY(40px) scale(.96)}to{opacity:1;transform:none}}
+  .field{width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.25);border-radius:.8rem;padding:.8rem 1rem .8rem 2.8rem;color:#fff;outline:none;transition:border .2s,box-shadow .2s}
+  .field::placeholder{color:#a9bddc}
+  .field:focus{border-color:#17B7CD;box-shadow:0 0 0 3px rgba(23,183,205,.25)}
+  .ficon{position:absolute;left:1rem;top:50%;transform:translateY(-50%);display:flex;color:#c3d3ec}
+  .tab.active{background:#17B7CD;color:#fff}
+  .shake{animation:shake .4s}
+  @keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+  .btn{transition:transform .25s,box-shadow .25s}
+  .btn:hover{transform:translateY(-1px);box-shadow:0 10px 22px -8px rgba(23,183,205,.6)}
+  .slide{transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+  /* ===== header: same look as the main page — dark scrim over the hero, solid white once scrolled ===== */
+  #siteNav{background:linear-gradient(180deg,rgba(8,12,58,.88),rgba(8,12,58,.45));backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.12);color:#fff;transition:background .3s,box-shadow .3s,border-color .3s}
+  #siteNav.scrolled{background:rgba(255,255,255,.93);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-color:#d9dff0;box-shadow:0 14px 30px -22px rgba(45,54,145,.5);color:#151a52}
+  #siteNav .nav-a{text-shadow:0 1px 8px rgba(0,0,0,.45)}
+  #siteNav .nav-a:hover{background:rgba(255,255,255,.14)}
+  #siteNav.scrolled .nav-a{text-shadow:none}
+  #siteNav.scrolled .nav-a:hover{background:#e8eaf8;color:#2D3691}
+  #siteNav .nav-a.active,nav a.active{color:#17B7CD}
+  #siteNav.scrolled .nav-a.active{color:#2D3691;background:#e8eaf8}
+  #siteNav.scrolled #menuBtn{background:rgba(45,54,145,.1)}
+  #siteNav.scrolled #menuBtn .bar{background:#151a52}
+  #siteNav .logo .on-dark{display:block}#siteNav .logo .on-light{display:none}
+  #siteNav.scrolled .logo .on-dark{display:none}#siteNav.scrolled .logo .on-light{display:block}
+
+  canvas{display:block}
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<header class="hero-bg relative text-white overflow-hidden" id="home">
+  <canvas id="heroCanvas" class="absolute inset-0 w-full h-full z-0 pointer-events-none opacity-80 md:opacity-100"></canvas>
+  <!-- legibility scrims: text column (left→right) and navbar (top→bottom) -->
+  <div class="scrim-x absolute inset-x-0 top-0 bottom-16 z-[1] pointer-events-none"></div>
+  <div class="absolute inset-x-0 top-0 h-28 z-[1] pointer-events-none" style="background:linear-gradient(180deg,rgba(12,15,51,.85),rgba(12,15,51,0))"></div>
+
+  <div class="h-[76px]" aria-hidden="true"></div>
+  <nav id="siteNav" class="fixed inset-x-0 top-0 z-[60]" aria-label="Primary">
+    <div class="mx-auto flex h-[76px] w-full max-w-7xl items-center gap-6 px-6">
+      <a href="index.html" class="logo flex flex-none items-center gap-[.6rem]" aria-label="MedleyMed – home"><img class="on-light size-[38px]" src="assets/medleymed-icon.png" alt="" width="38" height="38"><img class="on-dark size-[38px]" src="assets/brand-icon-dark.png" alt="" width="38" height="38"><img class="on-light h-[19px] w-auto" src="assets/brand-wordmark.png" alt="MedleyMed" width="169" height="19"><img class="on-dark h-[19px] w-auto" src="assets/brand-wordmark-dark.png" alt="" width="169" height="19"></a>
+      <div class="ml-auto hidden items-center gap-[.15rem] md:flex">
+        <a href="#home" class="nav-a rounded-[.7rem] px-[.8rem] py-[.55rem] text-[.8rem] font-medium uppercase tracking-wide transition duration-200 active">Home</a>
+        <a href="#about" class="nav-a rounded-[.7rem] px-[.8rem] py-[.55rem] text-[.8rem] font-medium uppercase tracking-wide transition duration-200">About Us</a>
+        <a href="#network" class="nav-a rounded-[.7rem] px-[.8rem] py-[.55rem] text-[.8rem] font-medium uppercase tracking-wide transition duration-200">Medleymed Network</a>
+        <a href="#contact" class="nav-a rounded-[.7rem] px-[.8rem] py-[.55rem] text-[.8rem] font-medium uppercase tracking-wide transition duration-200">Contact Us</a>
+      </div>
+      <div class="ml-auto flex items-center gap-3 md:ml-0">
+        <button id="menuBtn" aria-label="Menu" aria-expanded="false" class="md:hidden w-10 h-10 rounded-full bg-white/10 flex flex-col items-center justify-center gap-1.5">
+          <span class="bar block w-5 h-0.5 bg-white transition"></span><span class="bar block w-5 h-0.5 bg-white transition"></span><span class="bar block w-5 h-0.5 bg-white transition"></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+  <div id="mobileMenu" class="md:hidden hidden fixed inset-x-4 top-[84px] z-[70] sm:inset-x-6 rounded-2xl bg-[#1b2263]/95 backdrop-blur border border-white/15 p-3 text-sm font-medium shadow-2xl">
+    <a href="#home" class="block px-4 py-3 rounded-xl text-teal">Home</a>
+    <a href="#about" class="block px-4 py-3 rounded-xl hover:bg-white/10">About Us</a>
+    <a href="#network" class="block px-4 py-3 rounded-xl hover:bg-white/10">Medleymed Network</a>
+    <a href="#contact" class="block px-4 py-3 rounded-xl hover:bg-white/10">Contact Us</a>
+  </div>
+
+  <div class="relative z-10 max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-12 pt-4 sm:pt-6 pb-24 sm:pb-28 grid md:grid-cols-[5fr_7fr] gap-8 md:gap-4 items-center">
+    <div class="reveal-l in relative z-10">
+      <div class="eyebrow text-teal flex items-center gap-3 mb-5">Grow Together <span class="h-px w-20 bg-teal/50"></span></div>
+      <h1 class="text-[2rem] min-[400px]:text-4xl sm:text-5xl md:text-4xl lg:text-5xl font-extrabold leading-tight">India's <span class="grad-text">Fastest</span><br>Growing B2B<br>Pharmacy Network</h1>
+      <p class="mt-6 text-slate-100 max-w-md leading-relaxed">Empowering Pharmacies, Partners and Manufacturers with a smarter, stronger and more connected network.</p>
+      <div class="mt-7 sm:mt-9 flex flex-wrap gap-3 sm:gap-4">
+        <a href="#" class="btn bg-teal hover:bg-[#3fcce0] text-navy px-6 py-3 rounded-xl font-semibold text-sm flex items-center gap-2">Download the App →
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3l14 9-14 9z"/></svg></a>
+        <a href="#about" class="btn border border-white/50 bg-white/5 px-6 py-3 rounded-xl font-semibold text-sm hover:bg-white/15">Know More →</a>
+      </div>
+    </div>
+    <div class="relative flex justify-center md:justify-end lg:pr-8 min-w-0">
+      <section id="login" class="login-card glass rounded-3xl p-6 sm:p-8 lg:p-10 max-w-md w-full scroll-mt-24">
+        <div class="eyebrow text-teal flex items-center gap-3 mb-3">Welcome back <span class="h-px w-16 bg-teal/50"></span></div>
+        <h2 class="text-3xl font-extrabold leading-tight">Login to your <span class="grad-text">Network</span></h2>
+        <p class="text-sm text-slate-200 mt-3">Access orders, deals and partners on India's fastest growing B2B pharmacy network.</p>
+
+        <div class="mt-6 flex bg-white/10 rounded-full p-1 text-sm font-semibold">
+          <button type="button" data-tab="otp" class="tab active flex-1 py-2 rounded-full transition">Mobile OTP</button>
+          <button type="button" data-tab="pwd" class="tab flex-1 py-2 rounded-full transition">Password</button>
+        </div>
+
+        <form id="loginForm" class="mt-6 space-y-4" novalidate>
+          <div data-pane="otp" class="space-y-4">
+            <div class="relative"><span class="ficon"><i data-ic="phone" data-s="18"></i></span><input id="mobile" class="field" type="tel" inputmode="numeric" maxlength="10" placeholder="10-digit mobile number"></div>
+            <div id="otpRow" class="hidden">
+              <div class="flex gap-2 justify-between" id="otpBoxes"></div>
+              <div class="text-xs text-slate-300 mt-2 flex justify-between"><span>OTP sent to your mobile</span><button type="button" id="resend" class="text-teal hover:underline">Resend</button></div>
+            </div>
+          </div>
+          <div data-pane="pwd" class="space-y-4 hidden">
+            <div class="relative"><span class="ficon"><i data-ic="mail" data-s="18"></i></span><input id="email" class="field" type="text" placeholder="Email or User ID"></div>
+            <div class="relative"><span class="ficon"><i data-ic="lock" data-s="18"></i></span><input id="pwd" class="field !pr-12" type="password" placeholder="Password">
+              <button type="button" id="eye" class="absolute right-4 top-1/2 -translate-y-1/2 opacity-80 hover:opacity-100" aria-label="Show password"><i data-ic="eye" data-s="18"></i></button></div>
+            <div class="flex items-center justify-between text-xs">
+              <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="accent-cyan-400"> Remember me</label>
+              <a href="#" class="text-teal hover:underline">Forgot password?</a>
+            </div>
+          </div>
+          <p id="loginErr" class="text-xs text-rose-300 min-h-[1rem]"></p>
+          <button id="loginBtn" class="btn w-full bg-teal hover:bg-[#3fcce0] text-navy py-3 rounded-xl font-semibold">Send OTP →</button>
+        </form>
+        <p class="text-sm text-slate-200 mt-6 text-center">New to Medleymed? <a href="#contact" class="text-teal font-semibold hover:underline">Become a Partner</a></p>
+      </section>
+    </div>
+    <div id="loginToast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-white text-navy px-6 py-3 rounded-full shadow-2xl text-sm font-semibold opacity-0 pointer-events-none transition-opacity"></div>
+  </div>
+  <svg class="absolute -bottom-2 left-0 w-full z-[2] pointer-events-none" viewBox="0 0 1440 90" preserveAspectRatio="none" height="90"><path d="M0 60 Q360 0 720 40 T1440 30 V90 H0Z" fill="#f4fbfe"/></svg>
+</header>
+
+<!-- ============ ABOUT ============ -->
+<section id="about" class="max-w-7xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-12 items-center">
+  <div class="reveal-l relative rounded-3xl overflow-hidden bg-gradient-to-br from-[#151a52] to-[#2D3691] h-[280px] sm:h-[380px] shadow-2xl">
+    <canvas id="mapCanvas" class="w-full h-full"></canvas>
+    <div class="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-[#0c0f33]/80 to-transparent"></div>
+  </div>
+  <div class="reveal-r">
+    <div class="eyebrow text-teal2 flex items-center gap-3">About Medleymed Network <span class="h-px w-16 bg-teal/50"></span></div>
+    <h2 class="text-3xl md:text-4xl font-extrabold mt-3 leading-tight">A Growing Network<br>for a <span class="grad-text-dark">Healthier India</span></h2>
+    <p class="mt-5 text-sm leading-relaxed text-slate-700">Medleymed Network has been promoted by Medleymed Network Solutions Pvt Ltd, a 100% subsidiary of <b>Athena Global Technologies Limited</b>, a leading Hyderabad based Technology Services Company.</p>
+    <p class="mt-4 text-sm leading-relaxed text-slate-700">Our vision is to become the largest B2B technology platform in the Healthcare space, facilitating seamless business interactions between Manufacturers, Partners and Pharmacies.</p>
+    <a href="#" class="btn inline-block mt-6 border border-navy2 text-navy2 hover:bg-navy2 hover:text-white px-6 py-2.5 rounded-xl text-sm font-semibold">Our Vision →</a>
+  </div>
+</section>
+
+<!-- ============ APP FEATURES (animated) ============ -->
+<section id="network" class="relative py-20 overflow-hidden">
+  <canvas id="featCanvas" class="absolute inset-0 w-full h-full opacity-70"></canvas>
+  <div class="absolute -right-20 top-10 w-[560px] h-[560px] blob bg-gradient-to-br from-teal/30 to-navy2/15"></div>
+  <div class="relative max-w-7xl mx-auto px-6">
+    <div class="text-center reveal">
+      <div class="eyebrow text-teal2 flex items-center justify-center gap-3"><span class="h-px w-12 bg-teal/50"></span>App can help your business<span class="h-px w-12 bg-teal/50"></span></div>
+      <h2 class="font-extrabold text-3xl md:text-4xl mt-3">App can help your business in <span class="grad-text-dark">multiple ways</span></h2>
+      <p class="mt-4 text-sm text-slate-700 max-w-lg mx-auto">Access a diverse range of products and services through Medleymed Network. Connect, grow and succeed with a trusted network.</p>
+    </div>
+
+    <div class="mt-12 grid lg:grid-cols-[1.4fr_1fr] gap-10 items-center">
+      <div id="featGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-5">
+        <!-- cards injected -->
+      </div>
+      <div class="reveal-r relative flex justify-center">
+        <div class="relative w-full max-w-[320px] aspect-[320/380]">
+          <div class="absolute inset-0 blob bg-gradient-to-br from-navy2/20 to-teal/60"></div>
+          <svg viewBox="0 0 300 360" class="absolute inset-0 w-full h-full floaty">
+            <!-- pharmacist illustration -->
+            <path d="M40 360 Q50 250 150 240 Q250 250 260 360Z" fill="#fff"/>
+            <path d="M120 240 L150 300 L180 240Z" fill="#1e5aa8"/>
+            <rect x="136" y="215" width="28" height="35" rx="8" fill="#d99a73"/>
+            <ellipse cx="150" cy="170" rx="46" ry="54" fill="#e3a77f"/>
+            <path d="M102 160 Q104 108 150 108 Q198 108 198 160 Q185 130 150 132 Q116 130 102 160Z" fill="#1a1a2e"/>
+            <circle cx="132" cy="172" r="14" fill="none" stroke="#111" stroke-width="3"/><circle cx="168" cy="172" r="14" fill="none" stroke="#111" stroke-width="3"/><path d="M146 172h8" stroke="#111" stroke-width="3"/>
+            <path d="M130 198 Q150 216 170 198" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+            <path d="M104 190 Q120 232 150 232 Q180 232 196 190 Q190 215 150 220 Q110 215 104 190Z" fill="#1a1a2e" opacity=".85"/>
+            <rect x="196" y="290" width="26" height="6" rx="3" fill="#17B7CD"/><rect x="204" y="282" width="6" height="22" rx="3" fill="#17B7CD"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STATS ============ -->
+<section class="max-w-7xl mx-auto px-6 pb-10">
+  <div class="reveal bg-gradient-to-r from-navy to-navy2 rounded-3xl px-8 py-10 grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white items-center shadow-2xl relative overflow-hidden">
+    <div><div class="mb-2 flex justify-center text-teal"><i data-ic="store" data-s="38"></i></div><div class="text-3xl font-extrabold"><span class="count" data-to="10" data-suf="K+">0</span></div><div class="text-sm">Pharmacies</div></div>
+    <div><div class="mb-2 flex justify-center text-teal"><i data-ic="users" data-s="38"></i></div><div class="text-3xl font-extrabold"><span class="count" data-to="500" data-suf="+">0</span></div><div class="text-sm">Partners</div></div>
+    <div><div class="mb-2 flex justify-center text-teal"><i data-ic="pill" data-s="38"></i></div><div class="text-3xl font-extrabold"><span class="count" data-to="1" data-suf="M+">0</span></div><div class="text-sm">Products Access</div></div>
+    <div class="col-span-2 md:col-span-1 text-2xl font-bold md:border-l border-white/20">Across India</div>
+  </div>
+</section>
+
+<!-- ============ BENEFITS ============ -->
+<section class="max-w-7xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-12 items-center">
+  <div class="reveal-l">
+    <div class="eyebrow text-teal2">Why choose Medleymed</div>
+    <h2 class="font-extrabold text-3xl md:text-4xl mt-2">Benefits of <span class="grad-text-dark">Partnering</span> with us</h2>
+    <p class="mt-4 text-slate-700 max-w-md">Join a trusted network that helps you grow with transparency, innovation and strong support.</p>
+    <ul id="benefits" class="mt-6 grid sm:grid-cols-2 gap-x-6 gap-y-3 text-sm font-medium"></ul>
+    <a href="#contact" class="btn inline-block mt-8 bg-navy2 hover:bg-[#232b78] text-white px-7 py-3 rounded-xl font-semibold text-sm">Become a Partner →</a>
+  </div>
+  <div class="reveal-r relative h-[340px]">
+    <div class="absolute inset-0 blob bg-gradient-to-br from-navy2 via-[#2a5cae] to-teal overflow-hidden">
+      <svg viewBox="0 0 400 300" class="w-full h-full opacity-90">
+        <path d="M0 170 Q70 120 150 160 L210 190 L170 235 Q90 215 0 230Z" fill="#14264f"/>
+        <path d="M400 140 Q330 110 250 150 L200 190 L240 240 Q320 220 400 235Z" fill="#1b3a74"/>
+        <ellipse cx="200" cy="195" rx="48" ry="22" fill="#e3a77f"/>
+        <rect x="170" y="180" width="60" height="26" rx="12" fill="#d99a73"/>
+      </svg>
+      <div class="absolute right-10 top-12 w-16 h-16 glass rounded-2xl flex items-center justify-center text-white floaty"><i data-ic="shield" data-s="30"></i></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TESTIMONIALS ============ -->
+<section class="py-16">
+  <div class="text-center reveal">
+    <div class="eyebrow text-teal2">What our clients say</div>
+    <h2 class="font-extrabold text-2xl mt-2">Real Stories. Real Growth.</h2>
+  </div>
+  <div class="max-w-5xl mx-auto px-6 mt-10 relative">
+    <button id="prev" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white shadow-lg text-teal2 font-bold hover:scale-110 transition">‹</button>
+    <button id="next" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white shadow-lg text-teal2 font-bold hover:scale-110 transition">›</button>
+    <div class="overflow-hidden mx-6 sm:mx-8"><div id="track" class="slide flex"></div></div>
+    <div id="dots" class="flex justify-center gap-2 mt-6"></div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="max-w-7xl mx-auto px-6 pb-16">
+  <div class="reveal rounded-3xl bg-gradient-to-r from-navy2 via-[#2a78b8] to-teal text-white px-8 py-9 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl overflow-hidden relative">
+    <div class="flex items-center gap-6"><div class="floaty text-white"><i data-ic="rocket" data-s="60"></i></div>
+      <div><h3 class="text-2xl font-bold">Join the Medleymed Network Today</h3><p class="text-sm opacity-90 mt-1">Grow your business with India's most trusted B2B pharmacy network.</p></div></div>
+    <a href="#" class="btn bg-white text-navy font-semibold px-8 py-3 rounded-xl">Get Started →</a>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer id="contact" class="bg-gradient-to-b from-navy to-navy2 text-slate-200 pt-14">
+  <div class="max-w-7xl mx-auto px-6 grid sm:grid-cols-2 lg:grid-cols-5 gap-10 text-sm">
+    <div class="flex items-start gap-3">
+      <svg width="42" height="42" viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="none" stroke="#17B7CD" stroke-width="3"/><path d="M14 32V16l10 11 10-11v16" fill="none" stroke="#fff" stroke-width="3.5" stroke-linejoin="round"/></svg>
+      <div class="leading-none text-white"><div class="font-extrabold text-lg">MEDLEYMED</div><div class="text-[9px] tracking-[.5em] text-teal">NETWORK</div></div>
+    </div>
+    <div><h4 class="font-semibold text-white mb-3">Company</h4><ul class="space-y-2"><li><a href="#about" class="hover:text-teal">About Us</a></li><li><a href="#contact" class="hover:text-teal">Contact Us</a></li><li><a href="#" class="hover:text-teal">Privacy Policy</a></li><li><a href="#" class="hover:text-teal">Terms and conditions</a></li></ul></div>
+    <div class="lg:col-span-1"><h4 class="font-semibold text-white mb-3">Reach us</h4>
+      <p class="flex gap-2"><span class="mt-0.5 text-teal"><i data-ic="pin" data-s="18"></i></span><span>Gowra Palladium, 2nd Floor, Unit 203, Madhapur, Hitec City, Hyderabad, Telangana-500081</span></p>
+      <p class="mt-3 flex items-center gap-2"><span class="text-teal"><i data-ic="phoneCall" data-s="18"></i></span>+91 950 295 2277</p><p class="mt-2 flex items-center gap-2"><span class="text-teal"><i data-ic="mail" data-s="18"></i></span>support@medleymednetwork.com</p></div>
+    <div><h4 class="font-semibold text-white mb-3">Follow us on</h4><div class="flex gap-3">
+      <a href="#" aria-label="LinkedIn" class="w-9 h-9 rounded-full bg-white/10 hover:bg-teal hover:text-navy flex items-center justify-center transition"><i data-ic="linkedin" data-s="17"></i></a>
+      <a href="#" aria-label="Facebook" class="w-9 h-9 rounded-full bg-white/10 hover:bg-teal hover:text-navy flex items-center justify-center transition"><i data-ic="facebook" data-s="17"></i></a>
+      <a href="#" aria-label="YouTube" class="w-9 h-9 rounded-full bg-white/10 hover:bg-teal hover:text-navy flex items-center justify-center transition"><i data-ic="youtube" data-s="17"></i></a>
+      <a href="#" aria-label="Instagram" class="w-9 h-9 rounded-full bg-white/10 hover:bg-teal hover:text-navy flex items-center justify-center transition"><i data-ic="instagram" data-s="17"></i></a></div></div>
+    <div><h4 class="font-semibold text-white mb-3">Our app</h4><div class="flex flex-wrap gap-2">
+      <a href="#" class="bg-black border border-white/30 rounded-lg px-3 py-1.5 text-xs inline-flex items-center gap-1.5 whitespace-nowrap"><i data-ic="play" data-s="13"></i>Google Play</a>
+      <a href="#" class="bg-black border border-white/30 rounded-lg px-3 py-1.5 text-xs inline-flex items-center gap-1.5 whitespace-nowrap"><i data-ic="phone" data-s="14"></i>App Store</a></div></div>
+  </div>
+  <div class="max-w-7xl mx-auto px-6 mt-12 py-6 border-t border-white/15 flex flex-col sm:flex-row justify-between text-xs">
+    <span>© 2026 Medleymed Network. All rights reserved.</span><span>Powering Growth Together</span>
+  </div>
+</footer>
+
+<script>
+/* ---------- Icon set (stroke icons, consistent across the UI) ---------- */
+const ICONS={
+ home:'<path d="M3 10.5 12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',
+ users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
+ userRound:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+ user:'<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+ grid:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>',
+ megaphone:'<path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>',
+ sliders:'<path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>',
+ message:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+ file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>',
+ box:'<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="m3.27 6.96 8.73 5.05 8.73-5.05M12 22.08V12"/>',
+ building:'<path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2M10 6h4M10 10h4M10 14h4M10 18h4"/>',
+ tag:'<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><circle cx="7" cy="7" r="1"/>',
+ pin:'<path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/>',
+ cart:'<circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>',
+ rupee:'<path d="M6 3h12M6 8h12M6 13l8.5 8M6 13h3M9 13c6.667 0 6.667-10 0-10"/>',
+ userPlus:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/>',
+ chart:'<path d="M3 3v18h18M18 17V9M13 17V5M8 17v-3"/>',
+ truck:'<path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2M15 18H9M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/>',
+ card:'<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>',
+ calendar:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+ bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
+ search:'<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+ menu:'<path d="M4 6h16M4 12h16M4 18h16"/>',
+ bag:'<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/>',
+ pie:'<path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/>',
+ download:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>',
+ trend:'<path d="m22 7-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/>'
+};
+const svgI=(n,s=20)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0">${ICONS[n]||''}</svg>`;
+
+
+Object.assign(ICONS,{
+ phone:'<rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/>',
+ mail:'<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/>',
+ lock:'<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+ eye:'<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+ eyeOff:'<path d="M9.9 4.24A9.1 9.1 0 0 1 12 4c7 0 10 8 10 8a13.2 13.2 0 0 1-1.67 2.68M6.61 6.61A13.5 13.5 0 0 0 2 12s3 7 10 7a9.7 9.7 0 0 0 5.39-1.61M2 2l20 20M14.12 14.12a3 3 0 1 1-4.24-4.24"/>',
+ store:'<path d="M3 9l1-5h16l1 5"/><path d="M3 9v11h18V9"/><path d="M3 9c0 1.7 1.3 3 3 3s3-1.3 3-3c0 1.7 1.3 3 3 3s3-1.3 3-3c0 1.7 1.3 3 3 3s3-1.3 3-3"/><path d="M9 20v-5h6v5"/>',
+ pill:'<path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7z"/><path d="m8.5 8.5 7 7"/>',
+ shield:'<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>',
+ rocket:'<path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>',
+ percent:'<path d="M19 5 5 19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/>',
+ star:'<path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>',
+ phoneCall:'<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>',
+ linkedin:'<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>',
+ facebook:'<path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>',
+ youtube:'<path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/>',
+ instagram:'<rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><path d="M17.5 6.5h.01"/>',
+ play:'<path d="M6 3l14 9-14 9z"/>'
+});
+document.querySelectorAll('i[data-ic]').forEach(e=>{e.outerHTML=svgI(e.dataset.ic,+e.dataset.s||20)});
+
+/* ---------- Data-driven sections ---------- */
+const features = [
+  ['cart','Curated Selection'],['percent','Transparent Pricing'],['box','Ease of Ordering'],
+  ['card','Credit Facilities'],['truck','Delivery Tie-ups'],['star','Special Deals']
+];
+const grid = document.getElementById('featGrid');
+features.forEach(([ic,t],i)=>{
+  const d = document.createElement('div');
+  d.className='feat reveal p-6 text-center cursor-pointer';
+  d.style.transitionDelay=(i*0.12)+'s'; d.style.setProperty('--d',(i*0.12+0.3)+'s');
+  d.innerHTML=`<div class="relative w-14 h-14 mx-auto mb-3 rounded-2xl bg-gradient-to-br from-navy2/10 to-teal/20 flex items-center justify-center">
+      <span class="ring" style="--d:${i*0.4}s"></span><span class="ico relative text-navy2">${svgI(ic,28)}</span></div>
+    <div class="font-semibold text-sm relative">${t}</div>`;
+  grid.appendChild(d);
+  // 3D tilt
+  d.addEventListener('mousemove',e=>{const r=d.getBoundingClientRect();const x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+    d.style.transform=`perspective(600px) rotateY(${x*18}deg) rotateX(${-y*18}deg) translateY(-6px)`;});
+  d.addEventListener('mouseleave',()=>d.style.transform='');
+});
+const ben=['Curated Product Range','Easy Order Management','Better Business Deals','Dedicated Support','Transparent & Reliable Platform','Growth Opportunities'];
+const bl=document.getElementById('benefits');
+ben.forEach((b,i)=>{const li=document.createElement('li');li.className='reveal flex items-center gap-2';li.style.transitionDelay=(i*.1)+'s';
+  li.innerHTML=`<svg width="22" height="22" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#17B7CD"/><path class="check" d="M7 12.5l3.5 3.5L17 9" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>${b}`;
+  bl.appendChild(li);});
+
+/* ---------- Testimonials carousel ---------- */
+const T=[
+ ['Sanjay Ji','Gourav Medical Agencies','Using the Medleymed Network app, I was able to move more of my existing inventory. They connect me with retailers who need exactly what I have in stock.'],
+ ['Govind Ji','D K Pharma','One thing I love about Medleymed Network is that they constantly keep adding new Retailers. I am now supplying to Retailers who are reaching out to me through the app.'],
+ ['Ramesh K','Sri Balaji Distributors','Ordering is effortless and the pricing is transparent. Credit facilities have helped me stock up without worry.']
+];
+const track=document.getElementById('track'),dots=document.getElementById('dots');let idx=0;
+T.forEach((t,i)=>{
+  track.insertAdjacentHTML('beforeend',`<div class="shrink-0 w-full md:w-1/2 p-3"><div class="bg-white rounded-2xl shadow-lg p-6 h-full">
+    <div class="text-5xl text-teal leading-none">“</div><p class="text-sm text-slate-700 -mt-2">${t[2]}</p>
+    <div class="flex items-center gap-3 mt-5"><div class="w-11 h-11 rounded-full bg-gradient-to-br from-teal to-navy2 text-white flex items-center justify-center font-bold">${t[0][0]}</div>
+    <div><div class="font-semibold text-sm">${t[0]}</div><div class="text-xs text-slate-500">${t[1]}</div></div></div></div></div>`);
+  const b=document.createElement('button');b.className='w-2.5 h-2.5 rounded-full bg-slate-300 transition-all';b.onclick=()=>go(i);dots.appendChild(b);
+});
+function go(i){const per=innerWidth>=768?2:1,max=T.length-per;idx=Math.max(0,Math.min(i,max));
+  track.style.transform=`translateX(-${idx*(100/per)}%)`;
+  [...dots.children].forEach((d,k)=>{d.className='h-2.5 rounded-full transition-all '+(k===idx?'w-6 bg-teal':'w-2.5 bg-slate-300')});}
+document.getElementById('next').onclick=()=>go(idx>=T.length-(innerWidth>=768?2:1)?0:idx+1);
+document.getElementById('prev').onclick=()=>go(idx-1);
+go(0);setInterval(()=>document.getElementById('next').click(),5000);
+
+/* ---------- Mobile menu ---------- */
+(()=>{const b=document.getElementById('menuBtn'),m=document.getElementById('mobileMenu');
+  const set=o=>{m.classList.toggle('hidden',!o);b.setAttribute('aria-expanded',o)};
+  b.onclick=()=>set(b.getAttribute('aria-expanded')!=='true');
+  m.querySelectorAll('a').forEach(a=>a.onclick=()=>set(false));
+})();
+
+/* ---------- Hero login form ---------- */
+(()=>{
+  let mode='otp',otpSent=false;
+  const $=s=>document.querySelector(s),err=$('#loginErr'),btn=$('#loginBtn'),form=$('#loginForm'),boxes=$('#otpBoxes');
+  document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
+    mode=t.dataset.tab;document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===t));
+    document.querySelectorAll('[data-pane]').forEach(p=>p.classList.toggle('hidden',p.dataset.pane!==mode));
+    err.textContent='';btn.textContent=mode==='otp'?(otpSent?'Verify & Login →':'Send OTP →'):'Login →';
+  });
+  $('#eye').onclick=()=>{const p=$('#pwd'),show=p.type==='password';p.type=show?'text':'password';$('#eye').innerHTML=svgI(show?'eyeOff':'eye',18);$('#eye').setAttribute('aria-label',show?'Hide password':'Show password')};
+  for(let i=0;i<6;i++){const b=document.createElement('input');b.maxLength=1;b.inputMode='numeric';
+    b.className='field !px-0 text-center w-11 h-12 text-lg font-semibold';
+    b.addEventListener('input',()=>{b.value=b.value.replace(/\D/g,'');if(b.value&&b.nextElementSibling)b.nextElementSibling.focus()});
+    b.addEventListener('keydown',e=>{if(e.key==='Backspace'&&!b.value&&b.previousElementSibling)b.previousElementSibling.focus()});
+    boxes.appendChild(b);}
+  $('#mobile').addEventListener('input',e=>e.target.value=e.target.value.replace(/\D/g,''));
+  const toast=m=>{const t=$('#loginToast');t.textContent=m;t.style.opacity=1;setTimeout(()=>t.style.opacity=0,2600)};
+  const fail=m=>{err.textContent=m;form.classList.remove('shake');void form.offsetWidth;form.classList.add('shake')};
+  $('#resend').onclick=()=>toast('OTP resent');
+  form.addEventListener('submit',e=>{
+    e.preventDefault();err.textContent='';
+    if(mode==='otp'){
+      if(!/^[6-9]\d{9}$/.test($('#mobile').value))return fail('Enter a valid 10-digit mobile number');
+      if(!otpSent){otpSent=true;$('#otpRow').classList.remove('hidden');btn.textContent='Verify & Login →';boxes.firstChild.focus();return toast('OTP sent (demo)');}
+      if([...boxes.children].some(b=>!b.value))return fail('Enter the 6-digit OTP');
+    }else{
+      if(!/\S+@\S+\.\S+|^\w{4,}$/.test($('#email').value))return fail('Enter your email or user ID');
+      if($('#pwd').value.length<6)return fail('Password must be at least 6 characters');
+    }
+    btn.textContent='Signing in…';btn.disabled=true;
+    setTimeout(()=>{btn.disabled=false;btn.textContent='Login →';toast('Login successful (demo)');setTimeout(()=>location.href='dashboard.html',700)},1200); // TODO: call your API
+  });
+})();
+
+/* ---------- Reveal + counters ---------- */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');
+  e.target.querySelectorAll?.('.count').forEach(c=>{if(c.dataset.done)return;c.dataset.done=1;const to=+c.dataset.to;let s=null;
+    const step=t=>{s??=t;const p=Math.min((t-s)/1600,1);c.textContent=Math.floor((1-Math.pow(1-p,3))*to)+(p>=1?c.dataset.suf:'');p<1&&requestAnimationFrame(step)};requestAnimationFrame(step)});
+  io.unobserve(e.target)}}),{threshold:.15});
+document.querySelectorAll('.reveal,.reveal-l,.reveal-r').forEach(el=>io.observe(el));
+
+/* ---------- Three.js helper ---------- */
+function makeScene(canvas,fov,z){
+  const r=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});r.setPixelRatio(Math.min(devicePixelRatio,2));
+  const s=new THREE.Scene(),c=new THREE.PerspectiveCamera(fov,1,.1,100);c.position.z=z;
+  const fit=()=>{const w=canvas.parentElement.clientWidth,h=canvas.parentElement.clientHeight;r.setSize(w,h,false);c.aspect=w/h;c.updateProjectionMatrix()};
+  fit();addEventListener('resize',fit);
+  s.add(new THREE.AmbientLight(0xffffff,.7));const l=new THREE.DirectionalLight(0xffffff,1);l.position.set(3,4,5);s.add(l);
+  return {r,s,c,fit};
+}
+function visible(el){const b=el.getBoundingClientRect();return b.bottom>0&&b.top<innerHeight}
+
+
+/* ---------- 1. HERO: medicine-themed background (capsules, tablets, blister packs, crosses, DNA, molecules) ---------- */
+(()=>{
+  const cv=document.getElementById('heroCanvas');if(!cv)return;
+  const {r,s,c}=makeScene(cv,50,13);
+  const rnd=(a,b)=>a+Math.random()*(b-a);
+  const items=[];
+  const std=(color,o=.9)=>new THREE.MeshStandardMaterial({color,roughness:.28,metalness:.15,transparent:true,opacity:o});
+  // keep objects out of the text column + nav (screen-space "safe zones")
+  const wide=innerWidth>=768, tmp=new THREE.Vector3();c.updateMatrixWorld();
+  const blocked=p=>{tmp.copy(p).project(c);
+    if(tmp.y>.68||tmp.y<-.62)return true;           // navbar band + bottom wave band
+    if(wide)return tmp.x<-.06;                      // left text column
+    return Math.abs(tmp.x)<.72;                     // mobile: only the side edges stay free
+  };
+  const place=(g,sc)=>{
+    const p=new THREE.Vector3();let n=0;
+    do{p.set(rnd(-12,12),rnd(-6,6),rnd(-5,1.5));n++}while(blocked(p)&&n<60);
+    g.position.copy(p);g.scale.setScalar(sc);
+    g.rotation.set(rnd(0,6),rnd(0,6),rnd(0,6));
+    g.userData={y:g.position.y,x:g.position.x,sp:rnd(.25,.8),ph:rnd(0,6),rs:rnd(.003,.012)};
+    s.add(g);items.push(g);return g;
+  };
+  // two-tone capsule (r128 has no CapsuleGeometry, so build it)
+  const capsule=(c1,c2)=>{
+    const g=new THREE.Group(),R=.16,H=.3;
+    const cyl=new THREE.CylinderGeometry(R,R,H,20),sph=new THREE.SphereGeometry(R,20,12);
+    const a=new THREE.Mesh(cyl,std(c1)),b=new THREE.Mesh(cyl,std(c2));a.position.y=H/2;b.position.y=-H/2;
+    const sa=new THREE.Mesh(sph,std(c1)),sb=new THREE.Mesh(sph,std(c2));sa.position.y=H;sb.position.y=-H;
+    g.add(a,b,sa,sb);return g;
+  };
+  const tablet=col=>{const g=new THREE.Group();g.add(new THREE.Mesh(new THREE.CylinderGeometry(.3,.3,.12,28),std(col)));
+    const line=new THREE.Mesh(new THREE.BoxGeometry(.5,.14,.03),std(0xb8c7d9,.8));g.add(line);return g;};
+  const cross=col=>{const g=new THREE.Group(),m=new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:.55});
+    g.add(new THREE.Mesh(new THREE.BoxGeometry(.7,.22,.12),m),new THREE.Mesh(new THREE.BoxGeometry(.22,.7,.12),m));return g;};
+  const blister=()=>{const g=new THREE.Group();g.add(new THREE.Mesh(new THREE.BoxGeometry(1.1,.7,.06),std(0xcfeefa,.55)));
+    for(let i=0;i<3;i++)for(let j=0;j<2;j++){const p=new THREE.Mesh(new THREE.SphereGeometry(.12,14,10),std([0xff7a59,0xffffff,0xffc107][i]));p.position.set(-.35+i*.35,-.18+j*.36,.1);g.add(p);}return g;};
+  const bottle=()=>{const g=new THREE.Group();const b=new THREE.Mesh(new THREE.CylinderGeometry(.22,.22,.6,20),std(0xf59e0b,.85));
+    const cap=new THREE.Mesh(new THREE.CylinderGeometry(.24,.24,.16,20),std(0xffffff));cap.position.y=.38;
+    const lab=new THREE.Mesh(new THREE.CylinderGeometry(.225,.225,.28,20),std(0xffffff,.95));g.add(b,cap,lab);return g;};
+  const molecule=()=>{const g=new THREE.Group(),pos=[];
+    for(let i=0;i<5;i++){const p=new THREE.Vector3(rnd(-.5,.5),rnd(-.5,.5),rnd(-.3,.3));pos.push(p);
+      const sp=new THREE.Mesh(new THREE.SphereGeometry(rnd(.07,.13),14,10),new THREE.MeshBasicMaterial({color:i%2?0x17B7CD:0xffffff,transparent:true,opacity:.8}));sp.position.copy(p);g.add(sp);}
+    const lp=[];for(let i=1;i<5;i++)lp.push(pos[0],pos[i]);lp.push(pos[1],pos[2],pos[3],pos[4]);
+    g.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(lp),new THREE.LineBasicMaterial({color:0x7dd3fc,transparent:true,opacity:.6})));return g;};
+  const pc=[0xff7a59,0x17B7CD,0xffc107,0x7c4dff,0xffffff];
+  for(let i=0;i<10;i++)place(capsule(pc[i%5],pc[(i+2)%5]),rnd(.8,1.4));
+  for(let i=0;i<7;i++)place(tablet(pc[i%5]),rnd(.9,1.4));
+  for(let i=0;i<7;i++)place(cross(i%2?0x17B7CD:0xffffff),rnd(.7,1.5));
+  for(let i=0;i<3;i++)place(blister(),rnd(1,1.4));
+  for(let i=0;i<3;i++)place(bottle(),rnd(.9,1.3));
+  for(let i=0;i<5;i++)place(molecule(),rnd(1,1.8));
+
+  // DNA double helix
+  const dna=new THREE.Group(),A=0xffffff,B=0x17B7CD,steps=36;
+  for(let i=0;i<steps;i++){
+    const y=(i-steps/2)*.22,a=i*.5,x1=Math.cos(a)*.7,z1=Math.sin(a)*.7;
+    const s1=new THREE.Mesh(new THREE.SphereGeometry(.09,12,10),new THREE.MeshBasicMaterial({color:A,transparent:true,opacity:.85}));s1.position.set(x1,y,z1);
+    const s2=new THREE.Mesh(new THREE.SphereGeometry(.09,12,10),new THREE.MeshBasicMaterial({color:B,transparent:true,opacity:.85}));s2.position.set(-x1,y,-z1);
+    const rung=new THREE.Mesh(new THREE.CylinderGeometry(.02,.02,1.4,6),new THREE.MeshBasicMaterial({color:0x7dd3fc,transparent:true,opacity:.35}));
+    rung.position.set(0,y,0);rung.rotation.z=Math.PI/2;rung.rotation.y=-a;dna.add(s1,s2,rung);
+  }
+  // helixes live in the free centre strip and far-right edge, never behind the headline
+  const hw=Math.tan(25*Math.PI/180)*16*(innerWidth/innerHeight);
+  dna.position.set(wide?hw*.1:hw*.8,0,-3);dna.rotation.z=.25;dna.scale.setScalar(wide?1:.7);s.add(dna);
+  const dna2=dna.clone();dna2.position.set(hw*.95,0,-4);dna2.scale.setScalar(.8);dna2.rotation.z=-.3;dna2.visible=wide;s.add(dna2);
+
+  // rising bubbles / particles
+  const N=220,pg=new THREE.BufferGeometry(),pa=new Float32Array(N*3);
+  for(let i=0;i<N;i++){pa[i*3]=rnd(-14,14);pa[i*3+1]=rnd(-7,7);pa[i*3+2]=rnd(-6,2);}
+  pg.setAttribute('position',new THREE.BufferAttribute(pa,3));
+  s.add(new THREE.Points(pg,new THREE.PointsMaterial({color:0x9be7ff,size:.07,transparent:true,opacity:.6})));
+  const pts=s.children[s.children.length-1];
+
+  let mx=0,my=0;addEventListener('mousemove',e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5});
+  const clock=new THREE.Clock();
+  (function loop(){requestAnimationFrame(loop);if(!visible(cv))return;const t=clock.getElapsedTime();
+    items.forEach(g=>{g.rotation.x+=g.userData.rs;g.rotation.y+=g.userData.rs*1.3;
+      g.position.y=g.userData.y+Math.sin(t*g.userData.sp+g.userData.ph)*.35;
+      g.position.x=g.userData.x+Math.cos(t*g.userData.sp*.6+g.userData.ph)*.15;});
+    dna.rotation.y=t*.5;dna2.rotation.y=-t*.4;
+    const p=pts.geometry.attributes.position;for(let i=0;i<N;i++){let y=p.getY(i)+.01+(i%5)*.002;if(y>7)y=-7;p.setY(i,y);}p.needsUpdate=true;
+    s.rotation.y=mx*.25;s.rotation.x=my*.12;
+    r.render(s,c)})();
+})();
+
+/* ---------- 2. ABOUT: particle India map with network lines ---------- */
+(()=>{
+  const cv=document.getElementById('mapCanvas');const {r,s,c}=makeScene(cv,45,10);
+  const poly=[[74,37],[77,35.5],[79,34.5],[78.5,32.5],[79,31],[81,30],[80.1,28.8],[84,27.3],[88,27.2],[88.8,27.5],[88.1,26.5],[89.8,26.7],[92,27],[95,28.2],[97,28.3],[96,27],[95,26],[94.5,24.5],[93.5,23],[92.5,22],[92,24.5],[91,25.2],[89.8,25.3],[89,26],[88.5,24],[89,22],[87,21.5],[86.5,20],[85,19.3],[83,17.5],[81,16],[80.2,15],[80,13],[79.8,11],[78.8,9.3],[77.5,8.1],[76.5,9.5],[75.5,11.5],[74.8,13.5],[74,15.5],[73,18],[72.8,20.5],[72.5,21.5],[70,20.8],[69,22.3],[70.5,23],[68.2,23.7],[71,25],[70,27],[71.5,28],[74,31],[74.5,32.5],[73.5,34.5]];
+  const inside=(px,py)=>{let o=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const[a,b]=poly[i],[d,e]=poly[j];if((b>py)!=(e>py)&&px<(d-a)*(py-b)/(e-b)+a)o=!o}return o};
+  const pts=[];for(let lo=67;lo<98;lo+=.55)for(let la=7;la<38;la+=.55)if(inside(lo,la))pts.push(new THREE.Vector3((lo-82.5)*.2,(la-22)*.2,0));
+  const g=new THREE.Group();s.add(g);
+  const geo=new THREE.BufferGeometry().setFromPoints(pts);
+  g.add(new THREE.Points(geo,new THREE.PointsMaterial({color:0x7be3ff,size:.07,transparent:true,opacity:.95})));
+  // lines between near neighbours
+  const lp=[];for(let i=0;i<pts.length;i+=3)for(let j=i+1;j<pts.length;j+=4)if(pts[i].distanceTo(pts[j])<.75&&Math.random()<.35)lp.push(pts[i],pts[j]);
+  g.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(lp),new THREE.LineBasicMaterial({color:0x17B7CD,transparent:true,opacity:.28})));
+  // hub nodes pulsing
+  const hubs=[[78.4,17.4],[77.2,28.6],[72.8,19],[80.2,13],[88.3,22.5],[77.6,12.9]].map(([lo,la])=>{
+    const m=new THREE.Mesh(new THREE.SphereGeometry(.08,12,12),new THREE.MeshBasicMaterial({color:0xffffff}));
+    m.position.set((lo-82.5)*.2,(la-22)*.2,.05);const h=new THREE.Mesh(new THREE.RingGeometry(.1,.13,32),new THREE.MeshBasicMaterial({color:0x17B7CD,transparent:true,side:2}));
+    h.position.copy(m.position);g.add(m,h);return h});
+  g.rotation.x=-.25;
+  let mx=0;cv.addEventListener('mousemove',e=>{mx=(e.offsetX/cv.clientWidth-.5)});
+  const clock=new THREE.Clock();
+  (function loop(){requestAnimationFrame(loop);if(!visible(cv))return;const t=clock.getElapsedTime();
+    g.rotation.y=Math.sin(t*.5)*.35+mx*.5;
+    hubs.forEach((h,i)=>{const k=((t*.8+i*.3)%1);h.scale.setScalar(1+k*3);h.material.opacity=1-k});
+    r.render(s,c)})();
+})();
+
+/* ---------- 3. FEATURES: floating business-network nodes (icons) ---------- */
+(()=>{
+  const cv=document.getElementById('featCanvas');const {r,s,c}=makeScene(cv,50,12);
+  const nodes=[];const mats=[0x17B7CD,0x4d59d6,0x2D3691,0x7fe5f2];
+  const geos=[new THREE.IcosahedronGeometry(.28,0),new THREE.OctahedronGeometry(.3),new THREE.TorusGeometry(.25,.07,10,24),new THREE.BoxGeometry(.42,.42,.42)];
+  for(let i=0;i<26;i++){
+    const m=new THREE.Mesh(geos[i%4],new THREE.MeshStandardMaterial({color:mats[i%4],roughness:.35,metalness:.3,transparent:true,opacity:.75}));
+    m.position.set((Math.random()-.5)*22,(Math.random()-.5)*10,(Math.random()-.5)*5-2);
+    m.userData={v:new THREE.Vector3((Math.random()-.5)*.006,(Math.random()-.5)*.006,0),rs:Math.random()*.02+.005};s.add(m);nodes.push(m);
+  }
+  const lineGeo=new THREE.BufferGeometry();const lines=new THREE.LineSegments(lineGeo,new THREE.LineBasicMaterial({color:0x17B7CD,transparent:true,opacity:.3}));s.add(lines);
+  let sy=0;addEventListener('scroll',()=>sy=scrollY);
+  (function loop(){requestAnimationFrame(loop);if(!visible(cv))return;
+    const pos=[];nodes.forEach(n=>{n.position.add(n.userData.v);n.rotation.x+=n.userData.rs;n.rotation.y+=n.userData.rs;
+      if(Math.abs(n.position.x)>11)n.userData.v.x*=-1;if(Math.abs(n.position.y)>5)n.userData.v.y*=-1;});
+    for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++)if(nodes[i].position.distanceTo(nodes[j].position)<3.6)pos.push(nodes[i].position.x,nodes[i].position.y,nodes[i].position.z,nodes[j].position.x,nodes[j].position.y,nodes[j].position.z);
+    lineGeo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));
+    s.rotation.y=Math.sin(sy*.002)*.15;r.render(s,c)})();
+})();
+</script>
+<script>(()=>{const n=document.getElementById('siteNav');const f=()=>n.classList.toggle('scrolled',scrollY>8);f();addEventListener('scroll',f,{passive:true})})();</script>
+</body>
+</html>
