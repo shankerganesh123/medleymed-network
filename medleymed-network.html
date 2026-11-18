@@ -95,7 +95,6 @@ tailwind.config = {
   @media(prefers-reduced-motion:reduce){.hero-copy>*,.hero-copy .hero-stats li,.hero-copy .eyebrow::after{animation:none}.hero-copy h1 .w>span,.hero-copy h1 .grad>span{transform:none;animation:none}}
   .scrim-x{background:linear-gradient(180deg,rgba(12,15,51,.55) 0%,rgba(12,15,51,.35) 100%)}
   @media(min-width:1024px){.scrim-x{background:linear-gradient(90deg,rgba(12,15,51,.9) 0%,rgba(12,15,51,.55) 30%,rgba(12,15,51,0) 48%)}}
-  #heroCanvas{-webkit-mask-image:linear-gradient(to bottom,#000 0,#000 78%,transparent 93%);mask-image:linear-gradient(to bottom,#000 0,#000 78%,transparent 93%)}
   #otpBoxes input{min-width:0;flex:1;max-width:3rem;height:3rem}
   #menuBtn[aria-expanded=true] .bar:nth-child(1){transform:translateY(8px) rotate(45deg)}
   #menuBtn[aria-expanded=true] .bar:nth-child(2){opacity:0}
@@ -198,7 +197,6 @@ tailwind.config = {
 
 <!-- ============ HERO ============ -->
 <header class="hero-bg relative text-white overflow-hidden" id="home">
-  <canvas id="heroCanvas" class="absolute inset-0 w-full h-full z-0 pointer-events-none opacity-50 min-[1100px]:opacity-100"></canvas>
   <!-- legibility scrims: text column (left→right) and navbar (top→bottom) -->
   <div class="scrim-x absolute inset-0 z-[1] pointer-events-none"></div>
   <div class="absolute inset-x-0 top-0 h-28 z-[1] pointer-events-none" style="background:linear-gradient(180deg,rgba(12,15,51,.85),rgba(12,15,51,0))"></div>
@@ -391,7 +389,7 @@ tailwind.config = {
           <a href="#" aria-label="Instagram" class="grid size-9 place-items-center rounded-full border border-white/20 bg-white/10 text-white transition duration-200 hover:-translate-y-0.5 hover:bg-teal hover:text-[#0b1040]"><i data-ic="instagram" data-s="17"></i></a>
         </div>
       </div>
-      <div><h4 class="mb-5 flex items-center gap-2.5 text-sm font-bold uppercase tracking-[.12em] text-white"><span class="h-4 w-1 rounded-full bg-gradient-to-b from-teal to-white/70"></span>Company</h4><ul class="grid gap-3"><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="about.html"><svg class="-ml-4 size-3 flex-none text-teal opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>About us</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="contact.html"><svg class="-ml-4 size-3 flex-none text-teal opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Contact us</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="#"><svg class="-ml-4 size-3 flex-none text-teal opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Terms & Conditions</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="#"><svg class="-ml-4 size-3 flex-none text-teal opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Privacy Policy</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="index.html#insights"><svg class="-ml-4 size-3 flex-none text-teal opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Blog</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="index.html#stories"><svg class="-ml-4 size-3 flex-none text-teal opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Media</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="index.html#careers"><svg class="-ml-4 size-3 flex-none text-teal opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Careers</a></li></ul></div>
+      <div><h4 class="mb-5 flex items-center gap-2.5 text-sm font-bold uppercase tracking-[.12em] text-white"><span class="h-4 w-1 rounded-full bg-gradient-to-b from-teal to-white/70"></span>Company</h4><ul class="grid gap-3"><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="about.html"><svg class="-ml-4 size-3 flex-none text-teal opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>About us</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="contact.html"><svg class="-ml-4 size-3 flex-none text-teal opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Contact us</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="#"><svg class="-ml-4 size-3 flex-none text-teal opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Terms & Conditions</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="#"><svg class="-ml-4 size-3 flex-none text-teal opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Privacy Policy</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="blogs.html"><svg class="-ml-4 size-3 flex-none text-teal opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Blog</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="media.html"><svg class="-ml-4 size-3 flex-none text-teal opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Media</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="careers.html"><svg class="-ml-4 size-3 flex-none text-teal opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Careers</a></li></ul></div>
       <div>
         <h4 class="mb-5 flex items-center gap-2.5 text-sm font-bold uppercase tracking-[.12em] text-white"><span class="h-4 w-1 rounded-full bg-gradient-to-b from-teal to-white/70"></span>Pharmacy</h4><ul class="grid gap-3"><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="#"><svg class="-ml-4 size-3 flex-none text-teal opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Ananda EClinic</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="#"><svg class="-ml-4 size-3 flex-none text-teal opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Smartz ERP</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="#"><svg class="-ml-4 size-3 flex-none text-teal opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Franchise</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="#network"><svg class="-ml-4 size-3 flex-none text-teal opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>BIZ</a></li></ul>
         <h4 class="mb-5 flex items-center gap-2.5 text-sm font-bold uppercase tracking-[.12em] text-white mt-8"><span class="h-4 w-1 rounded-full bg-gradient-to-b from-teal to-white/70"></span>Telemedicine</h4><ul class="grid gap-3"><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="#"><svg class="-ml-4 size-3 flex-none text-teal opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>SAAS</a></li></ul>
@@ -567,97 +565,6 @@ const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.targ
     const step=t=>{s??=t;const p=Math.min((t-s)/1600,1);c.textContent=Math.floor((1-Math.pow(1-p,3))*to)+(p>=1?c.dataset.suf:'');p<1&&requestAnimationFrame(step)};requestAnimationFrame(step)});
   io.unobserve(e.target)}}),{threshold:.15});
 document.querySelectorAll('.reveal,.reveal-l,.reveal-r').forEach(el=>io.observe(el));
-
-/* ---------- 1. HERO: "PharmaOS" — an AI core orchestrating the pharma workflow on a rotating orbit ---------- */
-(()=>{
-  const cv=document.getElementById('heroCanvas');if(!cv)return;
-  const g=cv.getContext('2d'),hero=cv.parentElement,still=matchMedia('(prefers-reduced-motion: reduce)').matches,TAU=Math.PI*2;
-  const NODES=[['Orders','#17B7CD','cart'],['Inventory','#8f9bff','box'],['Billing','#2dd4e8','card'],['Delivery','#b39dff','truck'],['Analytics','#4aa8ff','chart'],['Compliance','#5eead4','shield']];
-  const ICON={cart:'M2 3h2l2.7 12.4a2 2 0 0 0 2 1.6h9.8a2 2 0 0 0 2-1.6L22 7H5.1',box:'M21 16V8l-9-5-9 5v8l9 5 9-5zM3.3 7 12 12l8.7-5M12 22V12',card:'M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zM2 10h20',
-    truck:'M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11h2M15 18H9M14 8h4l4 4v5h-2',chart:'M3 3v18h18M18 17V9M13 17V5M8 17v-3',shield:'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10zM9 12l2 2 4-4'};
-  const PATH={};for(const k in ICON)PATH[k]=new Path2D(ICON[k]);
-  let W=0,H=0,D=1,wide=true,cx=0,cy=0,R=150,cr=50,nr=23,nodes=[],packets=[],pulses=[],tok=0,acc=0,vis=true,last=performance.now(),T=0,coreFlash=0;
-  const hex=(c,a)=>{const n=parseInt(c.slice(1),16);return `rgba(${n>>16},${n>>8&255},${n&255},${a})`};
-  function layout(){
-    const r=hero.getBoundingClientRect();D=Math.min(devicePixelRatio||1,2);W=r.width;H=r.height;cv.width=W*D;cv.height=H*D;g.setTransform(D,0,0,D,0,0);
-    wide=W>=1100;
-    if(wide){
-      /* centre the orbit in the free space between the headline column and the login card */
-      const p=hero.querySelector('.reveal-l p'),c=hero.querySelector('#login');let L=W*.36,Rt=W*.62,mid=H*.5;
-      if(p&&c){const pr=p.getBoundingClientRect(),cr2=c.getBoundingClientRect();L=pr.right-r.left+10;Rt=cr2.left-r.left-10;mid=(cr2.top+cr2.bottom)/2-r.top}
-      cx=(L+Rt)/2;cy=mid;R=Math.max(90,Math.min((Rt-L)/2-34,H*.34));nr=Math.max(17,Math.min(23,R*.15));
-    }else{R=Math.min(W*.2,72);cx=W*.74;cy=Math.min(H*.2,150);nr=Math.max(10,R*.17)}
-    cr=R*.36;
-    nodes=NODES.map((n,i)=>({name:n[0],c:n[1],ic:n[2],a0:-Math.PI/2+i/NODES.length*TAU,x:0,y:0,flash:0}));
-    place();packets=[];
-  }
-  const rot=()=>T*.07;
-  function place(){nodes.forEach(n=>{const a=n.a0+rot();n.a=a;n.x=cx+Math.cos(a)*R;n.y=cy+Math.sin(a)*R})}
-  const pos=(p)=>{
-    if(p.k==='ring'){const a=nodes[p.i].a,b=nodes[(p.i+1)%nodes.length].a,da=((b-a)%TAU+TAU)%TAU,t=Math.min(1,p.t),an=a+da*(t*t*(3-2*t));return{x:cx+Math.cos(an)*R,y:cy+Math.sin(an)*R}}
-    const n=nodes[p.i],t0=p.k==='in'?1-p.t:p.t,t=t0*t0*(3-2*t0),sx=cx+(n.x-cx)*(cr/R*1.05),sy=cy+(n.y-cy)*(cr/R*1.05),ex=n.x+(cx-n.x)*(nr/R),ey=n.y+(cy-n.y)*(nr/R);
-    return{x:sx+(ex-sx)*t,y:sy+(ey-sy)*t}};
-  function step(dt){
-    T+=dt;acc+=dt;if(acc>1.35){acc=0;packets.push({k:'ring',i:tok,t:0,s:.42,c:nodes[tok].c,tr:[]});tok=(tok+1)%nodes.length}
-    place();nodes.forEach(n=>n.flash=Math.max(0,n.flash-dt*1.5));coreFlash=Math.max(0,coreFlash-dt*1.3);
-    for(let k=packets.length-1;k>=0;k--){const p=packets[k];p.t+=dt*p.s;const q=pos(p);p.tr.push(q);if(p.tr.length>14)p.tr.shift();
-      if(p.t>=1){packets.splice(k,1);
-        if(p.k==='ring'){const j=(p.i+1)%nodes.length;nodes[j].flash=1;packets.push({k:'in',i:j,t:0,s:.9,c:nodes[j].c,tr:[]})}
-        else if(p.k==='in'){coreFlash=1;pulses.push(T);const o=(p.i+2+Math.floor(Math.random()*(nodes.length-2)))%nodes.length;packets.push({k:'out',i:o,t:0,s:.9,c:'#ffffff',tr:[]})}
-        else nodes[p.i].flash=Math.max(nodes[p.i].flash,.85)}}
-    pulses=pulses.filter(s=>T-s<2.2);
-  }
-  function draw(){
-    g.clearRect(0,0,W,H);g.lineCap='round';
-    /* soft glow + a dot grid that fades out away from the core */
-    const bg=g.createRadialGradient(cx,cy,0,cx,cy,R*2.1);bg.addColorStop(0,'rgba(45,54,145,.45)');bg.addColorStop(.55,'rgba(23,183,205,.07)');bg.addColorStop(1,'rgba(23,183,205,0)');g.fillStyle=bg;g.fillRect(cx-R*2.2,cy-R*2.2,R*4.4,R*4.4);
-    const gs=wide?26:22,rg=R*1.95;for(let x=Math.floor((cx-rg)/gs)*gs;x<cx+rg;x+=gs)for(let y=Math.floor((cy-rg)/gs)*gs;y<cy+rg;y+=gs){const d=Math.hypot(x-cx,y-cy);if(d<rg){g.fillStyle=`rgba(255,255,255,${.2*(1-d/rg)})`;g.fillRect(x,y,1.3,1.3)}}
-    /* ticks, orbit rings */
-    const tr=R*1.2;g.lineWidth=1;for(let i=0;i<72;i++){const a=i/72*TAU-T*.05,l=i%6?4:8;g.strokeStyle=`rgba(143,219,230,${i%6?.22:.4})`;g.beginPath();g.moveTo(cx+Math.cos(a)*tr,cy+Math.sin(a)*tr);g.lineTo(cx+Math.cos(a)*(tr+l),cy+Math.sin(a)*(tr+l));g.stroke()}
-    g.lineWidth=1.3;g.strokeStyle='rgba(143,219,230,.28)';g.beginPath();g.arc(cx,cy,R,0,TAU);g.stroke();
-    g.setLineDash([3,9]);g.lineDashOffset=T*10;g.strokeStyle='rgba(143,155,255,.35)';g.beginPath();g.arc(cx,cy,R*.64,0,TAU);g.stroke();g.setLineDash([]);
-    /* spokes */
-    nodes.forEach(n=>{const gr=g.createLinearGradient(cx,cy,n.x,n.y);gr.addColorStop(0,'rgba(23,183,205,.38)');gr.addColorStop(1,hex(n.c,.1+n.flash*.45));g.strokeStyle=gr;g.lineWidth=1+n.flash*1.4;g.beginPath();g.moveTo(cx+(n.x-cx)*cr/R,cy+(n.y-cy)*cr/R);g.lineTo(n.x,n.y);g.stroke()});
-    /* pulse waves */
-    pulses.forEach(s=>{const a=(T-s)/2.2;g.strokeStyle=`rgba(23,183,205,${.4*(1-a)})`;g.lineWidth=1.6;g.beginPath();g.arc(cx,cy,cr*1.1+(R*1.02-cr*1.1)*a,0,TAU);g.stroke()});
-    /* comets */
-    g.globalCompositeOperation='lighter';
-    packets.forEach(p=>{const col=p.c;p.tr.forEach((q,i)=>{const f=(i+1)/p.tr.length;g.fillStyle=hex(col,.5*f*f);g.beginPath();g.arc(q.x,q.y,1.2+f*3.2,0,TAU);g.fill()});
-      const q=pos(p),gr=g.createRadialGradient(q.x,q.y,0,q.x,q.y,13);gr.addColorStop(0,hex(col,.95));gr.addColorStop(1,hex(col,0));g.fillStyle=gr;g.beginPath();g.arc(q.x,q.y,13,0,TAU);g.fill()});
-    const halo=g.createRadialGradient(cx,cy,cr*.3,cx,cy,cr*2.4);halo.addColorStop(0,`rgba(23,183,205,${.5+coreFlash*.3})`);halo.addColorStop(.5,'rgba(45,54,145,.28)');halo.addColorStop(1,'rgba(45,54,145,0)');g.fillStyle=halo;g.beginPath();g.arc(cx,cy,cr*2.4,0,TAU);g.fill();
-    g.globalCompositeOperation='source-over';
-    /* AI core */
-    g.save();g.beginPath();g.arc(cx,cy,cr,0,TAU);g.clip();
-    const hx=cx+Math.cos(T*.4)*cr*.35,hy=cy+Math.sin(T*.4)*cr*.35,orb=g.createRadialGradient(hx,hy,cr*.05,cx,cy,cr);orb.addColorStop(0,'#8ef0fb');orb.addColorStop(.5,'#1f8fd0');orb.addColorStop(1,'#2D3691');g.fillStyle=orb;g.fillRect(cx-cr,cy-cr,cr*2,cr*2);
-    const pts=[];for(let i=0;i<11;i++){const a=i*2.399+T*.5,rad=cr*(.22+.58*((i*37)%10)/10);pts.push({x:cx+Math.cos(a)*rad,y:cy+Math.sin(a*1.1+i)*rad*.85})}
-    g.strokeStyle='rgba(255,255,255,.5)';g.lineWidth=1;for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const d=Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y);if(d<cr*.75){g.globalAlpha=1-d/(cr*.75);g.beginPath();g.moveTo(pts[i].x,pts[i].y);g.lineTo(pts[j].x,pts[j].y);g.stroke()}}
-    g.globalAlpha=1;g.fillStyle='#fff';pts.forEach(p=>{g.beginPath();g.arc(p.x,p.y,1.8,0,TAU);g.fill()});g.restore();
-    g.strokeStyle='rgba(255,255,255,.55)';g.lineWidth=1.5;g.beginPath();g.arc(cx,cy,cr,0,TAU);g.stroke();
-    /* HUD arcs around the core */
-    [[1.3,.55,.9,'rgba(23,183,205,.9)'],[1.5,.38,-.65,'rgba(143,155,255,.8)'],[1.72,.22,.45,'rgba(94,234,212,.7)']].forEach(([m,len,sp,col],k)=>{g.strokeStyle=col;g.lineWidth=2;for(let s=0;s<3;s++){const a=T*sp+s*TAU/3+k;g.beginPath();g.arc(cx,cy,cr*m,a,a+len*1.4);g.stroke()}});
-    /* AI badge + name, inside the core (never collides with the orbiting labels) */
-    g.textAlign='center';g.textBaseline='middle';const by=wide?cy-9:cy;g.fillStyle='#17B7CD';g.beginPath();g.roundRect?g.roundRect(cx-15,by-9,30,18,9):g.rect(cx-15,by-9,30,18);g.fill();g.fillStyle='#0b1040';g.font='800 11px Inter,system-ui,sans-serif';g.fillText('AI',cx,by+.5);
-    if(wide){g.fillStyle='rgba(255,255,255,.95)';g.font='800 9px Inter,system-ui,sans-serif';if('letterSpacing' in g)g.letterSpacing='.14em';g.fillText('PHARMAOS',cx,cy+15);if('letterSpacing' in g)g.letterSpacing='0px'}
-    /* workflow nodes: round icon badges riding the orbit */
-    nodes.forEach(n=>{
-      if(n.flash>0){g.shadowColor=n.c;g.shadowBlur=22*n.flash}
-      g.fillStyle='rgba(12,15,60,.82)';g.beginPath();g.arc(n.x,n.y,nr,0,TAU);g.fill();g.shadowBlur=0;
-      g.strokeStyle=hex(n.c,.5+n.flash*.5);g.lineWidth=1.4+n.flash*1.2;g.beginPath();g.arc(n.x,n.y,nr,0,TAU);g.stroke();
-      const s=nr*1.0/12*.82;g.save();g.translate(n.x-12*s,n.y-12*s);g.scale(s,s);g.lineWidth=1.9/s*.9;g.lineJoin='round';g.strokeStyle=n.flash>.2?'#fff':hex(n.c,1);g.stroke(PATH[n.ic]);
-      if(n.ic==='cart'){g.beginPath();g.arc(9,20,1.2,0,TAU);g.arc(18,20,1.2,0,TAU);g.stroke()}if(n.ic==='truck'){g.beginPath();g.arc(7,18,2,0,TAU);g.arc(17,18,2,0,TAU);g.stroke()}g.restore();
-      if(n.flash>.5){g.fillStyle='#34d399';g.beginPath();g.arc(n.x+nr*.78,n.y-nr*.78,5,0,TAU);g.fill();g.strokeStyle='#04210f';g.lineWidth=1.5;g.beginPath();g.moveTo(n.x+nr*.78-2.4,n.y-nr*.78);g.lineTo(n.x+nr*.78-.6,n.y-nr*.78+2);g.lineTo(n.x+nr*.78+2.6,n.y-nr*.78-2);g.stroke()}
-      if(wide){const below=Math.sin(n.a)<.6,ly=below?n.y+nr+13:n.y-nr-13;g.font='600 11.5px Inter,system-ui,sans-serif';g.fillStyle=`rgba(255,255,255,${.7+n.flash*.3})`;g.fillText(n.name,n.x,ly)}});
-  }
-  function loop(now){requestAnimationFrame(loop);if(!vis||document.hidden){last=now;return}const dt=Math.min((now-last)/1000,.05);last=now;step(dt);draw()}
-  new IntersectionObserver(es=>es.forEach(e=>vis=e.isIntersecting)).observe(hero);
-  /* re-fit whenever the hero changes size — e.g. the login card grows/shrinks when you switch Mobile OTP ⇄ Password */
-  let rq=0;const refit=()=>{if(rq)return;rq=requestAnimationFrame(()=>{rq=0;layout();draw()})};
-  addEventListener('resize',refit);
-  if('ResizeObserver' in window){const ro=new ResizeObserver(refit);ro.observe(hero);const c=hero.querySelector('#login');if(c)ro.observe(c)}
-  layout();
-  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(refit);
-  if(still){T=3;place();draw()}else requestAnimationFrame(loop);
-})();
 
 </script>
 <script>(()=>{const n=document.getElementById('siteNav');const f=()=>n.classList.toggle('scrolled',scrollY>8);f();addEventListener('scroll',f,{passive:true})})();</script>

@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Careers – MedleyMed</title>
+<meta name="description" content="Join MedleyMed and help build healthcare's digital backbone. Explore open roles and see why teams love working with us.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Careers – MedleyMed">
+<meta property="og:description" content="Join us in building healthcare's digital backbone.">
+<meta property="og:image" content="assets/eco-3.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta name="theme-color" content="#2D3691">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+/* Tailwind theme = the MedleyMed brand tokens (same palette as index.html / dashboard.html) */
+tailwind.config={
+  theme:{extend:{
+    colors:{
+      primary:{DEFAULT:'#2D3691',hover:'#232b78',soft:'#e8eaf8'},
+      accent:{DEFAULT:'#17B7CD',soft:'#e0f5f9',dark:'#0a7f92',light:'#63dcec'},
+      navy:'#151a52',ink:{DEFAULT:'#0f1535',2:'#38426b'},muted:'#667097',page:'#f5f7fd',line:'#d9dff0'
+    },
+    fontFamily:{sans:['Inter','ui-sans-serif','system-ui','sans-serif']},
+    boxShadow:{card:'0 8px 30px rgba(20,120,170,.10)',cardhover:'0 20px 50px rgba(23,183,205,.30)'},
+    keyframes:{
+      marq:{to:{transform:'translateX(-50%)'}},
+      gradshine:{to:{backgroundPosition:'200% 0'}},
+      dockin:{from:{opacity:0,transform:'translateY(34px)'},to:{opacity:1,transform:'none'}}
+    },
+    animation:{
+      marq:'marq 38s linear infinite',
+      gradshine:'gradshine 6s linear infinite',
+      dockin:'dockin .9s .3s cubic-bezier(.2,.8,.2,1) both'
+    }
+  }}
+}
+</script>
+<style type="text/tailwindcss">
+  :root{--head-h:76px}
+  @layer base{
+    html{scroll-behavior:smooth;scroll-padding-top:calc(var(--head-h) + 12px);-webkit-text-size-adjust:100%}
+    body{@apply bg-page font-sans leading-normal text-ink antialiased overflow-x-hidden;text-rendering:optimizeLegibility}
+    h1,h2{@apply font-extrabold leading-tight tracking-[-.025em]}
+    h3,h4{@apply leading-tight tracking-[-.01em]}
+    h1,h2,h3{@apply text-balance}
+    button{@apply font-[inherit]}
+    :focus-visible{outline:2px solid #17B7CD;outline-offset:3px;border-radius:.5rem}
+  }
+  @layer components{
+    .wrap{@apply mx-auto w-full max-w-7xl px-6}
+    /* buttons */
+    .btn{@apply inline-flex items-center justify-center gap-[.55rem] rounded-xl border border-transparent px-6 py-3 text-sm font-semibold leading-[1.43] transition duration-300 hover:-translate-y-px hover:shadow-[0_10px_22px_-8px_rgba(23,183,205,.6)]}
+    .btn-primary{@apply relative overflow-hidden bg-primary px-7 text-white shadow-[0_8px_18px_-8px_rgba(45,54,145,.65)] hover:bg-primary-hover hover:shadow-[0_12px_24px_-8px_rgba(45,54,145,.75)]}
+    .btn-white{@apply border-primary/10 bg-white px-8 text-ink shadow-[0_12px_26px_-14px_rgba(45,54,145,.45)] hover:shadow-[0_18px_32px_-14px_rgba(45,54,145,.55)]}
+    .btn-outline{@apply border-primary bg-transparent px-6 py-[.625rem] text-primary hover:bg-primary hover:text-white}
+    .btn-accent{@apply bg-accent text-[#0b1040] hover:bg-[#3fcce0]}
+    .btn-ghost{@apply border-white/50 bg-white/5 text-white backdrop-blur-[10px] hover:bg-white/15}
+    .play-dot{@apply grid size-[1.9rem] place-items-center rounded-full bg-gradient-to-br from-accent to-[#2D8FD6] text-white}
+    /* cards + small parts */
+    .card{@apply relative rounded-[1.4rem] bg-white shadow-card transition duration-300 hover:-translate-y-1.5 hover:shadow-cardhover}
+    .eyebrow{@apply inline-flex items-center gap-[.8rem] text-xs font-bold uppercase tracking-[.25em] text-primary}
+    .round-btn{@apply grid size-[2.6rem] place-items-center rounded-full border border-navy/35 bg-white/70 text-navy transition duration-200 hover:-translate-y-px hover:bg-navy hover:text-white}
+    .arrow-btn{@apply grid size-9 place-items-center rounded-full border-[1.5px] border-white/40 bg-white/5 text-white transition duration-300 hover:scale-[1.07] hover:bg-white/20}
+    .arrow-btn.next{@apply border-accent text-accent hover:bg-accent hover:text-[#0b1040]}
+    .store-badge{@apply inline-flex h-12 items-center justify-center gap-[.6rem] rounded-[.85rem] border border-white/25 bg-[#0b0f2e] px-[1.1rem] text-sm font-semibold text-white transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_26px_-14px_rgba(11,15,46,.8)] [&_svg]:size-[1.45rem]}
+    .tag{@apply self-start rounded-full bg-accent-soft px-[.7rem] py-1 text-xs font-bold tracking-[.04em] text-accent-dark}
+    .soc{@apply grid size-9 place-items-center rounded-full border border-white/15 bg-white/10 text-white transition duration-200 hover:-translate-y-0.5 hover:bg-accent hover:text-[#0b1040]}
+    .more{@apply mt-auto inline-flex items-center gap-[.4rem] text-sm font-semibold text-primary [&_svg]:transition-transform [&_svg]:duration-200}
+    .input{@apply w-full rounded-xl border border-line bg-white px-4 py-3 text-sm text-ink outline-none transition duration-200 focus:border-primary focus:shadow-[0_0_0_3px_rgba(23,183,205,.28)]}
+  }
+</style>
+<style>
+  /* ==========================================================================================
+     What Tailwind utilities can't express lives here: pseudo-elements, masks, keyframes,
+     JS-driven state classes (.scrolled .open .in .on .run …) and the hero's bespoke effects.
+     Layout, spacing, type, colour and component styling is all Tailwind (markup + @apply above).
+     ========================================================================================== */
+  .reveal{opacity:0;transform:translateY(34px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.8,.2,1);transition-delay:var(--d,0s)}
+  .reveal.in{opacity:1;transform:none}
+  .eyebrow::before,.eyebrow::after{content:"";width:4rem;height:1px;background:rgba(23,183,205,.5)}
+  .eyebrow.left::before{display:none}
+  .grad-dark{background:linear-gradient(90deg,#2D3691,#17B7CD);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .grad{background-image:linear-gradient(90deg,#17B7CD,#2a8de0,#17B7CD);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent}
+  .btn:focus-visible{outline:0;box-shadow:0 0 0 3px rgba(23,183,205,.4)}
+  .btn:active{transform:translateY(0) scale(.98)}
+  .btn:disabled{opacity:.7;cursor:not-allowed;transform:none}
+  .btn-primary::after{content:"";position:absolute;top:0;left:-70%;width:45%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-20deg);transition:left .6s}
+  .btn-primary:hover::after{left:130%}
+  /* glossy icon tile */
+  .ico-tile{flex:none;position:relative;overflow:hidden;display:grid;place-items:center;width:3rem;height:3rem;border-radius:.95rem;color:#2D3691;
+    background:linear-gradient(145deg,#fff 0%,#d9f3fa 48%,#c4eaf5 100%);border:1px solid rgba(23,183,205,.38);
+    box-shadow:0 12px 22px -10px rgba(23,183,205,.7),0 2px 5px rgba(45,54,145,.1),inset 0 1px 0 rgba(255,255,255,.95);transition:transform .3s cubic-bezier(.3,1.4,.5,1),box-shadow .3s}
+  .ico-tile::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(135deg,rgba(255,255,255,.65),rgba(255,255,255,0) 46%)}
+  .ico-tile svg{position:relative;z-index:1;stroke-width:2;filter:drop-shadow(0 2px 3px rgba(23,183,205,.45));transition:transform .35s cubic-bezier(.3,1.5,.5,1)}
+  .card:hover .ico-tile{transform:translateY(-3px)}.card:hover .ico-tile svg{transform:scale(1.14) rotate(-6deg)}
+  .card:hover .more svg{transform:translateX(5px)}
+  .card::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .35s;background:radial-gradient(300px circle at var(--mx,50%) var(--my,50%),rgba(23,183,205,.17),transparent 65%)}
+  .card:hover::before{opacity:1}.card>*{position:relative}
+  .dd-item .ico-tile{width:2.3rem;height:2.3rem;border-radius:.75rem}.dd-item .ico-tile svg{width:17px;height:17px}
+  /* masks (Tailwind has no mask utilities) */
+  .fade-x{-webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent)}
+  .fade-l{-webkit-mask-image:linear-gradient(to right,transparent 0,#000 30%);mask-image:linear-gradient(to right,transparent 0,#000 30%)}
+  .no-scrollbar{scrollbar-width:none}.no-scrollbar::-webkit-scrollbar{display:none}
+  /* decorative pseudo-elements */
+  .stats::before{content:"";position:absolute;inset:0;opacity:.14;background-image:linear-gradient(rgba(255,255,255,.4) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.4) 1px,transparent 1px);background-size:40px 40px;-webkit-mask-image:radial-gradient(circle at 20% 30%,#000,transparent 70%);mask-image:radial-gradient(circle at 20% 30%,#000,transparent 70%)}
+  .stats::after{content:"";position:absolute;width:420px;height:420px;right:-120px;top:-180px;border-radius:50%;background:radial-gradient(circle,rgba(23,183,205,.35),transparent 70%);pointer-events:none}
+  .shot::before{content:"";position:absolute;width:260px;height:260px;right:-40px;top:-60px;border-radius:50%;background:radial-gradient(circle,rgba(23,183,205,.5),transparent 70%)}
+  .band::after{content:"";position:absolute;width:320px;height:320px;right:-80px;top:-120px;border-radius:50%;background:rgba(255,255,255,.14)}
+  .post-top::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 80% 10%,rgba(255,255,255,.35),transparent 55%)}
+  .t-dots button.on{width:1.6rem;background:#17B7CD}
+
+  /* ----- header states (JS toggles .scrolled / .menu-open) ----- */
+  .site-head.scrolled,.site-head.menu-open{background:rgba(255,255,255,.93);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-color:#d9dff0;box-shadow:0 14px 30px -22px rgba(45,54,145,.5)}
+  .site-head:not(.scrolled):not(.menu-open){background:linear-gradient(180deg,rgba(8,12,58,.88),rgba(8,12,58,.45));backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom-color:rgba(255,255,255,.12)}
+  .site-head:not(.scrolled):not(.menu-open) .nav-link{color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.45)}
+  .site-head:not(.scrolled):not(.menu-open) .nav-link:hover,.site-head:not(.scrolled):not(.menu-open) .nav-dd.open>.nav-link{background:rgba(255,255,255,.14);color:#fff}
+  .site-head:not(.scrolled):not(.menu-open) .round-btn{color:#fff;background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.45)}
+  .site-head:not(.scrolled):not(.menu-open) .round-btn:hover{background:#fff;color:#151a52}
+  .site-head:not(.scrolled):not(.menu-open) .btn-outline{color:#fff;border-color:rgba(255,255,255,.7)}
+  .site-head:not(.scrolled):not(.menu-open) .btn-outline:hover{background:#fff;color:#151a52}
+  .site-head:not(.scrolled):not(.menu-open) .nav-cta{background:#17B7CD;color:#0b1040}
+  .site-head:not(.scrolled):not(.menu-open) .nav-cta:hover{background:#3fcce0}
+  .site-head .nav-link.is-active{color:#2D3691;background:#e8eaf8}
+  .site-head:not(.scrolled):not(.menu-open) .nav-link.is-active{color:#17B7CD;background:rgba(255,255,255,.14)}
+  .logo .on-dark{display:none}
+  .site-head:not(.scrolled):not(.menu-open) .logo .on-light{display:none}.site-head:not(.scrolled):not(.menu-open) .logo .on-dark{display:block}
+
+  /* ----- hero: photo layers, shade, motion ----- */
+  .hero-bg{position:absolute;inset:0;opacity:0;transition:opacity 1.1s ease;overflow:hidden}
+  .hero-bg.on{opacity:1}
+  .hero-bg .bg-img{position:absolute;inset:-3%;background-size:cover;background-position:72% center;transform-origin:70% 40%;translate:calc(var(--px,0)*-18px) calc(var(--py,0)*-10px);transition:translate .6s ease-out}
+  .hero-bg.on .bg-img{animation:kenburns 16s ease-out both}
+  @keyframes kenburns{from{transform:scale(1.07)}to{transform:scale(1)}}
+  .hero-bg.ph .bg-img{background:radial-gradient(60% 70% at 78% 38%,color-mix(in srgb,var(--c) 38%,transparent),transparent 65%),radial-gradient(40% 50% at 92% 80%,color-mix(in srgb,var(--c2) 55%,transparent),transparent 70%),repeating-linear-gradient(120deg,rgba(255,255,255,.035) 0 22px,transparent 22px 44px),linear-gradient(135deg,#10185f,#1a2a8a 55%,#16206e)}
+  .hero-bg .bg-note{position:absolute;right:max(3rem,8%);top:44%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;gap:.7rem;text-align:center;color:rgba(255,255,255,.55);font-size:.74rem;letter-spacing:.1em;text-transform:uppercase}
+  .hero-bg .bg-note span{display:grid;place-items:center;width:5.2rem;height:5.2rem;border-radius:1.5rem;background:rgba(255,255,255,.08);border:1px dashed rgba(255,255,255,.35);color:#fff;animation:bob 5s ease-in-out infinite}
+  .hero-bg:not(.ph) .bg-note{display:none}
+  @keyframes bob{50%{transform:translateY(-5px)}}
+  .hero-shade{background:linear-gradient(90deg,rgba(8,12,58,.94) 0%,rgba(8,12,58,.78) 30%,rgba(8,12,58,.28) 62%,rgba(8,12,58,.05) 100%),linear-gradient(0deg,rgba(8,12,58,.9) 0%,rgba(8,12,58,0) 34%),linear-gradient(180deg,rgba(8,12,58,.55),transparent 22%)}
+  @media(min-width:960px){
+    .hero-bg.photo .bg-img{inset:auto;top:calc(var(--head-h) + .5rem);bottom:0;right:0;left:auto;width:min(60%,1250px);background-position:var(--pos);
+      -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 34%),linear-gradient(0deg,transparent 0,#000 24%),linear-gradient(180deg,transparent 0,#000 9%);-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent 0,#000 34%),linear-gradient(0deg,transparent 0,#000 24%),linear-gradient(180deg,transparent 0,#000 9%);mask-composite:intersect}
+    .hero-bg.photo{background:radial-gradient(60% 80% at 80% 45%,rgba(45,54,145,.55),transparent 70%)}
+  }
+  @media(max-width:959px){
+    .hero-shade{background:linear-gradient(180deg,rgba(8,12,58,.7) 0%,rgba(8,12,58,.82) 45%,rgba(8,12,58,.96) 100%)}
+    .hero-bg .bg-img{background-position:70% center}.hero-bg.photo .bg-img{background-position:var(--mpos)}.hero-bg .bg-note{display:none}
+  }
+  .hero .eyebrow{letter-spacing:.16em;color:#17B7CD;font-size:.82rem;gap:.9rem}.hero .eyebrow::before{display:none}
+  @media(max-width:479px){.hero .eyebrow{font-size:.7rem;letter-spacing:.12em;gap:.6rem;white-space:nowrap}.hero .eyebrow::after{width:2rem}}
+  .hero .eyebrow::after{width:5rem;background:rgba(23,183,205,.5);transform-origin:left;animation:lineGrow 1s .4s cubic-bezier(.2,.8,.2,1) both}
+  @keyframes lineGrow{from{transform:scaleX(0)}}
+  .hero-copy>*{animation:heroIn .8s cubic-bezier(.2,.8,.2,1) both}
+  .hero-copy>*:nth-child(2){animation-delay:.08s}.hero-copy>*:nth-child(3){animation-delay:.16s}.hero-copy>*:nth-child(4){animation-delay:.24s}.hero-copy>*:nth-child(5){animation-delay:.34s}
+  .hero-copy>h1{animation:none}
+  @keyframes heroIn{from{opacity:0;transform:translateY(24px);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}
+  .hero h1 .w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.1em;margin-bottom:-.1em}
+  .hero h1 .w>span{display:inline-block;transform:translateY(110%);animation:wordUp .95s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:calc(var(--i)*.11s + .15s)}
+  @keyframes wordUp{to{transform:none}}
+  .hero h1 .grad>span{background:linear-gradient(100deg,#17B7CD 30%,#9be9f5 50%,#17B7CD 70%) 0 0/250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:wordUp .95s cubic-bezier(.2,.8,.2,1) forwards,shimmer 5s 1.4s linear infinite;animation-delay:calc(var(--i)*.11s + .15s),1.4s}
+  @keyframes shimmer{to{background-position:-250% 0}}
+  /* hero copy: fades out, then the new slide's copy animates in (A/B keyframe names restart the entrance) */
+  .hero-copy>h1{transition:opacity .22s ease}
+  .hero-copy.out>h1{opacity:0}
+  .hero-copy.out>*:not(h1){animation:copyOut .24s ease-in forwards!important}
+  @keyframes copyOut{to{opacity:0;transform:translateY(-14px);filter:blur(4px)}}
+  .hero-copy.b>*:not(h1){animation-name:heroInB}
+  @keyframes heroInB{from{opacity:0;transform:translateY(24px);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}
+  .hero-copy.b h1 .w>span{animation-name:wordUpB}
+  .hero-copy.b h1 .grad>span{animation-name:wordUpB,shimmer}
+  @keyframes wordUpB{to{transform:none}}
+  .hero-stats li{animation:statIn .6s cubic-bezier(.2,.8,.2,1) both}
+  .hero-stats li:nth-child(2){animation-delay:.08s}.hero-stats li:nth-child(3){animation-delay:.16s}
+  @keyframes statIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  /* ----- ecosystem: 3-D curved carousel ----- */
+  .cf{--w:clamp(11.5rem,46vw,13.5rem);position:relative;height:calc(var(--w)*1.5 + 13.4rem);perspective:1500px;touch-action:pan-y;cursor:grab;outline-offset:-4px;user-select:none;-webkit-user-select:none}
+  @media(min-width:640px){.cf{--w:clamp(12rem,21vw,17rem)}}
+  .cf.drag{cursor:grabbing}
+  .cf-stage{position:absolute;inset:0 0 auto 0;height:calc(var(--w)*1.5);transform-style:preserve-3d}
+  .cf-card{position:absolute;left:50%;top:0;width:var(--w);height:100%;margin-left:calc(var(--w)/-2);border-radius:1.4rem;overflow:hidden;backface-visibility:hidden;background:#151a52;
+    box-shadow:0 30px 50px -28px rgba(21,26,82,.55);transition:transform .8s cubic-bezier(.2,.8,.2,1),opacity .6s,filter .6s,box-shadow .6s}
+  .cf-card.on{box-shadow:0 50px 80px -28px rgba(45,54,145,.75),0 0 0 2px rgba(23,183,205,.6),0 0 60px -12px rgba(23,183,205,.45)}
+  .cf-card img{width:100%;height:100%;object-fit:cover;pointer-events:none;-webkit-user-drag:none;transform:scale(1.06);transition:transform 1.2s cubic-bezier(.2,.8,.2,1)}
+  .cf-card.on img{transform:scale(1)}
+  .cf-shade{position:absolute;inset:0;background:linear-gradient(0deg,rgba(10,14,60,.45),transparent 45%)}
+  .cf-ico{position:absolute;left:.9rem;top:.9rem;width:2.5rem;height:2.5rem;border-radius:.8rem}
+  .cf-labels{position:absolute;left:0;right:0;top:calc(var(--w)*1.5 + 1.6rem);height:11rem}
+  .cf-label{position:absolute;left:50%;top:0;width:min(calc(var(--w)*1.5),92vw);margin-left:calc(min(calc(var(--w)*1.5),92vw)/-2);text-align:center;transition:transform .8s cubic-bezier(.2,.8,.2,1),opacity .45s}
+  .cf-label .num{display:inline-flex;align-items:center;gap:.3rem;padding:.3rem .85rem;border-radius:9999px;background:rgba(23,183,205,.12);color:#0a7f92;font-size:.8rem;font-weight:700;letter-spacing:.14em}
+  .cf-label .num i{font-style:normal;font-weight:600;opacity:.65}
+  .cf-label b{display:block;margin-top:.7rem;font-size:1.5rem;font-weight:800;letter-spacing:-.02em;line-height:1.2;color:#0f1535}
+  .cf-label small{display:block;margin-top:.55rem;font-size:1rem;line-height:1.6;color:#475569}
+  .cf-label a{display:inline-flex;align-items:center;gap:.45rem;margin-top:1rem;padding:.6rem 1.25rem;border-radius:.75rem;border:1px solid #2D3691;font-size:.9rem;font-weight:600;color:#2D3691;transition:background .2s,color .2s,transform .2s}
+  .cf-label a:hover{background:#2D3691;color:#fff;transform:translateY(-1px)}
+  .cf-label .num,.cf-label b,.cf-label small,.cf-label a{animation:lblUp .65s cubic-bezier(.2,.8,.2,1) both;animation-play-state:paused}
+  .cf-label.on .num,.cf-label.on b,.cf-label.on small,.cf-label.on a{animation-play-state:running}
+  .cf-label.on b{animation-delay:.08s}.cf-label.on small{animation-delay:.18s}.cf-label.on a{animation-delay:.3s}
+  @keyframes lblUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  @media(max-width:639px){.cf{height:calc(var(--w)*1.5 + 16.4rem)}.cf-labels{height:14rem}}
+  .cf-ico{transition:opacity .4s}.cf-card:not(.on) .cf-ico{opacity:0}
+  .eco-btn{display:grid;place-items:center;width:2.6rem;height:2.6rem;border-radius:9999px;background:#fff;color:#2D3691;box-shadow:0 10px 24px -10px rgba(45,54,145,.5);transition:transform .2s,background .2s,color .2s}
+  .eco-btn:hover{transform:scale(1.1);background:#2D3691;color:#fff}
+  #cfDots button{width:.6rem;height:.6rem;border-radius:9999px;background:#cbd2ea;transition:all .3s}
+  #cfDots button.on{width:1.6rem;background:#17B7CD}
+  /* ===== modern dropdown (same component as the dashboard) ===== */
+  .dd{position:relative;min-width:0}
+  .dd.open{z-index:60}
+  .dd-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:.6rem;text-align:left;background:#fff;border:1px solid #d6e5f1;border-radius:.8rem;padding:.6rem .9rem;font-size:.85rem;color:#06173d;cursor:pointer;transition:border-color .2s,box-shadow .2s,background .2s}
+  .dd-btn:hover{border-color:#8fd3e2}
+  .dd-btn:focus-visible,.dd.open .dd-btn{outline:0;border-color:#2D3691;box-shadow:0 0 0 3px rgba(23,183,205,.22)}
+  .dd-lbl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .dd-chev{flex-shrink:0;color:#7a93ad;transition:transform .25s}
+  .dd.open .dd-chev{transform:rotate(180deg);color:#2D3691}
+  .dd-list{position:absolute;left:0;top:calc(100% + .4rem);min-width:100%;width:max-content;max-width:18rem;max-height:15rem;overflow-y:auto;margin:0;padding:.35rem;list-style:none;background:#fff;border:1px solid #dbe8f2;border-radius:.95rem;box-shadow:0 18px 45px rgba(10,40,90,.2);opacity:0;visibility:hidden;transform:translateY(-6px) scale(.97);transform-origin:top;transition:opacity .16s,transform .16s,visibility .16s;z-index:50}
+  .dd.open .dd-list{opacity:1;visibility:visible;transform:none}
+  .dd.up .dd-list{top:auto;bottom:calc(100% + .4rem);transform-origin:bottom;transform:translateY(6px) scale(.97)}
+  .dd.up.open .dd-list{transform:none}
+  .dd-opt{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.55rem .75rem;border-radius:.65rem;font-size:.85rem;color:#334e68;cursor:pointer;transition:background .12s}
+  .dd-opt.act{background:#eef6fb}
+  .dd-opt .dd-check{opacity:0;color:#2D3691;flex-shrink:0}
+  .dd-opt.on{color:#2D3691;font-weight:600;background:#e6f6fb}
+  .dd-opt.on .dd-check{opacity:1}
+  .dd>select{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;border:0!important;opacity:0!important;pointer-events:none}
+  /* sits level with the form inputs */
+  .field .dd-btn{padding:.75rem 1rem;font-size:.875rem;border-radius:.75rem;border-color:#d9dff0}
+  .field .dd-btn:hover{border-color:#8fd3e2}
+  /* ----- B2B / B2C ----- */
+  .seg-pane{animation:segIn .65s cubic-bezier(.2,.8,.2,1) both}
+  .seg-pane .seg-card{animation:segIn .65s cubic-bezier(.2,.8,.2,1) both}
+  .seg-pane .seg-card:nth-child(2){animation-delay:.1s}.seg-pane .seg-card:nth-child(3){animation-delay:.2s}
+  .seg-pane .seg-flow>*{animation:segIn .6s .3s cubic-bezier(.2,.8,.2,1) both}
+  @keyframes segIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+  @keyframes flowDash{to{stroke-dashoffset:-24}}
+  .flow-line{stroke-dasharray:6 6;animation:flowDash 1.2s linear infinite}
+  /* ----- floating info chips ----- */
+  .hchip{animation:chipFloat 6s ease-in-out infinite}.hchip[data-k="1"]{animation-duration:7s;animation-delay:-3s}
+  @keyframes chipFloat{50%{transform:translateY(-9px)}}
+  .hchip-in{animation:chipIn .8s .45s cubic-bezier(.2,.8,.2,1) both}.hchip[data-k="1"] .hchip-in{animation-delay:.6s}
+  .hero-chips.b .hchip-in{animation-name:chipInB}
+  .hero-chips.out .hchip-in{animation:chipOut .24s ease-in forwards!important}
+  @keyframes chipIn{from{opacity:0;transform:translateY(18px) scale(.92)}to{opacity:1;transform:none}}
+  @keyframes chipInB{from{opacity:0;transform:translateY(18px) scale(.92)}to{opacity:1;transform:none}}
+  @keyframes chipOut{to{opacity:0;transform:translateY(-10px) scale(.96)}}
+  /* pause / play */
+  .i-play{display:none}.hero.paused .i-play{display:grid}.hero.paused .i-pause{display:none}
+  .hero.paused .bar.run::after{animation-play-state:paused}
+  .hero-cta .btn.swap{animation:ctaIn .6s cubic-bezier(.2,.8,.2,1)}
+  @keyframes ctaIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .hero .btn-accent{position:relative;overflow:hidden}
+  .hero .btn-accent::after{content:"";position:absolute;top:0;bottom:0;left:-60%;width:40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(-20deg);animation:btnshine 4.5s 1.6s ease-in-out infinite}
+  @keyframes btnshine{0%{left:-60%}28%,100%{left:140%}}
+  /* thumbnails */
+  .thumb{transition:flex-grow .65s cubic-bezier(.65,0,.2,1),border-color .35s,box-shadow .35s,transform .35s,opacity .35s;animation:thumbIn .8s cubic-bezier(.2,.8,.2,1) backwards}
+  .thumb:nth-child(1){animation-delay:.55s}.thumb:nth-child(2){animation-delay:.67s}.thumb:nth-child(3){animation-delay:.79s}.thumb:nth-child(4){animation-delay:.91s}
+  @keyframes thumbIn{from{opacity:0;transform:translateY(26px) scale(.94)}}
+  .t-img{background-image:radial-gradient(circle at 30% 20%,color-mix(in srgb,var(--c) 70%,transparent),transparent 62%),radial-gradient(circle at 85% 90%,color-mix(in srgb,var(--c2) 80%,transparent),transparent 65%),linear-gradient(160deg,#1a2685,#0f1760)}
+  .t-img svg{color:rgba(255,255,255,.4);margin-top:-1.1rem;animation:bob 4s ease-in-out infinite}
+  .thumb:nth-child(2) .t-img svg{animation-delay:-1s}.thumb:nth-child(3) .t-img svg{animation-delay:-2s}.thumb:nth-child(4) .t-img svg{animation-delay:-3s}
+  .t-img.has-img svg{display:none}
+  .thumb .bar::after{content:"";display:block;height:100%;width:100%;background:#17B7CD;transform:scaleX(0);transform-origin:left}
+  .thumb[aria-selected=true] .bar.run::after{animation:fill var(--dur,7s) linear forwards}
+  .dock:hover .bar.run::after,.dock:focus-within .bar.run::after,.hero.off .bar.run::after{animation-play-state:paused}
+  @keyframes fill{to{transform:scaleX(1)}}
+  /* heartbeat line + ambient canvas */
+  .hero-ecg{-webkit-mask-image:linear-gradient(90deg,#000 55%,transparent);mask-image:linear-gradient(90deg,#000 55%,transparent)}
+  .hero-ecg>svg:last-child{position:absolute;inset:0;width:100%;height:100%;opacity:.7}
+  .hero-ecg path{fill:none;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+  .ecg-base{stroke:rgba(255,255,255,.14);stroke-width:1.5}
+  .ecg-pulse{stroke:#17B7CD;stroke-width:2.6;stroke-dasharray:140 1060;filter:drop-shadow(0 0 6px #17B7CD);animation:ecg 3.6s linear infinite}
+  .ecg-pulse.p2{stroke:#fff;stroke-width:1.6;opacity:.5;animation-delay:-1.8s;filter:drop-shadow(0 0 4px #fff)}
+  @keyframes ecg{from{stroke-dashoffset:140}to{stroke-dashoffset:-1060}}
+  .ecg-heart{left:max(1.25rem,calc((100vw - 1240px)/2));background:linear-gradient(145deg,#17B7CD,#2D8FD6);box-shadow:0 0 0 4px rgba(23,183,205,.16),0 0 18px 2px rgba(23,183,205,.65);animation:heartbeat 1.8s ease-in-out infinite}
+  .ecg-heart svg{width:.95rem;height:.95rem}.ecg-heart path{fill:currentColor!important;stroke:none!important;filter:none!important}
+  .ecg-heart::after{content:"";position:absolute;inset:0;border-radius:50%;border:1.5px solid #17B7CD;animation:ripple 1.8s ease-out infinite}
+  @keyframes heartbeat{0%,100%{transform:scale(1)}12%{transform:scale(1.22)}24%{transform:scale(1)}36%{transform:scale(1.14)}48%{transform:scale(1)}}
+  @keyframes ripple{0%{transform:scale(1);opacity:.8}70%,100%{transform:scale(2.2);opacity:0}}
+  @media(max-width:959px){.hero-ecg{bottom:auto;top:58%;width:100%;opacity:.3}.ecg-heart{display:none}}
+
+  @media(prefers-reduced-motion:reduce){
+    .hchip{animation:none}.seg-pane,.seg-pane .seg-card,.seg-pane .seg-flow>*,.flow-line{animation:none}.cf-label .num,.cf-label b,.cf-label small,.cf-label a{animation:none!important}
+    *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+    .reveal{opacity:1;transform:none}.hero h1 .w>span,.hero h1 .grad>span{transform:none}.hero-ecg{display:none}
+  }
+</style>
+<style>
+  .ct-band{background:radial-gradient(60% 80% at 85% 0%,rgba(45,54,145,.9),transparent 70%),radial-gradient(40% 60% at 0% 100%,rgba(23,183,205,.2),transparent 70%),linear-gradient(135deg,#0a0f3d,#141a5c)}
+  .ct-grid::before{content:"";position:absolute;inset:0;opacity:.12;background-image:linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px);background-size:44px 44px;-webkit-mask-image:radial-gradient(circle at 25% 20%,#000,transparent 70%);mask-image:radial-gradient(circle at 25% 20%,#000,transparent 70%)}
+  .ct-glow{animation:ctGlow 8s ease-in-out infinite}@keyframes ctGlow{50%{opacity:.55;transform:scale(1.12)}}
+  .ct-float{animation:ctFloat 6s ease-in-out infinite}@keyframes ctFloat{50%{transform:translateY(-9px)}}
+  .ct-info:hover .ico-tile{transform:translateY(-3px) rotate(-6deg)}
+  .ct-soft{background:linear-gradient(180deg,#f4f8ff,#fff 85%)}
+  .ct-shell{box-shadow:0 30px 70px -30px rgba(20,26,92,.35),0 0 0 1px rgba(214,229,241,.9)}
+  .ct-side{background:radial-gradient(70% 60% at 100% 0%,rgba(23,183,205,.28),transparent 70%),linear-gradient(160deg,#0a0f3d,#1b2380)}
+  .ct-ring{animation:ctGlow 9s ease-in-out infinite}
+  .ct-info{position:relative;overflow:hidden;border:1px solid #e3edf7;background:linear-gradient(180deg,#fff,#f8fbff)}
+  .ct-info::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:linear-gradient(90deg,#2D3691,#17B7CD);transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+  .ct-info:hover::before{transform:scaleX(1)}
+  .ct-ico{display:grid;place-items:center;flex:none;width:3.25rem;height:3.25rem;border-radius:1rem;color:#fff;background:linear-gradient(135deg,#2D3691,#17B7CD);box-shadow:0 12px 22px -10px rgba(45,54,145,.7);transition:transform .4s cubic-bezier(.3,1.5,.5,1)}
+  .ct-info:hover .ct-ico{transform:translateY(-3px) rotate(-8deg) scale(1.05)}
+  .ct-act{display:inline-flex;align-items:center;gap:.35rem;margin-top:auto;padding-top:1rem;font-size:.82rem;font-weight:700;color:#2D3691}
+  .ct-act svg{transition:transform .25s}.ct-info:hover .ct-act svg{transform:translateX(4px)}
+  .ficon{position:absolute;left:1rem;top:50%;transform:translateY(-50%);display:flex;color:#7a93ad;pointer-events:none}
+  .ct-hform{box-shadow:0 30px 70px -28px rgba(0,0,0,.55)}
+  .ct-hwrap{max-width:32rem}@media(max-width:1023px){.ct-hwrap{max-width:none}}
+  .ct-map{filter:saturate(.9) contrast(1.02)}
+  .ct-send svg{transition:transform .25s}.ct-send:hover svg{transform:translateX(4px)}
+  @media(prefers-reduced-motion:reduce){.ct-glow,.ct-float{animation:none}}
+</style>
+</head>
+<body>
+<div class="progress fixed left-0 top-0 z-[90] h-[3px] w-0 bg-gradient-to-r from-accent to-primary shadow-[0_0_12px_rgba(23,183,205,.7)]" id="progress" aria-hidden="true"></div>
+<!-- ============ HEADER ============ -->
+<header class="site-head fixed inset-x-0 top-0 z-[60] border-b border-transparent transition-[background,box-shadow,border-color] duration-300" id="siteHead">
+  <div class="wrap flex h-[76px] items-center gap-6">
+    <a href="index.html" class="logo flex flex-none items-center gap-[.6rem]" aria-label="MedleyMed – home"><img class="on-light size-[38px]" src="assets/medleymed-icon.png" alt="" width="38" height="38"><img class="on-dark size-[38px]" src="assets/brand-icon-dark.png" alt="" width="38" height="38"><img class="on-light h-[19px] w-auto" src="assets/brand-wordmark.png" alt="MedleyMed" width="169" height="19"><img class="on-dark h-[19px] w-auto" src="assets/brand-wordmark-dark.png" alt="" width="169" height="19"></a>
+    <nav class="ml-auto hidden items-center gap-[.15rem] lg:flex" id="navDesktop" aria-label="Primary"></nav>
+    <div class="ml-auto flex items-center gap-[.7rem] lg:ml-0">
+      <a href="contact.html" class="btn btn-primary nav-cta hidden !py-2 lg:inline-flex">Contact Us</a>
+      <button class="round-btn lg:hidden" id="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav"><span data-ic="menu"></span></button>
+    </div>
+  </div>
+  <div class="hidden max-h-[calc(100vh-76px)] overflow-auto border-t border-line bg-white px-5 pb-[1.2rem] pt-[.7rem] lg:!hidden [&.open]:block" id="mobileNav"></div>
+</header>
+
+<a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-primary focus:shadow-card">Skip to content</a>
+<main id="main">
+<!-- ============ HERO ============ -->
+<section class="hero relative isolate overflow-hidden bg-[#0a1048] pt-[76px] text-white" id="top">
+  <div class="absolute inset-0 z-[-3]" aria-hidden="true"><div class="hero-bg photo on" style="--c:#17B7CD;--c2:#2D3691;--pos:50% 0%;--mpos:50% 0%"><div class="bg-img" style="background-image:url('assets/eco-3.jpg')"></div></div></div>
+  <div class="hero-shade pointer-events-none absolute inset-0 z-[-2]" aria-hidden="true"></div>
+  <div class="wrap relative flex min-h-[22rem] items-center py-12 max-lg:min-h-0 max-lg:py-10">
+    <div class="hero-copy w-full min-w-0 max-w-[40rem]">
+      <span class="eyebrow">Careers</span>
+      <h1 class="mt-[1.3rem] text-[2rem] leading-[1.12] tracking-[.005em] text-white uppercase min-[400px]:text-4xl sm:text-[2.6rem] lg:text-5xl" aria-label="Build healthcare's digital backbone."><span class="w" style="--i:0"><span>Build</span></span> <span class="w grad" style="--i:1"><span>healthcare's</span></span><br><span class="w" style="--i:2"><span>digital</span></span> <span class="w" style="--i:3"><span>backbone.</span></span></h1>
+      <p class="mt-6 max-w-lg text-pretty text-base leading-relaxed text-slate-100">We're a team of engineers, designers and operators making medicine supply simpler for millions. Come build it with us.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ OPEN ROLES ============ -->
+<section class="py-20 sm:py-24" id="openings">
+  <div class="wrap">
+    <div class="reveal mb-8 flex flex-wrap justify-center gap-2.5" id="chips" role="tablist" aria-label="Filter by team"></div>
+    <div class="mx-auto grid max-w-4xl gap-4" id="roles"></div>
+    <p class="mt-8 hidden text-center text-sm text-slate-600" id="rEmpty">No open roles in this team right now.</p>
+  </div>
+</section>
+
+<!-- ============ PROCESS ============ -->
+<section class="bg-[radial-gradient(55%_60%_at_50%_100%,rgba(23,183,205,.10),transparent)] pb-20 pt-4 sm:pb-24" id="process">
+  <div class="wrap">
+    <div class="reveal mx-auto mb-12 max-w-[46rem] text-center"><span class="eyebrow">How we hire</span><h2 class="mt-3 text-3xl md:text-4xl">A Simple, <span class="grad-dark">Friendly Process</span></h2></div>
+    <ol class="grid list-none gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <li class="card reveal relative border border-line p-6" style="--d:0.0s"><span class="absolute right-4 top-2 select-none text-6xl font-extrabold leading-none text-primary/[.07]" aria-hidden="true">01</span><span class="grid size-10 place-items-center rounded-full bg-primary text-sm font-bold text-white">1</span><h3 class="mt-4 text-base font-bold">Apply</h3><p class="mt-1.5 text-sm leading-relaxed text-slate-700">Share your resume and tell us what you would like to work on.</p></li>
+      <li class="card reveal relative border border-line p-6" style="--d:0.08s"><span class="absolute right-4 top-2 select-none text-6xl font-extrabold leading-none text-primary/[.07]" aria-hidden="true">02</span><span class="grid size-10 place-items-center rounded-full bg-primary text-sm font-bold text-white">2</span><h3 class="mt-4 text-base font-bold">Intro call</h3><p class="mt-1.5 text-sm leading-relaxed text-slate-700">A friendly conversation about you, your goals and the role.</p></li>
+      <li class="card reveal relative border border-line p-6" style="--d:0.16s"><span class="absolute right-4 top-2 select-none text-6xl font-extrabold leading-none text-primary/[.07]" aria-hidden="true">03</span><span class="grid size-10 place-items-center rounded-full bg-primary text-sm font-bold text-white">3</span><h3 class="mt-4 text-base font-bold">Interviews</h3><p class="mt-1.5 text-sm leading-relaxed text-slate-700">Meet the team and work through a few practical conversations.</p></li>
+      <li class="card reveal relative border border-line p-6" style="--d:0.24s"><span class="absolute right-4 top-2 select-none text-6xl font-extrabold leading-none text-primary/[.07]" aria-hidden="true">04</span><span class="grid size-10 place-items-center rounded-full bg-primary text-sm font-bold text-white">4</span><h3 class="mt-4 text-base font-bold">Offer</h3><p class="mt-1.5 text-sm leading-relaxed text-slate-700">We move quickly, and welcome you to the team.</p></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="wrap pb-4">
+  <div class="band reveal relative flex flex-col items-start justify-between gap-[1.6rem] overflow-hidden rounded-[1.8rem] bg-[linear-gradient(120deg,#2D3691,#2a78b8_60%,#17B7CD)] px-[1.6rem] py-12 text-white min-[800px]:flex-row min-[800px]:items-center min-[800px]:px-12 min-[800px]:py-[3.2rem]">
+    <div class="relative"><span class="mb-4 inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-bold tracking-wider text-white backdrop-blur"><span class="size-2 animate-pulse rounded-full bg-[#7cf3a8]"></span>WE'RE HIRING</span><h2 class="max-w-[30rem] text-2xl font-bold leading-tight md:text-3xl">Don't see your role? Say hello.</h2><p class="mt-1 max-w-[32rem] text-sm text-white/90">Send us a note about what you'd like to work on and we'll keep you in mind.</p></div>
+    <div class="relative flex flex-wrap gap-3"><a href="contact.html" class="btn btn-white">Get in touch <span data-ic="arrow" data-s="17"></span></a><a href="about.html" class="btn btn-ghost">About MedleyMed</a></div>
+  </div>
+</section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="relative mt-20 overflow-hidden bg-gradient-to-b from-navy to-primary pt-16 text-slate-200">
+  <span class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent to-transparent"></span>
+  <span class="pointer-events-none absolute -top-40 left-1/2 size-[30rem] -translate-x-1/2 rounded-full bg-accent/20 blur-3xl"></span>
+  <span class="pointer-events-none absolute -bottom-48 -right-24 size-[26rem] rounded-full bg-primary-soft/10 blur-3xl"></span>
+  <div class="wrap relative">
+    <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1.4fr] lg:gap-12">
+      <div>
+        <a href="index.html" class="inline-flex items-center gap-[.7rem]" aria-label="MedleyMed"><img class="size-[42px]" src="assets/brand-icon-dark.png" alt="" width="42" height="42"><img class="h-[17px] w-auto" src="assets/brand-wordmark-dark.png" alt="MedleyMed" width="151" height="17"></a>
+        <p class="mt-5 max-w-[19rem] text-sm leading-relaxed text-slate-300">Connecting pharmacies, healthcare providers and patients through innovative digital solutions.</p>
+        <h4 class="mb-5 flex items-center gap-2.5 text-sm font-bold uppercase tracking-[.12em] text-white mt-8"><span class="h-4 w-1 rounded-full bg-gradient-to-b from-accent to-primary-soft"></span>Follow us on</h4>
+        <div class="flex flex-wrap gap-2.5" id="socials"></div>
+      </div>
+      <div><h4 class="mb-5 flex items-center gap-2.5 text-sm font-bold uppercase tracking-[.12em] text-white"><span class="h-4 w-1 rounded-full bg-gradient-to-b from-accent to-primary-soft"></span>Company</h4><ul class="grid gap-3"><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="about.html"><svg class="-ml-4 size-3 flex-none text-accent opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>About us</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="contact.html"><svg class="-ml-4 size-3 flex-none text-accent opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Contact us</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="#"><svg class="-ml-4 size-3 flex-none text-accent opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Terms & Conditions</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="#"><svg class="-ml-4 size-3 flex-none text-accent opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Privacy Policy</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="blogs.html"><svg class="-ml-4 size-3 flex-none text-accent opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Blog</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="media.html"><svg class="-ml-4 size-3 flex-none text-accent opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Media</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="careers.html"><svg class="-ml-4 size-3 flex-none text-accent opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Careers</a></li></ul></div>
+      <div>
+        <h4 class="mb-5 flex items-center gap-2.5 text-sm font-bold uppercase tracking-[.12em] text-white"><span class="h-4 w-1 rounded-full bg-gradient-to-b from-accent to-primary-soft"></span>Pharmacy</h4><ul class="grid gap-3"><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="#"><svg class="-ml-4 size-3 flex-none text-accent opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Ananda EClinic</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="#"><svg class="-ml-4 size-3 flex-none text-accent opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Smartz ERP</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="#"><svg class="-ml-4 size-3 flex-none text-accent opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Franchise</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="medleymed-network.html"><svg class="-ml-4 size-3 flex-none text-accent opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>BIZ</a></li></ul>
+        <h4 class="mb-5 flex items-center gap-2.5 text-sm font-bold uppercase tracking-[.12em] text-white mt-8"><span class="h-4 w-1 rounded-full bg-gradient-to-b from-accent to-primary-soft"></span>Telemedicine</h4><ul class="grid gap-3"><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="#"><svg class="-ml-4 size-3 flex-none text-accent opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>SAAS</a></li></ul>
+      </div>
+      <div>
+        <h4 class="mb-5 flex items-center gap-2.5 text-sm font-bold uppercase tracking-[.12em] text-white"><span class="h-4 w-1 rounded-full bg-gradient-to-b from-accent to-primary-soft"></span>Reach us</h4>
+        <address class="grid gap-4 not-italic">
+          <a href="mailto:support@medleymed.com" class="group/r flex items-start gap-3 text-sm leading-relaxed text-slate-200 items-center hover:text-white"><span class="grid size-9 flex-none place-items-center rounded-full bg-white/10 text-accent-light ring-1 ring-white/15 transition duration-200 group-hover/r:bg-accent group-hover/r:text-[#0b1040]" data-ic="mail" data-s="16"></span>support@medleymed.com</a>
+          <a href="tel:+918928300500" class="group/r flex items-start gap-3 text-sm leading-relaxed text-slate-200 items-center hover:text-white"><span class="grid size-9 flex-none place-items-center rounded-full bg-white/10 text-accent-light ring-1 ring-white/15 transition duration-200 group-hover/r:bg-accent group-hover/r:text-[#0b1040]" data-ic="phone" data-s="16"></span>+91 8928 300 500</a>
+          <div class="group/r flex items-start gap-3 text-sm leading-relaxed text-slate-200"><span class="grid size-9 flex-none place-items-center rounded-full bg-white/10 text-accent-light ring-1 ring-white/15 transition duration-200 group-hover/r:bg-accent group-hover/r:text-[#0b1040]" data-ic="pin" data-s="16"></span><span class="pt-1.5">2nd Floor, Unit 203 Gowra Palladium Hi-Tech City, Madhapur, Hyderabad, Telangana 500032</span></div>
+        </address>
+        <div class="mt-6 flex flex-wrap gap-2.5"><a href="#" class="store-badge h-[2.7rem] bg-[rgba(8,11,42,.6)] px-[.95rem]" aria-label="Get it on Google Play"><span data-ic="gplay"></span>Google Play</a><a href="#" class="store-badge h-[2.7rem] bg-[rgba(8,11,42,.6)] px-[.95rem]" aria-label="Download on the App Store"><span data-ic="apple"></span>App Store</a></div>
+      </div>
+    </div>
+    <div class="mt-12 flex flex-col items-center justify-between gap-3 border-t border-white/[.14] py-6 text-center text-sm text-slate-300 sm:flex-row sm:text-left">
+      <span>© Medley Medical Solutions Pvt. Ltd. 2020. All Rights Reserved.</span>
+      <span class="flex items-center gap-5"><a href="#" class="transition hover:text-white">Privacy Policy</a><a href="#" class="transition hover:text-white">Terms &amp; Conditions</a></span>
+    </div>
+  </div>
+</footer>
+
+<button class="to-top pointer-events-none fixed bottom-[1.2rem] right-[1.2rem] z-[70] grid size-12 translate-y-4 place-items-center rounded-full bg-primary text-white opacity-0 shadow-[0_14px_28px_-10px_rgba(45,54,145,.8)] transition duration-300 hover:bg-primary-hover [&.show]:pointer-events-auto [&.show]:translate-y-0 [&.show]:opacity-100 [&_svg]:-rotate-90" id="toTop" type="button" aria-label="Back to top"><span data-ic="arrow" data-s="18"></span></button>
+<div class="toast pointer-events-none fixed bottom-6 left-1/2 z-[100] -translate-x-1/2 translate-y-5 rounded-full bg-gradient-to-br from-navy to-primary px-6 py-3 text-sm font-semibold text-white opacity-0 shadow-[0_16px_32px_-12px_rgba(10,14,60,.7)] transition duration-300 [&.show]:translate-y-0 [&.show]:opacity-100" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ---------- icons (same stroke style as the rest of the product) ---------- */
+const ICONS={
+ search:'<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',menu:'<path d="M4 6h16M4 12h16M4 18h16"/>',x:'<path d="M18 6 6 18M6 6l12 12"/>',
+ arrow:'<path d="M5 12h14M12 5l7 7-7 7"/>',chev:'<path d="m6 9 6 6 6-6"/>',chevr:'<path d="m9 18 6-6-6-6"/>',chevl:'<path d="m15 18-6-6 6-6"/>',play:'<path d="M6 3l14 9-14 9z"/>',check:'<path d="M20 6 9 17l-5-5"/>',
+ sparkles:'<path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/>',
+ shield:'<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>',
+ truck:'<path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2M15 18H9M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/>',
+ cpu:'<rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2M15 20v2M2 15h2M2 9h2M20 15h2M20 9h2M9 2v2M9 20v2"/>',
+ store:'<path d="M3 9l1-5h16l1 5"/><path d="M3 9v11h18V9"/><path d="M3 9c0 1.7 1.3 3 3 3s3-1.3 3-3c0 1.7 1.3 3 3 3s3-1.3 3-3c0 1.7 1.3 3 3 3s3-1.3 3-3"/><path d="M9 20v-5h6v5"/>',
+ users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
+ pill:'<path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7z"/><path d="m8.5 8.5 7 7"/>',
+ trend:'<path d="m22 7-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/>',chart:'<path d="M3 3v18h18M18 17V9M13 17V5M8 17v-3"/>',
+ box:'<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="m3.27 6.96 8.73 5.05 8.73-5.05M12 22.08V12"/>',
+ card:'<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>',tag:'<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><circle cx="7" cy="7" r="1"/>',
+ zap:'<path d="M13 2 3 14h9l-1 8 10-12h-9z"/>',heart:'<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7z"/>',
+ globe:'<circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+ rocket:'<path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>',
+ cart:'<circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>',
+ pause:'<rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/>',
+ steth:'<path d="M11 2v2M5 2v2"/><path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1"/><path d="M8 15a6 6 0 0 0 12 0v-3"/><circle cx="20" cy="10" r="2"/>',
+ book:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',
+ brief:'<rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
+ clock:'<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+ flask:'<path d="M10 2v7.3L4.3 18.7A2 2 0 0 0 6 21.7h12a2 2 0 0 0 1.7-3L14 9.3V2M8.5 2h7M7.5 15.5h9"/>',
+ pin:'<path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/>',
+ phone:'<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>',
+ mail:'<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/>',
+ linkedin:'<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>',
+ facebook:'<path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>',
+ twitter:'<path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/>',
+ youtube:'<path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/>',
+ instagram:'<rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><path d="M17.5 6.5h.01"/>'
+};
+const svgI=(n,s=20,c='')=>`<svg class="i ${c}" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n]||''}</svg>`;
+const BRAND={
+ gplay:'<svg viewBox="0 0 24 24" aria-hidden="true" width="24" height="24"><path fill="#FFD500" d="M22.018 13.298l-3.919 2.218-3.515-3.493 3.543-3.521 3.891 2.202a1.49 1.49 0 0 1 0 2.594z"/><path fill="#00C3FF" d="M1.337.924a1.486 1.486 0 0 0-.112.568v21.017c0 .217.045.419.124.6l11.155-11.087L1.337.924z"/><path fill="#2DDC7A" d="M13.544 10.989l3.258-3.238L3.45.195a1.466 1.466 0 0 0-.946-.179l11.04 10.973z"/><path fill="#FF3D5A" d="M13.544 13.056l-11 10.933c.298.036.612-.016.906-.183l13.324-7.54-3.23-3.21z"/></svg>',
+ apple:'<svg viewBox="0 0 24 24" aria-hidden="true" width="24" height="24"><path fill="#fff" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>'};
+const hydrate=root=>root.querySelectorAll('[data-ic]').forEach(e=>{const n=e.dataset.ic,s=+e.dataset.s||20;e.innerHTML=BRAND[n]||svgI(n,s)});
+
+const SOC=[['facebook','Facebook'],['linkedin','LinkedIn'],['twitter','Twitter'],['youtube','YouTube'],['instagram','Instagram']];
+const MENU=[   // item = {t:title, d:sub-title, i:icon, h:href, items:[children]}
+ {t:'About Us',h:'about.html'},
+ {t:'Products',h:'index.html#segments',mega:true,items:[
+   {t:'B2B',d:'Business to business',i:'brief',h:'medleymed-network.html',items:[
+     {t:'Pharmacy',d:'For pharmacies & retailers',i:'pill',h:'index.html#seg-b2b',items:[
+       {t:'Purchase',i:'cart',h:'index.html#seg-b2b'}]},
+     {t:'Distributor',d:'For distributors & partners',i:'truck',h:'index.html#seg-b2b',items:[
+       {t:'Sale',i:'tag',h:'index.html#seg-b2b'},
+       {t:'Delivery Collection',i:'truck',h:'index.html#seg-b2b'},
+       {t:'Warehouse',i:'box',h:'index.html#seg-b2b'}]}]},
+   {t:'B2C',d:'Business to consumer',i:'users',h:'b2c.html',items:[
+     {t:'Pharmacy',d:'Medicines delivered to you',i:'pill',h:'b2c.html#services',items:[
+       {t:'Order Online',i:'cart',h:'b2c.html#download'}]},
+     {t:'Consultation',d:'Talk to a doctor',i:'steth',h:'b2c.html#services',items:[
+       {t:'Order Online',i:'cart',h:'b2c.html#download'}]},
+     {t:'Lab',d:'Tests & diagnostics',i:'flask',h:'b2c.html#services',items:[
+       {t:'Order Online',i:'cart',h:'b2c.html#download'}]}]}]},
+ {t:'Media',h:'media.html'},
+ {t:'Blogs',h:'blogs.html'},
+ {t:'Careers',h:'careers.html'}
+];
+
+/* ---------- render ---------- */
+const $=s=>document.querySelector(s);
+/* desktop: a two-pane mega menu — categories on the left, the matching groups + links on the right */
+const LEAF='dd-item group/l flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm font-medium text-slate-700 transition duration-200 hover:bg-primary-soft hover:text-primary';
+function megaPanel(m){
+  const tabs=m.items.map((c,k)=>`<button type="button" role="tab" data-k="${k}" class="mega-tab group/t flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition duration-200 hover:bg-primary-soft aria-selected:bg-primary-soft" aria-selected="${k===0}"><span class="ico-tile !size-10 !rounded-xl">${svgI(c.i,17)}</span><span class="min-w-0 flex-1"><b class="block text-sm font-semibold text-ink group-aria-selected/t:text-primary">${c.t}</b><small class="mt-0.5 block text-xs text-slate-500">${c.d}</small></span>${svgI('chevr',16,'flex-none text-slate-300 transition group-aria-selected/t:translate-x-0.5 group-aria-selected/t:text-primary')}</button>`).join('');
+  const panes=m.items.map((c,k)=>`<div class="mega-pane${k?' hidden':''}" role="tabpanel" data-k="${k}">
+    <div class="mb-4 flex items-center justify-between border-b border-line pb-3"><div><b class="block text-base font-bold text-ink">${c.t}</b><span class="text-xs text-slate-500">${c.d}</span></div><a href="${c.h}" class="dd-item inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline">Explore ${c.t}${svgI('arrow',13)}</a></div>
+    ${c.items
+      ?`<div class="grid gap-x-6 gap-y-4 sm:grid-cols-2">${c.items.map(g=>`<div><div class="flex items-center gap-2"><span class="grid size-8 place-items-center rounded-lg bg-accent-soft text-accent-dark">${svgI(g.i,16)}</span><div><b class="block text-sm font-bold text-ink">${g.t}</b><small class="block text-xs text-slate-500">${g.d||''}</small></div></div><ul class="mt-2 grid gap-0.5 border-l border-line pl-2 ml-4">${g.items.map(l=>`<li><a class="${LEAF}" href="${l.h}"><span class="size-1.5 flex-none rounded-full bg-accent"></span>${l.t}${svgI('arrow',13,'ml-auto -translate-x-1 opacity-0 transition duration-200 group-hover/l:translate-x-0 group-hover/l:opacity-100')}</a></li>`).join('')}</ul></div>`).join('')}</div>`
+      :`<div class="rounded-xl bg-page p-5"><p class="text-sm leading-relaxed text-slate-600">Products and services built for everyday customers. More details coming soon.</p><a href="${c.h}" class="btn btn-primary mt-4 !py-2">Explore ${c.t}</a></div>`}
+  </div>`).join('');
+  return `<div class="mega grid w-[min(46rem,92vw)] grid-cols-[16rem_1fr] overflow-hidden rounded-[1.15rem] border border-line bg-white shadow-[0_26px_50px_-20px_rgba(45,54,145,.45)]"><div class="space-y-1 border-r border-line bg-page/60 p-3" role="tablist" aria-label="${m.t}">${tabs}</div><div class="p-5">${panes}</div></div>`;
+}
+$('#navDesktop').innerHTML=`<a class="nav-link inline-flex items-center gap-[.35rem] rounded-[.7rem] px-[.8rem] py-[.55rem] text-[.8rem] font-medium uppercase tracking-wide text-navy transition duration-200 hover:bg-primary-soft hover:text-primary" href="index.html">Home</a>`
+  +MENU.map(m=>m.items
+   ?`<div class="nav-dd group/dd relative"><button class="nav-link inline-flex items-center gap-[.35rem] rounded-[.7rem] px-[.8rem] py-[.55rem] text-[.8rem] font-medium uppercase tracking-wide text-navy transition duration-200 hover:bg-primary-soft hover:text-primary group-focus-within/dd:bg-primary-soft group-focus-within/dd:text-primary group-[.open]/dd:bg-primary-soft group-[.open]/dd:text-primary" type="button" aria-haspopup="true" aria-expanded="false">${m.t}${svgI('chev',14,'chev transition-transform duration-200 group-[.open]/dd:rotate-180')}</button>
+  <div class="invisible absolute left-1/2 top-full z-[5] -translate-x-1/2 translate-y-2 pt-[.7rem] opacity-0 transition-[opacity,transform,visibility] duration-200 group-hover/dd:visible group-hover/dd:translate-y-0 group-hover/dd:opacity-100 group-focus-within/dd:visible group-focus-within/dd:translate-y-0 group-focus-within/dd:opacity-100 group-[.open]/dd:visible group-[.open]/dd:translate-y-0 group-[.open]/dd:opacity-100">${megaPanel(m)}</div></div>`
+   :`<a class="nav-link inline-flex items-center gap-[.35rem] rounded-[.7rem] px-[.8rem] py-[.55rem] text-[.8rem] font-medium uppercase tracking-wide text-navy transition duration-200 hover:bg-primary-soft hover:text-primary" href="${m.h}">${m.t}</a>`).join('');
+/* mega menu: hover / focus / click a category to switch the right-hand pane */
+document.querySelectorAll('.mega').forEach(mg=>{const tabs=[...mg.querySelectorAll('.mega-tab')],panes=[...mg.querySelectorAll('.mega-pane')];
+  const act=k=>{tabs.forEach((t,i)=>t.setAttribute('aria-selected',i===k));panes.forEach((p,i)=>p.classList.toggle('hidden',i!==k))};
+  tabs.forEach((t,k)=>['mouseenter','focus','click'].forEach(ev=>t.addEventListener(ev,()=>act(k))))});
+/* mobile: nested accordions */
+const mNode=(it,l)=>!it.items
+  ?`<a class="block px-[.4rem] py-[.55rem] text-sm font-medium text-slate-700" href="${it.h}">${it.t}</a>`
+  :`<div class="m-group group/m${l}"><button type="button" class="flex w-full items-center justify-between px-[.4rem] py-[.6rem] text-sm font-semibold text-ink" aria-expanded="false">${it.t}${svgI('chev',15,'chev transition-transform group-[.open]/m'+l+':rotate-180')}</button><div class="m-sub hidden border-l border-line pl-[.8rem] group-[.open]/m${l}:block">${it.items.map(x=>mNode(x,l+1)).join('')}</div></div>`;
+$('#mobileNav').innerHTML=`<a class="m-link flex w-full items-center justify-between border-b border-line px-[.2rem] py-[.9rem] text-base font-semibold" href="index.html">Home</a>`
+  +MENU.map(m=>m.items
+   ?`<div class="m-group group/m"><button type="button" class="flex w-full items-center justify-between border-b border-line px-[.2rem] py-[.9rem] text-base font-semibold" aria-expanded="false">${m.t}${svgI('chev',16,'chev transition-transform group-[.open]/m:rotate-180')}</button><div class="m-sub hidden pb-[.6rem] pl-[.4rem] pt-[.3rem] group-[.open]/m:block">${m.items.map(x=>mNode(x,1)).join('')}</div></div>`
+   :`<a class="m-link flex w-full items-center justify-between border-b border-line px-[.2rem] py-[.9rem] text-base font-semibold" href="${m.h}">${m.t}</a>`).join('')
+  +'<a class="btn btn-primary mt-[1.1rem] w-full" href="#contact">Contact Us</a>';
+const INFO=[
+ ['pin','Visit us','2nd Floor, Unit 203 Gowra Palladium Hi-Tech City, Madhapur, Hyderabad, Telangana 500032',null],
+ ['phone','Call us','+91 8928 300 500','tel:+918928300500'],
+ ['mail','Email us','support@medleymed.com','mailto:support@medleymed.com']
+];
+$('#socials').innerHTML=SOC.map(([ic,l])=>`<a class="soc" href="#" aria-label="${l}">${svgI(ic,17)}</a>`).join('');
+hydrate(document);
+
+/* ---------- header: scroll state, dropdowns, mobile menu ---------- */
+const head=$('#siteHead');const onScroll=()=>head.classList.toggle('scrolled',scrollY>8);onScroll();addEventListener('scroll',onScroll,{passive:true});
+const dds=[...document.querySelectorAll('.nav-dd')];
+const closeDD=except=>dds.forEach(d=>{if(d!==except){d.classList.remove('open');d.querySelector('.nav-link').setAttribute('aria-expanded','false')}});
+dds.forEach(d=>{const b=d.querySelector('.nav-link');
+  b.addEventListener('click',e=>{e.stopPropagation();const o=!d.classList.contains('open');closeDD(d);d.classList.toggle('open',o);b.setAttribute('aria-expanded',o)});
+  d.addEventListener('mouseenter',()=>b.setAttribute('aria-expanded','true'));d.addEventListener('mouseleave',()=>{if(!d.classList.contains('open'))b.setAttribute('aria-expanded','false')});
+  d.querySelectorAll('.dd-item').forEach(a=>a.addEventListener('click',()=>closeDD()))});
+document.addEventListener('click',()=>closeDD());
+addEventListener('keydown',e=>{if(e.key==='Escape'){closeDD();closeMobile()}});
+const burger=$('#burger'),mnav=$('#mobileNav');
+function closeMobile(){mnav.classList.remove('open');head.classList.remove('menu-open');burger.setAttribute('aria-expanded','false');burger.innerHTML=svgI('menu',20)}
+burger.addEventListener('click',()=>{const o=!mnav.classList.contains('open');mnav.classList.toggle('open',o);head.classList.toggle('menu-open',o);burger.setAttribute('aria-expanded',o);burger.innerHTML=svgI(o?'x':'menu',20)});
+mnav.querySelectorAll('.m-group>button').forEach(b=>b.addEventListener('click',()=>{const g=b.parentElement,o=!g.classList.contains('open');g.classList.toggle('open',o);b.setAttribute('aria-expanded',o)}));
+mnav.querySelectorAll('a').forEach(a=>a.addEventListener('click',closeMobile));
+addEventListener('resize',()=>{if(innerWidth>=1024)closeMobile()});
+
+/* ---------- reveal on scroll + count-up ---------- */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;e.target.classList.add('in');
+  e.target.querySelectorAll('.count').forEach(c=>{if(c.dataset.done)return;c.dataset.done=1;const to=+c.dataset.to;let t0=null;
+    const step=ts=>{t0??=ts;const p=Math.min((ts-t0)/1500,1);c.textContent=Math.floor((1-Math.pow(1-p,3))*to)+(p>=1?c.dataset.suf:'');p<1&&requestAnimationFrame(step)};requestAnimationFrame(step)});
+  io.unobserve(e.target)}),{threshold:.15});
+document.querySelectorAll('.reveal:not(.in)').forEach(el=>io.observe(el));
+
+
+/* team, title, location, type, summary — edit this list to publish real openings */
+const ROLES=[
+ ['Engineering','Full Stack Engineer','Hyderabad','Full-time','Build the web and mobile products that pharmacies and partners use every day.'],
+ ['Design','Product Designer (UI/UX)','Hyderabad','Full-time','Design simple, delightful experiences across the MedleyMed platform.'],
+ ['Business','Partnerships Executive: Pharmacy','Hyderabad','Full-time','Grow the network by onboarding and supporting pharmacies and distributors.'],
+ ['Operations','Operations Associate: Delivery & Logistics','Hyderabad','Full-time','Keep orders moving from dispatch to the pharmacy shelf.'],
+ ['Customer Success','Customer Success Executive','Hyderabad','Full-time','Help our partners get the most out of the network.'],
+ ['Data','Data Analyst','Hyderabad','Full-time','Turn network data into insights that improve every order.']
+];
+const grid=$('#roles'),chips=$('#chips'),empty=$('#rEmpty');
+const role=([team,t,loc,type,d],i)=>`<article class="card role reveal group flex flex-col gap-4 border border-line p-6 sm:flex-row sm:items-center sm:justify-between sm:p-7" data-team="${team}" style="--d:${i*.06}s"><div class="min-w-0"><span class="inline-flex w-fit items-center rounded-full bg-accent/10 px-3 py-1 text-xs font-bold uppercase tracking-[.12em] text-accent-dark">${team}</span><h3 class="mt-3 text-lg font-bold leading-snug">${t}</h3><p class="mt-1.5 text-sm leading-relaxed text-slate-700">${d}</p><div class="mt-3 flex flex-wrap gap-x-5 gap-y-1.5 text-xs text-slate-600"><span class="inline-flex items-center gap-1.5">${svgI('pin',14)}${loc}</span><span class="inline-flex items-center gap-1.5">${svgI('clock',14)}${type}</span></div></div><a href="contact.html" class="btn btn-outline flex-none self-start sm:self-center">Apply now ${svgI('arrow',16)}</a></article>`;
+grid.innerHTML=ROLES.map(role).join('');
+const teams=['All',...new Set(ROLES.map(r=>r[0]))];
+const chipCls=on=>'chip rounded-full border px-4 py-2 text-sm font-semibold transition duration-200 '+(on?'border-primary bg-primary text-white':'border-line bg-white text-slate-700 hover:border-primary hover:text-primary');
+chips.innerHTML=teams.map((t,i)=>`<button type="button" role="tab" aria-selected="${i===0}" data-t="${t}" class="${chipCls(i===0)}">${t}</button>`).join('');
+chips.addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;const t=b.dataset.t;
+  chips.querySelectorAll('.chip').forEach(c=>{const on=c===b;c.setAttribute('aria-selected',on);c.className=chipCls(on)});
+  let n=0;[...grid.children].forEach(c=>{const ok=t==='All'||c.dataset.team===t;c.classList.toggle('hidden',!ok);if(ok){n++;c.classList.add('in')}});empty.classList.toggle('hidden',n>0)});
+hydrate(document);
+/* the roles are injected after the page-wide reveal observer was set up, so watch them too */
+document.querySelectorAll('.reveal:not(.in)').forEach(el=>io.observe(el));
+
+/* ---------- progress bar, back-to-top, card spotlight ---------- */
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const bar=$('#progress'),toTop=$('#toTop');
+const onScroll2=()=>{const h=document.documentElement.scrollHeight-innerHeight;bar.style.width=(h>0?scrollY/h*100:0)+'%';toTop.classList.toggle('show',scrollY>700)};
+onScroll2();addEventListener('scroll',onScroll2,{passive:true});addEventListener('resize',onScroll2);
+toTop.addEventListener('click',()=>scrollTo({top:0,behavior:reduce?'auto':'smooth'}));
+document.querySelectorAll('.card').forEach(c=>c.addEventListener('pointermove',e=>{const r=c.getBoundingClientRect();c.style.setProperty('--mx',(e.clientX-r.left)+'px');c.style.setProperty('--my',(e.clientY-r.top)+'px')}));
+</script>
+</body>
+</html>

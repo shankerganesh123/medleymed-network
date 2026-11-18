@@ -155,6 +155,12 @@ tailwind.config={
     .hero-shade{background:linear-gradient(180deg,rgba(8,12,58,.7) 0%,rgba(8,12,58,.82) 45%,rgba(8,12,58,.96) 100%)}
     .hero-bg .bg-img{background-position:70% center}.hero-bg.photo .bg-img{background-position:var(--mpos)}.hero-bg .bg-note{display:none}
   }
+  /* phones: no photo behind the copy — a clean brand gradient instead (tablet + desktop keep the photos) */
+  @media(max-width:639px){
+    .hero-bgs{background:radial-gradient(90% 55% at 85% 8%,rgba(45,54,145,.75),transparent 70%),radial-gradient(70% 45% at 0% 100%,rgba(23,183,205,.16),transparent 70%),linear-gradient(180deg,#0a1048,#0c1260)}
+    .hero-bg .bg-img{display:none}
+    .hero-shade{background:none}
+  }
   .hero .eyebrow{letter-spacing:.16em;color:#17B7CD;font-size:.82rem;gap:.9rem}.hero .eyebrow::before{display:none}
   @media(max-width:479px){.hero .eyebrow{font-size:.7rem;letter-spacing:.12em;gap:.6rem;white-space:nowrap}.hero .eyebrow::after{width:2rem}}
   .hero .eyebrow::after{width:5rem;background:rgba(23,183,205,.5);transform-origin:left;animation:lineGrow 1s .4s cubic-bezier(.2,.8,.2,1) both}
@@ -357,7 +363,7 @@ tailwind.config={
     <div class="reveal mx-auto max-w-[46rem] text-center"><span class="eyebrow">Our Ecosystem</span>
       <h2 class="mt-3 text-3xl md:text-4xl">One Connected Platform for <span class="grad-dark">Every Healthcare Partner</span></h2>
       <p class="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-slate-700">From manufacturers to the pharmacy counter, MedleyMed brings every link of the medicine supply chain onto one intelligent network.</p>
-      <a href="#contact" class="btn btn-primary mt-6">Become a Partner <span data-ic="arrow" data-s="16"></span></a></div>
+      <a href="contact.html" class="btn btn-primary mt-6">Become a Partner <span data-ic="arrow" data-s="16"></span></a></div>
   </div>
   <div class="cf mt-10" id="cf" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Our ecosystem — use the arrow keys or swipe">
     <div class="cf-stage" id="cfStage"></div>
@@ -378,13 +384,13 @@ tailwind.config={
   <div class="wrap">
     <div class="reveal mx-auto max-w-[46rem] text-center"><span class="eyebrow">Our Solutions</span>
       <h2 class="mt-3 text-3xl md:text-4xl">One Platform for <span class="grad-dark">B2B and B2C</span></h2>
-      <p class="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-slate-700">Whether you run a pharmacy, supply medicines or look after your own health, MedleyMed brings it all online.</p></div>
-    <div class="reveal mt-9 flex justify-center">
+      </div>
+    <div class="reveal mt-8 flex justify-center">
       <div class="relative inline-flex rounded-full border border-line bg-white p-1.5 shadow-card" role="tablist" aria-label="Choose B2B or B2C" id="segTabs">
         <span class="pointer-events-none absolute left-0 top-1.5 h-[calc(100%-.75rem)] rounded-full bg-gradient-to-r from-navy to-primary shadow-[0_10px_22px_-10px_rgba(45,54,145,.8)] transition-[transform,width] duration-500 ease-[cubic-bezier(.65,0,.2,1)]" id="segInd" aria-hidden="true"></span>
       </div>
     </div>
-    <div class="mt-10" id="segPanes"></div>
+    <div class="mt-12" id="segPanes"></div>
   </div>
 </section>
 
@@ -436,7 +442,7 @@ tailwind.config={
       <h2 class="mt-3 text-3xl md:text-4xl">A Growing Network<br>for a <span class="grad-dark">Healthier India</span></h2>
       <p class="mt-4 text-sm leading-relaxed text-slate-700">MedleyMed Network has been promoted by MedleyMed Network Solutions Pvt Ltd, a 100% subsidiary of <b>Athena Global Technologies Limited</b>, a leading Hyderabad-based technology services company.</p>
       <p class="mt-4 text-sm leading-relaxed text-slate-700">Our vision is to become the largest B2B technology platform in the healthcare space, enabling seamless business between manufacturers, partners and pharmacies.</p>
-      <div class="mt-6"><a href="#contact" class="btn btn-primary">Partner with us <span data-ic="arrow" data-s="17"></span></a></div>
+      <div class="mt-6"><a href="contact.html" class="btn btn-primary">Partner with us <span data-ic="arrow" data-s="17"></span></a></div>
     </div>
   </div>
 </section>
@@ -469,35 +475,9 @@ tailwind.config={
 <section class="wrap" id="careers">
   <div class="band reveal relative flex flex-col items-start justify-between gap-[1.6rem] overflow-hidden rounded-[1.8rem] bg-[linear-gradient(120deg,#2D3691,#2a78b8_60%,#17B7CD)] px-[1.6rem] py-12 text-white min-[800px]:flex-row min-[800px]:items-center min-[800px]:px-12 min-[800px]:py-[3.2rem]">
     <div class="relative"><span class="mb-4 inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-bold tracking-wider text-white backdrop-blur"><span class="size-2 animate-pulse rounded-full bg-[#7cf3a8]"></span>WE'RE HIRING</span><h2 class="max-w-[30rem] text-2xl font-bold leading-tight md:text-3xl">Join us in building healthcare's digital backbone</h2><p class="mt-1 max-w-[32rem] text-sm text-white/90">We're a team of engineers, designers and operators making medicine supply simpler for millions. Come build it with us.</p></div>
-    <a href="#contact" class="btn btn-white relative">View open roles <span data-ic="arrow" data-s="17"></span></a>
+    <a href="careers.html" class="btn btn-white relative">View open roles <span data-ic="arrow" data-s="17"></span></a>
   </div>
 </section>
-
-<!-- ============ CONTACT ============ -->
-<section class="py-20" id="contact">
-  <div class="wrap grid gap-8 min-[960px]:grid-cols-[.9fr_1.1fr]">
-    <div class="reveal">
-      <span class="eyebrow left">Contact</span>
-      <h2 class="mt-3 text-3xl md:text-4xl">Let's Talk About <span class="grad-dark">Your Business</span></h2>
-      <p class="mt-4 text-sm leading-relaxed text-slate-700">Tell us how you'd like to work with MedleyMed and our team will get back to you shortly.</p>
-      <div class="mt-7 grid gap-[1.1rem]" id="infoList"></div>
-    </div>
-    <form class="card reveal grid gap-4 border border-line p-[1.8rem]" id="contactForm" style="--d:.1s" novalidate>
-      <div class="-mx-[1.8rem] -mt-[1.8rem] mb-1 rounded-t-[1.4rem] bg-gradient-to-r from-navy to-primary px-[1.8rem] py-5 text-white"><b class="block text-lg font-bold">Send us a message</b><span class="text-sm text-white/75">Our team will get back to you shortly.</span></div>
-      <div class="grid gap-4 min-[560px]:grid-cols-2">
-        <div class="field group/f"><label class="mb-1.5 block text-xs font-semibold text-slate-700" for="cName">Full name</label><input class="input group-[.bad]/f:border-[#e5484d]" id="cName" autocomplete="name" placeholder="Your name"><div class="err mt-1 hidden text-xs font-semibold text-[#d63a45] group-[.bad]/f:block">Please enter your name</div></div>
-        <div class="field group/f"><label class="mb-1.5 block text-xs font-semibold text-slate-700" for="cEmail">Work email</label><input class="input group-[.bad]/f:border-[#e5484d]" id="cEmail" type="email" autocomplete="email" placeholder="you@company.com"><div class="err mt-1 hidden text-xs font-semibold text-[#d63a45] group-[.bad]/f:block">Enter a valid email</div></div>
-      </div>
-      <div class="grid gap-4 min-[560px]:grid-cols-2">
-        <div class="field group/f"><label class="mb-1.5 block text-xs font-semibold text-slate-700" for="cPhone">Mobile number</label><input class="input group-[.bad]/f:border-[#e5484d]" id="cPhone" type="tel" inputmode="numeric" maxlength="10" placeholder="10-digit mobile"><div class="err mt-1 hidden text-xs font-semibold text-[#d63a45] group-[.bad]/f:block">Enter a 10-digit mobile number</div></div>
-        <div class="field group/f"><label class="mb-1.5 block text-xs font-semibold text-slate-700" for="cType">I am a…</label><select class="input" id="cType"><option>Pharmacy / Retailer</option><option>Distributor / Partner</option><option>Manufacturer</option><option>Delivery partner</option><option>Other</option></select></div>
-      </div>
-      <div class="field group/f"><label class="mb-1.5 block text-xs font-semibold text-slate-700" for="cMsg">Message</label><textarea class="input min-h-[7.5rem] resize-y group-[.bad]/f:border-[#e5484d]" id="cMsg" placeholder="How can we help?"></textarea><div class="err mt-1 hidden text-xs font-semibold text-[#d63a45] group-[.bad]/f:block">Please write a short message</div></div>
-      <button type="submit" class="btn btn-primary justify-self-stretch sm:justify-self-start">Send message <span data-ic="arrow" data-s="17"></span></button>
-    </form>
-  </div>
-</section>
-</main>
 
 <!-- ============ FOOTER ============ -->
 <footer class="relative mt-20 overflow-hidden bg-gradient-to-b from-navy to-primary pt-16 text-slate-200">
@@ -512,7 +492,7 @@ tailwind.config={
         <h4 class="mb-5 flex items-center gap-2.5 text-sm font-bold uppercase tracking-[.12em] text-white mt-8"><span class="h-4 w-1 rounded-full bg-gradient-to-b from-accent to-primary-soft"></span>Follow us on</h4>
         <div class="flex flex-wrap gap-2.5" id="socials"></div>
       </div>
-      <div><h4 class="mb-5 flex items-center gap-2.5 text-sm font-bold uppercase tracking-[.12em] text-white"><span class="h-4 w-1 rounded-full bg-gradient-to-b from-accent to-primary-soft"></span>Company</h4><ul class="grid gap-3"><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="about.html"><svg class="-ml-4 size-3 flex-none text-accent opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>About us</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="contact.html"><svg class="-ml-4 size-3 flex-none text-accent opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Contact us</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="#"><svg class="-ml-4 size-3 flex-none text-accent opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Terms & Conditions</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="#"><svg class="-ml-4 size-3 flex-none text-accent opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Privacy Policy</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="#insights"><svg class="-ml-4 size-3 flex-none text-accent opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Blog</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="#stories"><svg class="-ml-4 size-3 flex-none text-accent opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Media</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="#careers"><svg class="-ml-4 size-3 flex-none text-accent opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Careers</a></li></ul></div>
+      <div><h4 class="mb-5 flex items-center gap-2.5 text-sm font-bold uppercase tracking-[.12em] text-white"><span class="h-4 w-1 rounded-full bg-gradient-to-b from-accent to-primary-soft"></span>Company</h4><ul class="grid gap-3"><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="about.html"><svg class="-ml-4 size-3 flex-none text-accent opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>About us</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="contact.html"><svg class="-ml-4 size-3 flex-none text-accent opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Contact us</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="#"><svg class="-ml-4 size-3 flex-none text-accent opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Terms & Conditions</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="#"><svg class="-ml-4 size-3 flex-none text-accent opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Privacy Policy</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="blogs.html"><svg class="-ml-4 size-3 flex-none text-accent opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Blog</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="media.html"><svg class="-ml-4 size-3 flex-none text-accent opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Media</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="careers.html"><svg class="-ml-4 size-3 flex-none text-accent opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Careers</a></li></ul></div>
       <div>
         <h4 class="mb-5 flex items-center gap-2.5 text-sm font-bold uppercase tracking-[.12em] text-white"><span class="h-4 w-1 rounded-full bg-gradient-to-b from-accent to-primary-soft"></span>Pharmacy</h4><ul class="grid gap-3"><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="#"><svg class="-ml-4 size-3 flex-none text-accent opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Ananda EClinic</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="#"><svg class="-ml-4 size-3 flex-none text-accent opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Smartz ERP</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="#"><svg class="-ml-4 size-3 flex-none text-accent opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Franchise</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="medleymed-network.html"><svg class="-ml-4 size-3 flex-none text-accent opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>BIZ</a></li></ul>
         <h4 class="mb-5 flex items-center gap-2.5 text-sm font-bold uppercase tracking-[.12em] text-white mt-8"><span class="h-4 w-1 rounded-full bg-gradient-to-b from-accent to-primary-soft"></span>Telemedicine</h4><ul class="grid gap-3"><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="#"><svg class="-ml-4 size-3 flex-none text-accent opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>SAAS</a></li></ul>
@@ -539,7 +519,6 @@ tailwind.config={
   <div class="grid aspect-video place-items-center rounded-2xl bg-gradient-to-br from-navy to-primary p-4 text-center text-white" id="videoBox"><div><div class="text-xl font-bold">Your video goes here</div><p class="mt-2 text-sm text-white/75">Set the video address in the page's script (VIDEO_URL) to play it in this window.</p></div></div>
   <div class="mt-4 flex justify-end"><button type="button" class="btn btn-white" id="vClose">Close</button></div></div></dialog>
 <button class="to-top pointer-events-none fixed bottom-[1.2rem] right-[1.2rem] z-[70] grid size-12 translate-y-4 place-items-center rounded-full bg-primary text-white opacity-0 shadow-[0_14px_28px_-10px_rgba(45,54,145,.8)] transition duration-300 hover:bg-primary-hover [&.show]:pointer-events-auto [&.show]:translate-y-0 [&.show]:opacity-100 [&_svg]:-rotate-90" id="toTop" type="button" aria-label="Back to top"><span data-ic="arrow" data-s="18"></span></button>
-<div class="toast pointer-events-none fixed bottom-6 left-1/2 z-[100] -translate-x-1/2 translate-y-5 rounded-full bg-gradient-to-br from-navy to-primary px-6 py-3 text-sm font-semibold text-white opacity-0 shadow-[0_16px_32px_-12px_rgba(10,14,60,.7)] transition duration-300 [&.show]:translate-y-0 [&.show]:opacity-100" id="toast" role="status" aria-live="polite"></div>
 
 <script>
 /* ---------- icons (same stroke style as the rest of the product) ---------- */
@@ -599,9 +578,9 @@ const MENU=[   // item = {t:title, d:sub-title, i:icon, h:href, items:[children]
        {t:'Order Online',i:'cart',h:'#seg-b2c'}]},
      {t:'Lab',d:'Tests & diagnostics',i:'flask',h:'#seg-b2c',items:[
        {t:'Order Online',i:'cart',h:'#seg-b2c'}]}]}]},
- {t:'Media',h:'#stories'},
- {t:'Blogs',h:'#insights'},
- {t:'Careers',h:'#careers'}
+ {t:'Media',h:'media.html'},
+ {t:'Blogs',h:'blogs.html'},
+ {t:'Careers',h:'careers.html'}
 ];
 const ECO=[
  ['store','Pharmacies & Retailers','Discover curated products, transparent pricing and quick ordering — all in one app.'],
@@ -620,7 +599,6 @@ const POSTS=[
  ['#151a52','#2a78b8','card','Finance','Credit lines for small pharmacies: what actually works','6 min read'],
  ['#17B7CD','#2D3691','truck','Logistics','Inside India\'s last-mile medicine delivery','4 min read']
 ];
-const INFO=[['pin','Visit us','2nd Floor, Unit 203 Gowra Palladium Hi-Tech City, Madhapur, Hyderabad, Telangana 500032'],['phone','Call us','+91 950 295 2277'],['mail','Email us','support@medleymednetwork.com']];
 const SOC=[['facebook','Facebook'],['linkedin','LinkedIn'],['twitter','Twitter'],['youtube','YouTube'],['instagram','Instagram']];
 const CAPS=[['cart','Curated selection'],['tag','Transparent pricing'],['zap','Easy ordering'],['card','Credit facilities'],['truck','Delivery tie-ups'],['shield','Verified partners'],['trend','Special deals'],['chart','Live insights'],['users','Dedicated support']];
 const STEPS=[['users','Join the network','Onboard as a pharmacy, partner or manufacturer with a quick verification.'],['cart','Discover & order','Browse a curated catalogue with transparent pricing and order in a few taps.'],['truck','Deliver & grow','Track deliveries, use credit lines and watch your business grow with live insights.']];
@@ -668,7 +646,6 @@ if(PARTNERS.length){const half=Math.ceil(PARTNERS.length/2);
 $('#checks').innerHTML=CHECKS.map(c=>`<li class="flex items-center gap-3 rounded-xl border border-line bg-white px-4 py-3 text-sm font-medium transition duration-300 hover:-translate-y-0.5 hover:border-accent/50 hover:bg-accent-soft/40"><span class="grid size-[1.4rem] flex-none place-items-center rounded-full bg-gradient-to-br from-accent to-[#2D8FD6] text-white">${svgI('check',13)}</span>${c}</li>`).join('');
 $('#aboutCards').innerHTML=ABOUT.map(([ic,t,d],i)=>`<div class="card reveal flex items-start gap-4 border border-line border-l-[3px] border-l-accent px-6 py-5" style="--d:${i*.08}s"><span class="ico-tile">${svgI(ic,22)}</span><div><h3 class="text-base font-bold">${t}</h3><p class="mt-1 text-sm leading-relaxed text-slate-600">${d}</p></div></div>`).join('');
 $('#postGrid').innerHTML=POSTS.map(([c1,c2,ic,tag,t,m],i)=>`<article class="card post group reveal flex flex-col overflow-hidden border border-line" style="--d:${i*.08}s"><div class="post-top relative grid h-44 place-items-center overflow-hidden text-white" style="background:linear-gradient(135deg,${c1},${c2})"><span class="!absolute left-4 top-4 rounded-full border border-white/25 bg-white/15 px-3 py-1 text-xs font-bold backdrop-blur">${tag}</span>${svgI(ic,56,'relative z-[1] opacity-90 [stroke-width:1.4] drop-shadow-[0_8px_16px_rgba(0,0,0,.25)] transition duration-500 group-hover:scale-110 group-hover:-rotate-6')}</div><div class="flex flex-1 flex-col gap-3 p-6"><h3 class="text-lg font-bold">${t}</h3><small class="inline-flex items-center gap-1.5 text-xs text-slate-500">${svgI('clock',13)}${m}</small><a class="more" href="#insights">Read more ${svgI('arrow',16)}</a></div></article>`).join('');
-$('#infoList').innerHTML=INFO.map(([ic,t,d])=>`<div class="flex items-start gap-4 rounded-2xl border border-line bg-white p-4 transition duration-300 hover:-translate-y-0.5 hover:border-accent/50 hover:shadow-card"><span class="ico-tile !size-[2.7rem]">${svgI(ic,19)}</span><div><b class="block text-sm font-semibold">${t}</b><span class="mt-1 block text-sm leading-relaxed text-slate-600">${d}</span></div></div>`).join('');
 $('#socials').innerHTML=SOC.map(([ic,l])=>`<a class="soc" href="#" aria-label="${l}">${svgI(ic,17)}</a>`).join('');
 const chipHTML=CAPS.map(([ic,t])=>`<span class="inline-flex items-center gap-[.6rem] whitespace-nowrap rounded-full bg-white px-5 py-[.7rem] text-sm font-semibold text-navy">${svgI(ic,17,'text-accent')}${t}</span>`).join('');
 $('#marqTrack').innerHTML=chipHTML+chipHTML;
@@ -706,71 +683,6 @@ const vDlg=$('#videoDlg');
 $('#videoBtn').addEventListener('click',()=>{if(VIDEO_URL){$('#videoBox').innerHTML=`<iframe src="${VIDEO_URL}" title="MedleyMed video" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen class="size-full rounded-2xl border-0"></iframe>`}vDlg.showModal()});
 $('#vClose').addEventListener('click',()=>{vDlg.close();if(VIDEO_URL)$('#videoBox').innerHTML=''});
 
-/* ---------- contact form (demo — wire to your API) ---------- */
-/* ---------- modern dropdowns (progressive enhancement of <select>, same as the dashboard) ---------- */
-const selDDs=[];
-const DD_CHEV='<svg class="dd-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
-const DD_CHECK='<svg class="dd-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
-function enhanceSelect(sel,variant='light'){
-  const wrap=document.createElement('div');
-  wrap.className='dd dd-'+variant;
-  if(variant==='light'||variant==='sm')[...sel.classList].filter(c=>/^((sm|md|lg|xl):)?(!?w-|max-w-|min-w-|flex-|col-span)/.test(c)).forEach(c=>wrap.classList.add(c));
-  sel.parentNode.insertBefore(wrap,sel);wrap.appendChild(sel);
-  sel.classList.add('sr-only');sel.tabIndex=-1;sel.setAttribute('aria-hidden','true');
-  const lab=document.querySelector(`label[for="${sel.id}"]`),name=lab?lab.textContent.trim():sel.id;
-  const btn=document.createElement('button');btn.type='button';btn.className='dd-btn';
-  btn.setAttribute('aria-haspopup','listbox');btn.setAttribute('aria-expanded','false');btn.setAttribute('aria-label',name);
-  const list=document.createElement('ul');list.className='dd-list';list.setAttribute('role','listbox');list.tabIndex=-1;
-  wrap.append(btn,list);
-  let act=-1;
-  const sync=()=>{
-    const o=sel.options[sel.selectedIndex];
-    btn.innerHTML=`<span class="dd-lbl">${o?o.textContent:''}</span>${DD_CHEV}`;
-    list.querySelectorAll('.dd-opt').forEach((li,i)=>{const on=i===sel.selectedIndex;li.classList.toggle('on',on);li.setAttribute('aria-selected',on)});
-  };
-  list.innerHTML=[...sel.options].map((o,i)=>`<li role="option" class="dd-opt" data-i="${i}"><span>${o.textContent}</span>${DD_CHECK}</li>`).join('');
-  const setAct=i=>{const items=[...list.children];act=Math.max(0,Math.min(items.length-1,i));items.forEach((li,k)=>li.classList.toggle('act',k===act));items[act]&&items[act].scrollIntoView({block:'nearest'})};
-  const api={
-    close(){wrap.classList.remove('open','up');btn.setAttribute('aria-expanded','false')},
-    open(){
-      selDDs.forEach(d=>d!==api&&d.close());wrap.classList.add('open');btn.setAttribute('aria-expanded','true');
-      const r=wrap.getBoundingClientRect(),h=list.scrollHeight+12;
-      wrap.classList.toggle('up',r.bottom+h>innerHeight&&r.top>h);
-      setAct(sel.selectedIndex);
-    },
-    pick(i){sel.selectedIndex=i;sync();sel.dispatchEvent(new Event('change',{bubbles:true}));api.close();btn.focus()}
-  };
-  selDDs.push(api);
-  /* keep UI in sync when code sets select.value programmatically */
-  const d=Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype,'value');
-  Object.defineProperty(sel,'value',{get(){return d.get.call(sel)},set(v){d.set.call(sel,v);sync()}});
-  btn.onclick=e=>{e.stopPropagation();wrap.classList.contains('open')?api.close():api.open()};
-  list.onclick=e=>{e.stopPropagation();const li=e.target.closest('.dd-opt');if(li)api.pick(+li.dataset.i)};
-  list.onmousemove=e=>{const li=e.target.closest('.dd-opt');if(li)setAct(+li.dataset.i)};
-  btn.addEventListener('keydown',e=>{
-    const isOpen=wrap.classList.contains('open');
-    if(['ArrowDown','ArrowUp'].includes(e.key)){e.preventDefault();if(!isOpen)api.open();else setAct(act+(e.key==='ArrowDown'?1:-1))}
-    else if(e.key==='Enter'||e.key===' '){e.preventDefault();isOpen?api.pick(act):api.open()}
-    else if(e.key==='Escape'&&isOpen){e.stopPropagation();api.close()}
-    else if(e.key==='Tab')api.close();
-    else if(e.key==='Home'&&isOpen){e.preventDefault();setAct(0)}
-    else if(e.key==='End'&&isOpen){e.preventDefault();setAct(sel.options.length-1)}
-  });
-  if(sel.form)sel.form.addEventListener('reset',()=>setTimeout(sync));
-  sync();return api;
-}
-document.addEventListener('click',()=>selDDs.forEach(d=>d.close()));
-addEventListener('keydown',e=>{if(e.key==='Escape')selDDs.forEach(d=>d.close())});
-enhanceSelect($('#cType'),'light');
-
-const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove('show'),2800)};
-$('#cPhone').addEventListener('input',e=>e.target.value=e.target.value.replace(/\D/g,''));
-$('#contactForm').addEventListener('submit',e=>{e.preventDefault();
-  const rules={cName:v=>v.trim().length>1,cEmail:v=>/^\S+@\S+\.\S+$/.test(v),cPhone:v=>/^[6-9]\d{9}$/.test(v),cMsg:v=>v.trim().length>4};let ok=true;
-  Object.entries(rules).forEach(([id,fn])=>{const el=$('#'+id),good=fn(el.value);el.closest('.field').classList.toggle('bad',!good);if(!good)ok=false});
-  if(!ok){toast('Please fix the highlighted fields');return}
-  toast('Thanks! We\'ll be in touch shortly.');e.target.reset()});
-
 /* ---------- modern layer: progress, parallax, spotlight, tilt, carousel, back-to-top ---------- */
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const bar=$('#progress'),toTop=$('#toTop');
@@ -796,7 +708,7 @@ document.querySelectorAll('.card').forEach(c=>c.addEventListener('pointermove',e
 (()=>{
   const cf=$('#cf'),stage=$('#cfStage'),lab=$('#cfLabels'),dotsEl=$('#cfDots'),n=ECO.length,PERSP=1500;let act=0,ready=false,timer,hover=false,onScreen=false,queue;
   stage.innerHTML=ECO.map(([ic,t],i)=>`<article class="cf-card" data-i="${i}" role="group" aria-roledescription="slide" aria-label="${i+1} of ${n}: ${t}"><img src="${ECO_IMG[i]}" alt="" decoding="async" draggable="false"><span class="cf-shade"></span><span class="ico-tile cf-ico">${svgI(ic,20)}</span></article>`).join('');
-  lab.innerHTML=ECO.map(([,t,d],i)=>`<div class="cf-label" data-i="${i}"><span class="num">0${i+1}<i>/ 0${n}</i></span><b>${t}</b><small>${d}</small><a href="#contact">Learn more ${svgI('arrow',14)}</a></div>`).join('');
+  lab.innerHTML=ECO.map(([,t,d],i)=>`<div class="cf-label" data-i="${i}"><span class="num">0${i+1}<i>/ 0${n}</i></span><b>${t}</b><small>${d}</small><a href="contact.html">Learn more ${svgI('arrow',14)}</a></div>`).join('');
   dotsEl.innerHTML=ECO.map(([,t],i)=>`<button type="button" role="tab" aria-label="${t}" data-i="${i}"></button>`).join('');
   const cards=[...stage.children],labs=[...lab.children],dts=[...dotsEl.children];
   const pos=cards.map((_,i)=>{let d=((i-act)%n+n)%n;return d>n/2?d-n:d});          // start: -2…3
@@ -841,7 +753,7 @@ document.querySelectorAll('.card').forEach(c=>c.addEventListener('pointermove',e
 const SEG={
   b2b:{label:'B2B',icon:'brief',title:'Business to Business',desc:'A digital marketplace where pharmacies and distributors trade directly — curated products, transparent pricing and dependable delivery.',cta:['Explore B2B','medleymed-network.html'],
     cards:[
-      {icon:'pill',name:'Pharmacy',who:'For pharmacies & retailers',items:[['cart','Purchase','Order from a curated catalogue with transparent pricing and quick, easy ordering.']],points:['Curated product range','Transparent pricing','Easy order management']},
+      {icon:'pill',name:'Pharmacy',who:'For pharmacies & retailers',items:[['cart','Purchase','Order from a curated catalogue with transparent pricing and quick, easy ordering.']]},
       {icon:'truck',name:'Distributor',who:'For distributors & partners',items:[['tag','Sale','Reach more pharmacies and grow demand with confidence.'],['truck','Delivery Collection','Reliable last-mile tie-ups so medicines reach the counter on time.'],['box','Warehouse','Keep stock and inventory updates together in one clear view.']]}],
     flow:['Manufacturer','Distributor','Pharmacy']},
   b2c:{label:'B2C',icon:'users',title:'Business to Consumer',desc:'Healthcare for everyday customers, made simple — order medicines, talk to a doctor and book lab tests online.',cta:['Explore B2C','b2c.html'],
@@ -854,13 +766,12 @@ const SEG={
 const segTabs=$('#segTabs'),segInd=$('#segInd'),segPanes=$('#segPanes');let segCur='b2b';
 segTabs.insertAdjacentHTML('beforeend',Object.entries(SEG).map(([k,v])=>`<button type="button" role="tab" data-seg="${k}" aria-selected="${k===segCur}" aria-controls="seg-${k}" class="relative z-[1] inline-flex items-center gap-2 rounded-full px-7 py-2.5 text-sm font-semibold text-slate-600 transition-colors duration-300 aria-selected:text-white">${svgI(v.icon,17)}${v.label}</button>`).join(''));
 const segBtns=[...segTabs.querySelectorAll('button')];
-function segPane(k){const v=SEG[k],cols=v.cards.length===3?'md:grid-cols-3':'md:grid-cols-2';
+function segPane(k){const v=SEG[k],cols=v.cards.length===3?'md:grid-cols-2 lg:grid-cols-3 md:[&>*:last-child:nth-child(odd)]:col-span-2 lg:[&>*:last-child:nth-child(odd)]:col-span-1':'md:grid-cols-2';
   return `<div class="seg-pane" id="seg-${k}" role="tabpanel" ${k===segCur?'':'hidden'}>
-    <div class="mx-auto max-w-[44rem] text-center"><h3 class="text-2xl font-bold">${v.title}</h3><p class="mt-2 text-sm leading-relaxed text-slate-600">${v.desc}</p><a href="${v.cta[1]}" class="btn btn-primary mt-5">${v.cta[0]} ${svgI('arrow',16)}</a></div>
-    <div class="mt-10 grid gap-5 ${cols}">${v.cards.map(c=>`<article class="seg-card card group relative overflow-hidden border border-line p-7"><div class="flex items-center gap-4"><span class="ico-tile !size-14 !rounded-2xl">${svgI(c.icon,26)}</span><div><h4 class="text-xl font-bold">${c.name}</h4><span class="text-xs font-semibold uppercase tracking-wider text-accent-dark">${c.who}</span></div></div>
-      <div class="mt-6 grid gap-3">${c.items.map(([ic,t,d])=>`<a href="#contact" class="group/i flex items-start gap-3 rounded-xl border border-line bg-page/60 p-3.5 transition duration-300 hover:-translate-y-0.5 hover:border-accent/50 hover:bg-white hover:shadow-card"><span class="grid size-9 flex-none place-items-center rounded-full bg-gradient-to-br from-accent to-[#2D8FD6] text-white">${svgI(ic,16)}</span><span class="min-w-0 flex-1"><b class="block text-sm font-semibold">${t}</b><small class="mt-0.5 block text-xs leading-relaxed text-slate-600">${d}</small></span>${svgI('arrow',15,'mt-1 flex-none text-slate-300 transition duration-300 group-hover/i:translate-x-1 group-hover/i:text-primary')}</a>`).join('')}</div>
-      ${c.points?`<ul class="mt-5 grid gap-2 border-t border-line pt-4 text-sm font-medium text-slate-700">${c.points.map(x=>`<li class="flex items-center gap-2.5"><span class="grid size-5 place-items-center rounded-full bg-accent-soft text-accent-dark">${svgI('check',12)}</span>${x}</li>`).join('')}</ul>`:''}</article>`).join('')}</div>
-    <div class="seg-flow mt-10 flex flex-wrap items-center justify-center gap-x-3 gap-y-3">${v.flow.map((x,i)=>`${i?`<svg width="46" height="14" viewBox="0 0 46 14" class="text-accent" aria-hidden="true"><path class="flow-line" d="M0 7h38" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/><path d="m34 2 6 5-6 5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`:''}<span class="inline-flex items-center gap-2 rounded-full border border-primary/10 bg-white px-5 py-2.5 text-sm font-semibold text-navy"><span class="grid size-6 place-items-center rounded-full bg-gradient-to-br from-accent to-primary text-[.7rem] font-bold text-white">${i+1}</span>${x}</span>`).join('')}</div>
+    <div class="flex flex-col items-start justify-between gap-5 border-b border-line pb-7 md:flex-row md:items-center md:gap-10"><div class="max-w-[40rem]"><h3 class="text-xl font-bold md:text-2xl">${v.title}</h3><p class="mt-2 text-sm leading-relaxed text-slate-600">${v.desc}</p></div><a href="${v.cta[1]}" class="btn btn-primary flex-none">${v.cta[0]} ${svgI('arrow',16)}</a></div>
+    <div class="mt-8 grid ${v.cards.every(c=>c.items.length===v.cards[0].items.length)?'items-stretch':'items-start'} gap-5 ${cols}">${v.cards.map(c=>`<article class="seg-card card group relative overflow-hidden border border-line p-7"><div class="flex items-center gap-4"><span class="ico-tile !size-14 !rounded-2xl">${svgI(c.icon,26)}</span><div><h4 class="text-xl font-bold">${c.name}</h4><span class="text-xs font-semibold uppercase tracking-wider text-accent-dark">${c.who}</span></div></div>
+      <div class="mt-6 grid gap-3">${c.items.map(([ic,t,d])=>`<a href="contact.html" class="group/i flex items-start gap-3 rounded-xl border border-line bg-page/60 p-3.5 transition duration-300 hover:-translate-y-0.5 hover:border-accent/50 hover:bg-white hover:shadow-card"><span class="grid size-9 flex-none place-items-center rounded-full bg-gradient-to-br from-accent to-[#2D8FD6] text-white">${svgI(ic,16)}</span><span class="min-w-0 flex-1"><b class="block text-sm font-semibold">${t}</b><small class="mt-0.5 block text-xs leading-relaxed text-slate-600">${d}</small></span>${svgI('arrow',15,'mt-1 flex-none text-slate-300 transition duration-300 group-hover/i:translate-x-1 group-hover/i:text-primary')}</a>`).join('')}</div></article>`).join('')}</div>
+    <div class="seg-flow mt-10 flex flex-col items-center gap-1.5 sm:flex-row sm:justify-center sm:gap-x-2 md:gap-x-3">${v.flow.map((x,i)=>`${i?`<svg width="46" height="14" viewBox="0 0 46 14" class="w-9 flex-none rotate-90 text-accent sm:w-7 sm:rotate-0 md:w-[46px]" aria-hidden="true"><path class="flow-line" d="M0 7h38" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/><path d="m34 2 6 5-6 5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`:''}<span class="inline-flex min-w-[13rem] items-center justify-center gap-2 whitespace-nowrap rounded-full border border-primary/10 bg-white px-4 py-2.5 text-sm font-semibold text-navy sm:min-w-0 sm:justify-start sm:px-4 md:px-5"><span class="grid size-6 place-items-center rounded-full bg-gradient-to-br from-accent to-primary text-[.7rem] font-bold text-white">${i+1}</span>${x}</span>`).join('')}</div>
   </div>`}
 segPanes.innerHTML=Object.keys(SEG).map(segPane).join('');
 function segMove(){const b=segBtns.find(x=>x.dataset.seg===segCur);segInd.style.width=b.offsetWidth+'px';segInd.style.transform=`translateX(${b.offsetLeft}px)`}
