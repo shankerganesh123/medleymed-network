@@ -10,14 +10,14 @@
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <meta name="theme-color" content="#2D3691">
 <script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script>
 tailwind.config = {
   theme: { extend: {
-    colors: { navy:'#151a52', navy2:'#2D3691', teal:'#17B7CD', teal2:'#2D3691', ice:'#eef0fa' },
+    colors: { navy:'#151a52', navy2:'#2D3691', teal:'#17B7CD', teal2:'#2D3691', ice:'#eef0fa', primary:{DEFAULT:'#2D3691',hover:'#232b78',soft:'#e8eaf8'}, accent:{DEFAULT:'#17B7CD',soft:'#e0f5f9',dark:'#0a7f92',light:'#63dcec'}, ink:{DEFAULT:'#0f1535',2:'#38426b'}, page:'#f5f7fd', line:'#d9dff0' },
+    boxShadow: { card:'0 8px 30px rgba(20,120,170,.10)', cardhover:'0 20px 50px rgba(23,183,205,.30)' },
     fontFamily: { sans:['Inter','ui-sans-serif','system-ui','sans-serif'] }
   }}
 }
@@ -75,8 +75,26 @@ tailwind.config = {
   @keyframes dash{to{stroke-dashoffset:0}}
   .check{stroke-dasharray:24;stroke-dashoffset:24}
   .in .check,.check.in{animation:dash .6s .3s forwards}
+  /* ===== hero copy — same typography + motion as the home / B2C pages ===== */
+  .hero-copy .eyebrow{display:inline-flex;align-items:center;gap:.9rem;letter-spacing:.16em;color:#17B7CD;font-size:.82rem}
+  .hero-copy .eyebrow::after{content:"";width:5rem;height:1px;background:rgba(23,183,205,.5);transform-origin:left;animation:hcLine 1s .4s cubic-bezier(.2,.8,.2,1) both}
+  @media(max-width:479px){.hero-copy .eyebrow{font-size:.7rem;letter-spacing:.12em;gap:.6rem;white-space:nowrap}.hero-copy .eyebrow::after{width:2rem}}
+  @keyframes hcLine{from{transform:scaleX(0)}}
+  .hero-copy>*{animation:hcIn .8s cubic-bezier(.2,.8,.2,1) both}
+  .hero-copy>*:nth-child(2){animation-delay:.08s}.hero-copy>*:nth-child(3){animation-delay:.16s}.hero-copy>*:nth-child(4){animation-delay:.24s}.hero-copy>*:nth-child(5){animation-delay:.34s}
+  .hero-copy>h1{animation:none}
+  @keyframes hcIn{from{opacity:0;transform:translateY(24px);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}
+  .hero-copy h1 .w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.1em;margin-bottom:-.1em}
+  .hero-copy h1 .w>span{display:inline-block;transform:translateY(110%);animation:hcWord .95s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:calc(var(--i)*.11s + .15s)}
+  @keyframes hcWord{to{transform:none}}
+  .hero-copy h1 .grad>span{background:linear-gradient(100deg,#17B7CD 30%,#9be9f5 50%,#17B7CD 70%) 0 0/250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:hcWord .95s cubic-bezier(.2,.8,.2,1) forwards,hcShimmer 5s 1.4s linear infinite;animation-delay:calc(var(--i)*.11s + .15s),1.4s}
+  @keyframes hcShimmer{to{background-position:-250% 0}}
+  .hero-copy .hero-stats li{animation:hcStat .6s cubic-bezier(.2,.8,.2,1) both}
+  .hero-copy .hero-stats li:nth-child(2){animation-delay:.08s}.hero-copy .hero-stats li:nth-child(3){animation-delay:.16s}
+  @keyframes hcStat{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  @media(prefers-reduced-motion:reduce){.hero-copy>*,.hero-copy .hero-stats li,.hero-copy .eyebrow::after{animation:none}.hero-copy h1 .w>span,.hero-copy h1 .grad>span{transform:none;animation:none}}
   .scrim-x{background:linear-gradient(180deg,rgba(12,15,51,.55) 0%,rgba(12,15,51,.35) 100%)}
-  @media(min-width:768px){.scrim-x{background:linear-gradient(90deg,rgba(12,15,51,.9) 0%,rgba(12,15,51,.65) 40%,rgba(12,15,51,0) 65%)}}
+  @media(min-width:1024px){.scrim-x{background:linear-gradient(90deg,rgba(12,15,51,.9) 0%,rgba(12,15,51,.55) 30%,rgba(12,15,51,0) 48%)}}
   #heroCanvas{-webkit-mask-image:linear-gradient(to bottom,#000 0,#000 78%,transparent 93%);mask-image:linear-gradient(to bottom,#000 0,#000 78%,transparent 93%)}
   #otpBoxes input{min-width:0;flex:1;max-width:3rem;height:3rem}
   #menuBtn[aria-expanded=true] .bar:nth-child(1){transform:translateY(8px) rotate(45deg)}
@@ -95,10 +113,32 @@ tailwind.config = {
   .field:focus{border-color:#17B7CD;box-shadow:0 0 0 3px rgba(23,183,205,.25)}
   .ficon{position:absolute;left:1rem;top:50%;transform:translateY(-50%);display:flex;color:#c3d3ec}
   .tab.active{background:#17B7CD;color:#fff}
+  /* ===== login card — same white card as the contact form ===== */
+  #home .login-card{background:#fff;color:#0f1535;border:1px solid #e3edf7;border-radius:1.5rem;backdrop-filter:none;box-shadow:0 30px 70px -28px rgba(0,0,0,.55)}
+  #home .login-card .eyebrow{color:#0a7f92;letter-spacing:.25em}
+  #home .login-card .eyebrow span{background:rgba(23,183,205,.5)}
+  #home .login-card h2{color:#0f1535;text-shadow:none}
+  #home .login-card .grad-text{background:linear-gradient(90deg,#2D3691,#17B7CD);-webkit-background-clip:text;background-clip:text;color:transparent}
+  #home .login-card .text-slate-200,#home .login-card .text-slate-300{color:#475569}
+  #home .login-card .bg-white\/10{background:#eef3f9}
+  #home .login-card .tab{color:#475569}
+  #home .login-card .tab.active{background:#2D3691;color:#fff}
+  #home .login-card .field{background:#fff;border:1px solid #d6e5f1;color:#06173d;border-radius:.75rem;padding:.75rem 1rem .75rem 2.8rem;font-size:.875rem}
+  #home .login-card .field::placeholder{color:#94a3b8}
+  #home .login-card .field:focus{border-color:#17B7CD;box-shadow:0 0 0 3px rgba(23,183,205,.28)}
+  #home .login-card .ficon{color:#7a93ad}
+  #home .login-card #eye{color:#7a93ad}
+  #home .login-card a.text-teal,#home .login-card button.text-teal{color:#2D3691}
+  #home .login-card .text-rose-300{color:#d63a45;font-weight:600}
+  #home .login-card #loginBtn{color:#fff;background:#2D3691;box-shadow:0 8px 18px -8px rgba(45,54,145,.65)}
+  #home .login-card #loginBtn:hover{background:#232b78;box-shadow:0 12px 24px -8px rgba(45,54,145,.75)}
   .shake{animation:shake .4s}
   @keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
   .btn{transition:transform .25s,box-shadow .25s}
   .btn:hover{transform:translateY(-1px);box-shadow:0 10px 22px -8px rgba(23,183,205,.6)}
+  .btn:focus-visible{outline:0;box-shadow:0 0 0 3px rgba(23,183,205,.4)}
+  .btn:active{transform:translateY(0) scale(.98)}
+  .btn:disabled{opacity:.7;cursor:not-allowed;transform:none}
   .slide{transition:transform .6s cubic-bezier(.2,.8,.2,1)}
   /* ===== header: same look as the main page — dark scrim over the hero, solid white once scrolled ===== */
   #siteNav{background:linear-gradient(180deg,rgba(8,12,58,.88),rgba(8,12,58,.45));backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.12);color:#fff;transition:background .3s,box-shadow .3s,border-color .3s}
@@ -114,6 +154,43 @@ tailwind.config = {
   #siteNav .logo .on-dark{display:block}#siteNav .logo .on-light{display:none}
   #siteNav.scrolled .logo .on-dark{display:none}#siteNav.scrolled .logo .on-light{display:block}
 
+  /* ===== modern sections (same look as the home / B2C pages) ===== */
+  section h2{font-weight:800;line-height:1.25;letter-spacing:-.025em}
+  .grad-dark{background:linear-gradient(90deg,#2D3691,#17B7CD);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .grad-cyan{background:linear-gradient(90deg,#17B7CD,#9be9f5);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .m-eyebrow{display:inline-flex;align-items:center;gap:.8rem;font-size:.75rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:#2D3691}
+  .m-eyebrow::before,.m-eyebrow::after{content:"";width:4rem;height:1px;background:rgba(23,183,205,.5)}.m-eyebrow.left::before{display:none}
+  .m-eyebrow.on-dark{color:#17B7CD}
+  .m-card{position:relative;background:#fff;border-radius:1.4rem;box-shadow:0 8px 30px rgba(20,120,170,.10);transition:transform .3s,box-shadow .3s}
+  .m-card:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(23,183,205,.30)}
+  .m-card.reveal.in{transition:opacity .8s ease,transform .3s,box-shadow .3s}
+  .ico-tile{flex:none;position:relative;overflow:hidden;display:grid;place-items:center;width:3rem;height:3rem;border-radius:.95rem;color:#2D3691;background:linear-gradient(145deg,#fff 0%,#d9f3fa 48%,#c4eaf5 100%);border:1px solid rgba(23,183,205,.38);box-shadow:0 12px 22px -10px rgba(23,183,205,.7),0 2px 5px rgba(45,54,145,.1),inset 0 1px 0 rgba(255,255,255,.95);transition:transform .3s cubic-bezier(.3,1.4,.5,1)}
+  .ico-tile::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(135deg,rgba(255,255,255,.65),rgba(255,255,255,0) 46%)}
+  .ico-tile svg{position:relative;z-index:1;stroke-width:2}
+  .m-card:hover .ico-tile{transform:translateY(-3px)}
+  .m-btn{display:inline-flex;align-items:center;justify-content:center;gap:.55rem;font-weight:600;font-size:.875rem;line-height:1.43;border-radius:.75rem;padding:.75rem 1.75rem;border:1px solid transparent;transition:transform .25s,box-shadow .25s,background .25s,color .25s}
+  .m-btn:hover{transform:translateY(-1px)}
+  .m-btn-primary{background:#2D3691;color:#fff;box-shadow:0 8px 18px -8px rgba(45,54,145,.65)}.m-btn-primary:hover{background:#232b78;box-shadow:0 12px 24px -8px rgba(45,54,145,.75)}
+  .m-btn-white{background:#fff;color:#0f1535;box-shadow:0 12px 26px -14px rgba(45,54,145,.45)}
+  .m-btn-ghost{color:#fff;border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.06);backdrop-filter:blur(10px)}.m-btn-ghost:hover{background:rgba(255,255,255,.18)}
+  .photo-zoom img{transition:transform 1.2s cubic-bezier(.2,.8,.2,1)}.photo-zoom:hover img{transform:scale(1.05)}
+  .floaty-a{animation:floatA 6s ease-in-out infinite}.floaty-b{animation:floatA 7s -3s ease-in-out infinite}
+  @keyframes floatA{50%{transform:translateY(-9px)}}
+  /* PharmaOS automation flow */
+  .os-band{background:radial-gradient(60% 80% at 80% 0%,rgba(45,54,145,.9),transparent 70%),radial-gradient(40% 60% at 0% 100%,rgba(23,183,205,.18),transparent 70%),linear-gradient(135deg,#0a0f3d,#141a5c)}
+  .os-grid::before{content:"";position:absolute;inset:0;opacity:.12;background-image:linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px);background-size:44px 44px;-webkit-mask-image:radial-gradient(circle at 30% 20%,#000,transparent 70%);mask-image:radial-gradient(circle at 30% 20%,#000,transparent 70%)}
+  .flow-node{animation:nodeOn 6s ease-in-out infinite}
+  .flow-node:nth-of-type(1){animation-delay:0s}.flow-node:nth-of-type(2){animation-delay:1.5s}.flow-node:nth-of-type(3){animation-delay:3s}.flow-node:nth-of-type(4){animation-delay:4.5s}
+  @keyframes nodeOn{0%,100%{border-color:rgba(255,255,255,.14);box-shadow:none}8%,22%{border-color:rgba(23,183,205,.8);box-shadow:0 0 0 4px rgba(23,183,205,.15),0 18px 40px -18px rgba(23,183,205,.8)}}
+  .flow-tick{animation:tickOn 6s ease-in-out infinite;opacity:0}
+  .flow-node:nth-of-type(1) .flow-tick{animation-delay:.3s}.flow-node:nth-of-type(2) .flow-tick{animation-delay:1.8s}.flow-node:nth-of-type(3) .flow-tick{animation-delay:3.3s}.flow-node:nth-of-type(4) .flow-tick{animation-delay:4.8s}
+  @keyframes tickOn{0%,100%{opacity:0;transform:scale(.4)}8%,24%{opacity:1;transform:scale(1)}}
+  .flow-line{stroke-dasharray:6 6;animation:flowDash 1.1s linear infinite}
+  @keyframes flowDash{to{stroke-dashoffset:-24}}
+  .os-glow{animation:osGlow 8s ease-in-out infinite}
+  @keyframes osGlow{50%{opacity:.55;transform:scale(1.12)}}
+  .steps-line::before{content:"";position:absolute;left:16%;right:16%;top:2.3rem;height:2px;background:linear-gradient(90deg,#17B7CD,#2D3691);opacity:.35}
+  @media(prefers-reduced-motion:reduce){.floaty-a,.floaty-b,.flow-node,.flow-tick,.flow-line,.os-glow{animation:none}.flow-tick{opacity:1}}
   canvas{display:block}
 </style>
 </head>
@@ -121,9 +198,9 @@ tailwind.config = {
 
 <!-- ============ HERO ============ -->
 <header class="hero-bg relative text-white overflow-hidden" id="home">
-  <canvas id="heroCanvas" class="absolute inset-0 w-full h-full z-0 pointer-events-none opacity-80 md:opacity-100"></canvas>
+  <canvas id="heroCanvas" class="absolute inset-0 w-full h-full z-0 pointer-events-none opacity-50 min-[1100px]:opacity-100"></canvas>
   <!-- legibility scrims: text column (left→right) and navbar (top→bottom) -->
-  <div class="scrim-x absolute inset-x-0 top-0 bottom-16 z-[1] pointer-events-none"></div>
+  <div class="scrim-x absolute inset-0 z-[1] pointer-events-none"></div>
   <div class="absolute inset-x-0 top-0 h-28 z-[1] pointer-events-none" style="background:linear-gradient(180deg,rgba(12,15,51,.85),rgba(12,15,51,0))"></div>
 
   <div class="h-[76px]" aria-hidden="true"></div>
@@ -132,9 +209,9 @@ tailwind.config = {
       <a href="index.html" class="logo flex flex-none items-center gap-[.6rem]" aria-label="MedleyMed – home"><img class="on-light size-[38px]" src="assets/medleymed-icon.png" alt="" width="38" height="38"><img class="on-dark size-[38px]" src="assets/brand-icon-dark.png" alt="" width="38" height="38"><img class="on-light h-[19px] w-auto" src="assets/brand-wordmark.png" alt="MedleyMed" width="169" height="19"><img class="on-dark h-[19px] w-auto" src="assets/brand-wordmark-dark.png" alt="" width="169" height="19"></a>
       <div class="ml-auto hidden items-center gap-[.15rem] md:flex">
         <a href="#home" class="nav-a whitespace-nowrap rounded-[.7rem] px-2 py-[.55rem] text-[.74rem] font-medium uppercase tracking-wide transition duration-200 lg:px-[.8rem] lg:text-[.8rem] active">Home</a>
-        <a href="#about" class="nav-a whitespace-nowrap rounded-[.7rem] px-2 py-[.55rem] text-[.74rem] font-medium uppercase tracking-wide transition duration-200 lg:px-[.8rem] lg:text-[.8rem]">About Us</a>
+        <a href="about.html" class="nav-a whitespace-nowrap rounded-[.7rem] px-2 py-[.55rem] text-[.74rem] font-medium uppercase tracking-wide transition duration-200 lg:px-[.8rem] lg:text-[.8rem]">About Us</a>
         <a href="#network" class="nav-a whitespace-nowrap rounded-[.7rem] px-2 py-[.55rem] text-[.74rem] font-medium uppercase tracking-wide transition duration-200 lg:px-[.8rem] lg:text-[.8rem]">Medleymed Network</a>
-        <a href="#contact" class="nav-a whitespace-nowrap rounded-[.7rem] px-2 py-[.55rem] text-[.74rem] font-medium uppercase tracking-wide transition duration-200 lg:px-[.8rem] lg:text-[.8rem]">Contact Us</a>
+        <a href="contact.html" class="nav-a whitespace-nowrap rounded-[.7rem] px-2 py-[.55rem] text-[.74rem] font-medium uppercase tracking-wide transition duration-200 lg:px-[.8rem] lg:text-[.8rem]">Contact Us</a>
       </div>
       <div class="ml-auto flex items-center gap-3 md:ml-0">
         <button id="menuBtn" aria-label="Menu" aria-expanded="false" class="md:hidden w-10 h-10 rounded-full bg-white/10 flex flex-col items-center justify-center gap-1.5">
@@ -145,27 +222,31 @@ tailwind.config = {
   </nav>
   <div id="mobileMenu" class="md:hidden hidden fixed inset-x-4 top-[84px] z-[70] sm:inset-x-6 rounded-2xl bg-[#1b2263]/95 backdrop-blur border border-white/15 p-3 text-sm font-medium shadow-2xl">
     <a href="#home" class="block px-4 py-3 rounded-xl text-teal">Home</a>
-    <a href="#about" class="block px-4 py-3 rounded-xl hover:bg-white/10">About Us</a>
+    <a href="about.html" class="block px-4 py-3 rounded-xl hover:bg-white/10">About Us</a>
     <a href="#network" class="block px-4 py-3 rounded-xl hover:bg-white/10">Medleymed Network</a>
-    <a href="#contact" class="block px-4 py-3 rounded-xl hover:bg-white/10">Contact Us</a>
+    <a href="contact.html" class="block px-4 py-3 rounded-xl hover:bg-white/10">Contact Us</a>
   </div>
 
-  <div class="relative z-10 max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-12 pt-4 sm:pt-6 pb-24 sm:pb-28 grid md:grid-cols-[5fr_7fr] gap-8 md:gap-4 items-center">
-    <div class="reveal-l in relative z-10">
-      <div class="eyebrow text-teal flex items-center gap-3 mb-5">Grow Together <span class="h-px w-20 bg-teal/50"></span></div>
-      <h1 class="text-[2rem] min-[400px]:text-4xl sm:text-5xl md:text-4xl lg:text-5xl font-extrabold leading-tight">India's <span class="grad-text">Fastest</span><br>Growing B2B<br>Pharmacy Network</h1>
-      <p class="mt-6 text-slate-100 max-w-md leading-relaxed">Empowering Pharmacies, Partners and Manufacturers with a smarter, stronger and more connected network.</p>
-      <div class="mt-7 sm:mt-9 flex flex-nowrap gap-2.5 sm:gap-4">
-        <a href="#" class="btn bg-teal hover:bg-[#3fcce0] text-navy rounded-xl font-semibold flex items-center gap-1.5 min-[480px]:gap-2 min-w-0 flex-1 justify-center whitespace-nowrap px-3 py-2.5 text-[.8rem] min-[480px]:flex-none min-[480px]:px-6 min-[480px]:py-3 min-[480px]:text-sm"><span>Download<span class="max-[379px]:hidden"> the App</span> →</span>
-          <svg class="shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3l14 9-14 9z"/></svg></a>
-        <a href="#about" class="btn flex items-center border border-white/50 bg-white/5 rounded-xl font-semibold hover:bg-white/15 min-w-0 flex-1 justify-center whitespace-nowrap px-3 py-2.5 text-[.8rem] min-[480px]:flex-none min-[480px]:px-6 min-[480px]:py-3 min-[480px]:text-sm">Know More →</a>
+  <div class="relative z-10 max-w-7xl mx-auto px-6 pt-4 sm:pt-6 pb-14 sm:pb-16 grid lg:grid-cols-[5fr_7fr] gap-10 lg:gap-4 items-center">
+    <div class="hero-copy reveal-l in relative z-10 w-full min-w-0">
+      <div class="eyebrow">Grow Together</div>
+      <h1 class="mt-[1.3rem] text-[2rem] font-extrabold leading-[1.12] tracking-[.005em] text-white uppercase min-[400px]:text-4xl sm:text-[2.6rem] lg:text-[2.6rem] min-[1200px]:text-5xl" aria-label="India's Fastest Growing B2B Pharmacy Network"><span class="w" style="--i:0"><span>India's</span></span> <span class="w grad" style="--i:1"><span>Fastest</span></span><br><span class="w" style="--i:2"><span>Growing</span></span> <span class="w" style="--i:3"><span>B2B</span></span><br><span class="w" style="--i:4"><span>Pharmacy</span></span> <span class="w" style="--i:5"><span>Network</span></span></h1>
+      <p class="mt-6 max-w-md text-pretty text-base leading-relaxed text-slate-100">Empowering Pharmacies, Partners and Manufacturers with a smarter, stronger and more connected network.</p>
+      <div class="mt-[2.2rem] flex flex-nowrap gap-2.5 sm:gap-4">
+        <a href="#" class="btn flex items-center gap-1.5 rounded-xl bg-teal font-semibold text-navy hover:bg-[#3fcce0] min-[480px]:gap-[.55rem] min-w-0 flex-1 justify-center whitespace-nowrap px-3 py-2.5 text-[.8rem] min-[480px]:flex-none min-[480px]:px-6 min-[480px]:py-3 min-[480px]:text-sm"><span>Download<span class="max-[379px]:hidden"> the App</span></span><svg class="shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        <a href="#about" class="btn flex items-center rounded-xl border border-white/50 bg-white/5 font-semibold backdrop-blur-[10px] hover:bg-white/15 min-w-0 flex-1 justify-center whitespace-nowrap px-3 py-2.5 text-[.8rem] min-[480px]:flex-none min-[480px]:px-6 min-[480px]:py-3 min-[480px]:text-sm"><span>Know<span class="max-[379px]:hidden"> More</span></span></a>
       </div>
+      <ul class="hero-stats mt-[2.4rem] flex max-w-[33rem] list-none border-t border-white/[.16] pt-[1.15rem]" aria-label="MedleyMed network at a glance">
+        <li class="mr-3 min-w-0 flex-1 border-r border-white/[.14] pr-3 sm:mr-[1.4rem] sm:pr-[1.4rem] last:m-0 last:border-0 last:p-0"><b class="block text-xl font-extrabold leading-none tabular-nums sm:text-2xl">10K+</b><small class="mt-2 block text-xs text-slate-200 sm:text-sm">Pharmacies</small></li>
+        <li class="mr-3 min-w-0 flex-1 border-r border-white/[.14] pr-3 sm:mr-[1.4rem] sm:pr-[1.4rem] last:m-0 last:border-0 last:p-0"><b class="block text-xl font-extrabold leading-none tabular-nums sm:text-2xl">500+</b><small class="mt-2 block text-xs text-slate-200 sm:text-sm">Partners</small></li>
+        <li class="mr-3 min-w-0 flex-1 border-r border-white/[.14] pr-3 sm:mr-[1.4rem] sm:pr-[1.4rem] last:m-0 last:border-0 last:p-0"><b class="block text-xl font-extrabold leading-none tabular-nums sm:text-2xl">1M+</b><small class="mt-2 block text-xs text-slate-200 sm:text-sm">Products</small></li>
+      </ul>
     </div>
-    <div class="relative flex justify-center md:justify-end lg:pr-8 min-w-0">
+    <div class="relative flex justify-center lg:justify-end lg:pr-8 min-w-0">
       <section id="login" class="login-card glass rounded-3xl p-6 sm:p-8 lg:p-10 max-w-md w-full scroll-mt-24">
         <div class="eyebrow text-teal flex items-center gap-3 mb-3">Welcome back <span class="h-px w-16 bg-teal/50"></span></div>
         <h2 class="text-3xl font-extrabold leading-tight">Login to your <span class="grad-text">Network</span></h2>
-        <p class="text-sm text-slate-200 mt-3">Access orders, deals and partners on India's fastest growing B2B pharmacy network.</p>
+        <p class="text-sm text-slate-200 mt-3">Access orders, deals and partners on AI-powered PharmaOS.</p>
 
         <div class="mt-6 flex bg-white/10 rounded-full p-1 text-sm font-semibold">
           <button type="button" data-tab="otp" class="tab active flex-1 py-2 rounded-full transition">Mobile OTP</button>
@@ -190,144 +271,145 @@ tailwind.config = {
             </div>
           </div>
           <p id="loginErr" class="text-xs text-rose-300 min-h-[1rem]"></p>
-          <button id="loginBtn" class="btn w-full bg-teal hover:bg-[#3fcce0] text-navy py-3 rounded-xl font-semibold">Send OTP →</button>
+          <button id="loginBtn" class="btn w-full py-3 rounded-xl font-semibold">Send OTP →</button>
         </form>
         <p class="text-sm text-slate-200 mt-6 text-center">New to Medleymed? <a href="#contact" class="text-teal font-semibold hover:underline">Become a Partner</a></p>
       </section>
     </div>
     <div id="loginToast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-white text-navy px-6 py-3 rounded-full shadow-2xl text-sm font-semibold opacity-0 pointer-events-none transition-opacity"></div>
   </div>
-  <svg class="absolute -bottom-2 left-0 w-full z-[2] pointer-events-none" viewBox="0 0 1440 90" preserveAspectRatio="none" height="90"><path d="M0 60 Q360 0 720 40 T1440 30 V90 H0Z" fill="#f4fbfe"/></svg>
 </header>
 
+<!-- ============ NETWORK · trusted partners + figures ============ -->
+<section class="py-20" id="network" aria-label="Our network">
+  <div class="mx-auto w-full max-w-7xl px-6">
+    <div class="reveal mx-auto max-w-[46rem] text-center"><span class="m-eyebrow">Our Network</span>
+      <h2 class="mt-3 text-3xl md:text-4xl">Driving Digital Healthcare Trade in India with <span class="grad-dark">Trusted Partnerships</span></h2>
+      <p class="mx-auto mt-4 max-w-lg text-base leading-relaxed text-slate-600">One network connecting pharmacies, distributors and manufacturers.</p></div>
+    <div class="reveal mt-12 flex flex-col items-center gap-5" id="partnerRows" aria-label="Partner logos"></div>
+    <div class="reveal mt-10 grid grid-cols-2 gap-4 md:grid-cols-4" id="statsGrid"></div>
+  </div>
+</section>
+
 <!-- ============ ABOUT ============ -->
-<section id="about" class="max-w-7xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-12 items-center">
-  <div class="reveal-l relative rounded-3xl overflow-hidden bg-gradient-to-br from-[#151a52] to-[#2D3691] h-[280px] sm:h-[380px] shadow-2xl">
-    <canvas id="mapCanvas" class="w-full h-full"></canvas>
-    <div class="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-[#0c0f33]/80 to-transparent"></div>
+<section class="mx-auto grid w-full max-w-7xl items-center gap-14 px-6 py-20 min-[960px]:grid-cols-2" id="about">
+  <div class="reveal-l relative">
+    <div class="photo-zoom relative overflow-hidden rounded-[1.8rem] shadow-[0_34px_60px_-30px_rgba(45,54,145,.6)]"><img class="aspect-[4/3.1] w-full object-cover" style="object-position:70% 20%" src="assets/pharmacy-hero.jpg" alt="A pharmacist standing in a pharmacy" loading="lazy"><div class="absolute inset-0 bg-gradient-to-t from-[rgba(8,12,58,.35)] to-transparent"></div></div>
+    <div class="floaty-a absolute -bottom-6 -right-3 hidden w-44 overflow-hidden rounded-2xl border-4 border-white shadow-[0_24px_40px_-18px_rgba(10,14,60,.55)] sm:block"><img class="aspect-[4/3] w-full object-cover" src="assets/hero-s3.jpg" alt="Scientists working in a laboratory" loading="lazy"></div>
+    <div class="floaty-b absolute -left-3 top-8 inline-flex items-center gap-3 rounded-2xl border border-white/60 bg-white/85 px-4 py-3 shadow-[0_18px_40px_-18px_rgba(10,14,60,.5)] backdrop-blur-xl max-sm:left-2"><span class="grid size-10 place-items-center rounded-xl bg-gradient-to-br from-accent to-[#2D8FD6] text-white"><i data-ic="shield" data-s="20"></i></span><span><b class="block text-sm font-semibold text-ink">Verified partners</b><small class="block text-xs text-slate-500">Trusted network</small></span></div>
   </div>
   <div class="reveal-r">
-    <div class="eyebrow text-teal2 flex items-center gap-3">About Medleymed Network <span class="h-px w-16 bg-teal/50"></span></div>
-    <h2 class="text-3xl md:text-4xl font-extrabold mt-3 leading-tight">A Growing Network<br>for a <span class="grad-text-dark">Healthier India</span></h2>
-    <p class="mt-5 text-sm leading-relaxed text-slate-700">Medleymed Network has been promoted by Medleymed Network Solutions Pvt Ltd, a 100% subsidiary of <b>Athena Global Technologies Limited</b>, a leading Hyderabad based Technology Services Company.</p>
+    <span class="m-eyebrow left">About Medleymed Network</span>
+    <h2 class="mt-3 text-3xl md:text-4xl">A Growing Network<br>for a <span class="grad-dark">Healthier India</span></h2>
+    <p class="mt-4 text-sm leading-relaxed text-slate-700">Medleymed Network has been promoted by Medleymed Network Solutions Pvt Ltd, a 100% subsidiary of <b>Athena Global Technologies Limited</b>, a leading Hyderabad based Technology Services Company.</p>
     <p class="mt-4 text-sm leading-relaxed text-slate-700">Our vision is to become the largest B2B technology platform in the Healthcare space, facilitating seamless business interactions between Manufacturers, Partners and Pharmacies.</p>
-    <a href="#" class="btn inline-block mt-6 border border-navy2 text-navy2 hover:bg-navy2 hover:text-white px-6 py-2.5 rounded-xl text-sm font-semibold">Our Vision →</a>
+    <div class="mt-6 grid gap-3" id="aboutCards"></div>
   </div>
 </section>
 
-<!-- ============ APP FEATURES (animated) ============ -->
-<section id="network" class="relative py-20 overflow-hidden">
-  <canvas id="featCanvas" class="absolute inset-0 w-full h-full opacity-70"></canvas>
-  <div class="absolute -right-20 top-10 w-[560px] h-[560px] blob bg-gradient-to-br from-teal/30 to-navy2/15"></div>
-  <div class="relative max-w-7xl mx-auto px-6">
-    <div class="text-center reveal">
-      <div class="eyebrow text-teal2 flex items-center justify-center gap-3"><span class="h-px w-12 bg-teal/50"></span>App can help your business<span class="h-px w-12 bg-teal/50"></span></div>
-      <h2 class="font-extrabold text-3xl md:text-4xl mt-3">App can help your business in <span class="grad-text-dark">multiple ways</span></h2>
-      <p class="mt-4 text-sm text-slate-700 max-w-lg mx-auto">Access a diverse range of products and services through Medleymed Network. Connect, grow and succeed with a trusted network.</p>
-    </div>
-
-    <div class="mt-12 grid lg:grid-cols-[1.4fr_1fr] gap-10 items-center">
-      <div id="featGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-5">
-        <!-- cards injected -->
-      </div>
-      <div class="reveal-r relative flex justify-center">
-        <div class="relative w-full max-w-[320px] aspect-[320/380]">
-          <div class="absolute inset-0 blob bg-gradient-to-br from-navy2/20 to-teal/60"></div>
-          <svg viewBox="0 0 300 360" class="absolute inset-0 w-full h-full floaty">
-            <!-- pharmacist illustration -->
-            <path d="M40 360 Q50 250 150 240 Q250 250 260 360Z" fill="#fff"/>
-            <path d="M120 240 L150 300 L180 240Z" fill="#1e5aa8"/>
-            <rect x="136" y="215" width="28" height="35" rx="8" fill="#d99a73"/>
-            <ellipse cx="150" cy="170" rx="46" ry="54" fill="#e3a77f"/>
-            <path d="M102 160 Q104 108 150 108 Q198 108 198 160 Q185 130 150 132 Q116 130 102 160Z" fill="#1a1a2e"/>
-            <circle cx="132" cy="172" r="14" fill="none" stroke="#111" stroke-width="3"/><circle cx="168" cy="172" r="14" fill="none" stroke="#111" stroke-width="3"/><path d="M146 172h8" stroke="#111" stroke-width="3"/>
-            <path d="M130 198 Q150 216 170 198" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
-            <path d="M104 190 Q120 232 150 232 Q180 232 196 190 Q190 215 150 220 Q110 215 104 190Z" fill="#1a1a2e" opacity=".85"/>
-            <rect x="196" y="290" width="26" height="6" rx="3" fill="#17B7CD"/><rect x="204" y="282" width="6" height="22" rx="3" fill="#17B7CD"/>
-          </svg>
-        </div>
-      </div>
-    </div>
+<!-- ============ B2B SOLUTIONS ============ -->
+<section class="bg-[radial-gradient(55%_55%_at_50%_0%,rgba(45,54,145,.08),transparent)] py-20" id="solutions">
+  <div class="mx-auto w-full max-w-7xl px-6">
+    <div class="reveal mx-auto max-w-[46rem] text-center"><span class="m-eyebrow">B2B Solutions</span>
+      <h2 class="mt-3 text-3xl md:text-4xl">Built for Every Link of the <span class="grad-dark">Supply Chain</span></h2>
+      <p class="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-slate-700">Pharmacies buy smarter and distributors sell, deliver and store better — all on one network.</p></div>
+    <div class="mt-12 grid gap-6 md:grid-cols-2" id="b2bGrid"></div>
   </div>
 </section>
 
-<!-- ============ STATS ============ -->
-<section class="max-w-7xl mx-auto px-6 pb-10">
-  <div class="reveal bg-gradient-to-r from-navy to-navy2 rounded-3xl px-8 py-10 grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white items-center shadow-2xl relative overflow-hidden">
-    <div><div class="mb-2 flex justify-center text-teal"><i data-ic="store" data-s="38"></i></div><div class="text-3xl font-extrabold"><span class="count" data-to="10" data-suf="K+">0</span></div><div class="text-sm">Pharmacies</div></div>
-    <div><div class="mb-2 flex justify-center text-teal"><i data-ic="users" data-s="38"></i></div><div class="text-3xl font-extrabold"><span class="count" data-to="500" data-suf="+">0</span></div><div class="text-sm">Partners</div></div>
-    <div><div class="mb-2 flex justify-center text-teal"><i data-ic="pill" data-s="38"></i></div><div class="text-3xl font-extrabold"><span class="count" data-to="1" data-suf="M+">0</span></div><div class="text-sm">Products Access</div></div>
-    <div class="col-span-2 md:col-span-1 text-2xl font-bold md:border-l border-white/20">Across India</div>
+<!-- ============ PHARMAOS ============ -->
+<section class="os-band os-grid relative isolate overflow-hidden py-20 text-white" id="pharmaos">
+  <span class="os-glow pointer-events-none absolute -right-24 -top-24 -z-10 size-[28rem] rounded-full bg-teal/25 blur-3xl"></span>
+  <div class="relative mx-auto w-full max-w-7xl px-6">
+    <div class="reveal mx-auto max-w-[46rem] text-center"><span class="m-eyebrow on-dark">PharmaOS</span>
+      <h2 class="mt-3 text-3xl md:text-4xl">Automate Your Workflows with <span class="grad-cyan">AI-powered PharmaOS</span></h2>
+      <p class="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-slate-200">The operating system for the pharma industry — orders, stock, billing and delivery connected and automated on one intelligent platform.</p></div>
+    <div class="reveal mt-12 flex flex-wrap items-center justify-center gap-x-3 gap-y-4" id="osFlow" aria-label="Automated workflow: order, inventory, billing, delivery"></div>
+    <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3" id="osGrid"></div>
+  </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section class="bg-[radial-gradient(55%_60%_at_50%_0%,rgba(23,183,205,.10),transparent)] pb-8 pt-20" id="how">
+  <div class="mx-auto w-full max-w-7xl px-6">
+    <div class="reveal mx-auto mb-12 max-w-[46rem] text-center"><span class="m-eyebrow">How it works</span><h2 class="mt-3 text-3xl md:text-4xl">From Sign-up to Delivery in <span class="grad-dark">Three Simple Steps</span></h2><p class="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-slate-700">Get onboarded once and the whole network opens up to you.</p></div>
+    <div class="grid gap-[1.4rem] min-[900px]:grid-cols-3" id="steps"></div>
   </div>
 </section>
 
 <!-- ============ BENEFITS ============ -->
-<section class="max-w-7xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-12 items-center">
-  <div class="reveal-l">
-    <div class="eyebrow text-teal2">Why choose Medleymed</div>
-    <h2 class="font-extrabold text-3xl md:text-4xl mt-2">Benefits of <span class="grad-text-dark">Partnering</span> with us</h2>
-    <p class="mt-4 text-slate-700 max-w-md">Join a trusted network that helps you grow with transparency, innovation and strong support.</p>
-    <ul id="benefits" class="mt-6 grid sm:grid-cols-2 gap-x-6 gap-y-3 text-sm font-medium"></ul>
-    <a href="#contact" class="btn inline-block mt-8 bg-navy2 hover:bg-[#232b78] text-white px-7 py-3 rounded-xl font-semibold text-sm">Become a Partner →</a>
+<section class="mx-auto grid w-full max-w-7xl items-center gap-14 px-6 py-20 min-[960px]:grid-cols-2" id="benefitsSec">
+  <div class="reveal-l order-2 min-[960px]:order-1">
+    <span class="m-eyebrow left">Why choose Medleymed</span>
+    <h2 class="mt-3 text-3xl md:text-4xl">Benefits of <span class="grad-dark">Partnering</span> with us</h2>
+    <p class="mt-4 max-w-md text-sm leading-relaxed text-slate-700">Join a trusted network that helps you grow with transparency, innovation and strong support.</p>
+    <ul class="mt-6 grid gap-x-6 gap-y-3 sm:grid-cols-2" id="benefits"></ul>
+    <a href="#contact" class="m-btn m-btn-primary mt-8">Become a Partner <i data-ic="arrow" data-s="16"></i></a>
   </div>
-  <div class="reveal-r relative h-[340px]">
-    <div class="absolute inset-0 blob bg-gradient-to-br from-navy2 via-[#2a5cae] to-teal overflow-hidden">
-      <svg viewBox="0 0 400 300" class="w-full h-full opacity-90">
-        <path d="M0 170 Q70 120 150 160 L210 190 L170 235 Q90 215 0 230Z" fill="#14264f"/>
-        <path d="M400 140 Q330 110 250 150 L200 190 L240 240 Q320 220 400 235Z" fill="#1b3a74"/>
-        <ellipse cx="200" cy="195" rx="48" ry="22" fill="#e3a77f"/>
-        <rect x="170" y="180" width="60" height="26" rx="12" fill="#d99a73"/>
-      </svg>
-      <div class="absolute right-10 top-12 w-16 h-16 glass rounded-2xl flex items-center justify-center text-white floaty"><i data-ic="shield" data-s="30"></i></div>
-    </div>
+  <div class="reveal-r relative order-1 min-[960px]:order-2">
+    <div class="photo-zoom relative overflow-hidden rounded-[1.8rem] shadow-[0_34px_60px_-30px_rgba(45,54,145,.6)]"><img class="aspect-[4/3.2] w-full object-cover" style="object-position:75% 30%" src="assets/hero-s4.jpg" alt="A scientist working at a microscope" loading="lazy"><div class="absolute inset-0 bg-gradient-to-t from-[rgba(8,12,58,.4)] to-transparent"></div></div>
+    <div class="floaty-a absolute -bottom-5 left-5 inline-flex items-center gap-3 rounded-2xl border border-white/60 bg-white/90 px-4 py-3 shadow-[0_18px_40px_-18px_rgba(10,14,60,.5)] backdrop-blur-xl"><span class="grid size-10 place-items-center rounded-xl bg-gradient-to-br from-accent to-[#2D8FD6] text-white"><i data-ic="trend" data-s="20"></i></span><span><b class="block text-sm font-semibold text-ink">Growth opportunities</b><small class="block text-xs text-slate-500">Reach more partners</small></span></div>
   </div>
 </section>
 
 <!-- ============ TESTIMONIALS ============ -->
-<section class="py-16">
-  <div class="text-center reveal">
-    <div class="eyebrow text-teal2">What our clients say</div>
-    <h2 class="font-extrabold text-2xl mt-2">Real Stories. Real Growth.</h2>
-  </div>
-  <div class="max-w-5xl mx-auto px-6 mt-10 relative">
-    <button id="prev" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white shadow-lg text-teal2 font-bold hover:scale-110 transition">‹</button>
-    <button id="next" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white shadow-lg text-teal2 font-bold hover:scale-110 transition">›</button>
-    <div class="overflow-hidden mx-6 sm:mx-8"><div id="track" class="slide flex"></div></div>
-    <div id="dots" class="flex justify-center gap-2 mt-6"></div>
+<section class="bg-gradient-to-b from-transparent via-white/70 to-transparent py-16">
+  <div class="reveal mx-auto max-w-[46rem] px-6 text-center"><span class="m-eyebrow">What our clients say</span><h2 class="mt-3 text-3xl md:text-4xl">Real Stories. <span class="grad-dark">Real Growth.</span></h2></div>
+  <div class="relative mx-auto mt-10 max-w-5xl px-6">
+    <button id="prev" class="absolute left-0 top-1/2 z-10 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-white text-xl font-bold text-primary shadow-[0_10px_24px_-10px_rgba(45,54,145,.5)] transition hover:scale-110" aria-label="Previous">‹</button>
+    <button id="next" class="absolute right-0 top-1/2 z-10 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-white text-xl font-bold text-primary shadow-[0_10px_24px_-10px_rgba(45,54,145,.5)] transition hover:scale-110" aria-label="Next">›</button>
+    <div class="mx-6 overflow-hidden sm:mx-8"><div id="track" class="slide flex"></div></div>
+    <div id="dots" class="mt-6 flex justify-center gap-2"></div>
   </div>
 </section>
 
 <!-- ============ CTA ============ -->
-<section class="max-w-7xl mx-auto px-6 pb-16">
-  <div class="reveal rounded-3xl bg-gradient-to-r from-navy2 via-[#2a78b8] to-teal text-white px-8 py-9 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl overflow-hidden relative">
-    <div class="flex items-center gap-6"><div class="floaty text-white"><i data-ic="rocket" data-s="60"></i></div>
-      <div><h3 class="text-2xl font-bold">Join the Medleymed Network Today</h3><p class="text-sm opacity-90 mt-1">Grow your business with India's most trusted B2B pharmacy network.</p></div></div>
-    <a href="#" class="btn bg-white text-navy font-semibold px-8 py-3 rounded-xl">Get Started →</a>
+<section class="mx-auto w-full max-w-7xl px-6 pb-16">
+  <div class="reveal relative flex flex-col items-start justify-between gap-6 overflow-hidden rounded-[1.8rem] bg-[linear-gradient(120deg,#2D3691,#2a78b8_60%,#17B7CD)] px-[1.6rem] py-12 text-white min-[800px]:flex-row min-[800px]:items-center min-[800px]:px-12 min-[800px]:py-[3.2rem]">
+    <span class="pointer-events-none absolute -right-20 -top-28 size-80 rounded-full bg-white/[.14]"></span>
+    <div class="relative"><h2 class="max-w-[30rem] text-2xl font-bold leading-tight md:text-3xl">Join the Medleymed Network Today</h2><p class="mt-1 max-w-[32rem] text-sm text-white/90">Grow your business with India's most trusted B2B pharmacy network.</p></div>
+    <div class="relative flex flex-wrap gap-3"><a href="#contact" class="m-btn m-btn-white">Get Started <i data-ic="arrow" data-s="17"></i></a><a href="b2c.html" class="m-btn m-btn-ghost">Explore B2C</a></div>
   </div>
 </section>
 
 <!-- ============ FOOTER ============ -->
-<footer id="contact" class="bg-gradient-to-b from-navy to-navy2 text-slate-200 pt-14">
-  <div class="max-w-7xl mx-auto px-6 grid sm:grid-cols-2 lg:grid-cols-5 gap-10 text-sm">
-    <div class="flex items-start gap-3">
-      <svg width="42" height="42" viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="none" stroke="#17B7CD" stroke-width="3"/><path d="M14 32V16l10 11 10-11v16" fill="none" stroke="#fff" stroke-width="3.5" stroke-linejoin="round"/></svg>
-      <div class="leading-none text-white"><div class="font-extrabold text-lg">MEDLEYMED</div><div class="text-[9px] tracking-[.5em] text-teal">NETWORK</div></div>
+<footer id="contact" class="relative overflow-hidden bg-gradient-to-b from-navy to-navy2 pt-16 text-slate-200">
+  <span class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-teal to-transparent"></span>
+  <span class="pointer-events-none absolute -top-40 left-1/2 size-[30rem] -translate-x-1/2 rounded-full bg-teal/20 blur-3xl"></span>
+  <span class="pointer-events-none absolute -bottom-48 -right-24 size-[26rem] rounded-full bg-white/5 blur-3xl"></span>
+  <div class="relative mx-auto w-full max-w-7xl px-6">
+    <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1.4fr] lg:gap-12">
+      <div>
+        <a href="index.html" class="inline-flex items-center gap-[.7rem]" aria-label="MedleyMed"><img class="size-[42px]" src="assets/brand-icon-dark.png" alt="" width="42" height="42"><img class="h-[17px] w-auto" src="assets/brand-wordmark-dark.png" alt="MedleyMed" width="151" height="17"></a>
+        <p class="mt-5 max-w-[19rem] text-sm leading-relaxed text-slate-300">Connecting pharmacies, healthcare providers and patients through innovative digital solutions.</p>
+        <h4 class="mb-5 flex items-center gap-2.5 text-sm font-bold uppercase tracking-[.12em] text-white mt-8"><span class="h-4 w-1 rounded-full bg-gradient-to-b from-teal to-white/70"></span>Follow us on</h4>
+        <div class="flex flex-wrap gap-2.5">
+          <a href="#" aria-label="Facebook" class="grid size-9 place-items-center rounded-full border border-white/20 bg-white/10 text-white transition duration-200 hover:-translate-y-0.5 hover:bg-teal hover:text-[#0b1040]"><i data-ic="facebook" data-s="17"></i></a>
+          <a href="#" aria-label="LinkedIn" class="grid size-9 place-items-center rounded-full border border-white/20 bg-white/10 text-white transition duration-200 hover:-translate-y-0.5 hover:bg-teal hover:text-[#0b1040]"><i data-ic="linkedin" data-s="17"></i></a>
+          <a href="#" aria-label="Twitter" class="grid size-9 place-items-center rounded-full border border-white/20 bg-white/10 text-white transition duration-200 hover:-translate-y-0.5 hover:bg-teal hover:text-[#0b1040]"><i data-ic="twitter" data-s="17"></i></a>
+          <a href="#" aria-label="YouTube" class="grid size-9 place-items-center rounded-full border border-white/20 bg-white/10 text-white transition duration-200 hover:-translate-y-0.5 hover:bg-teal hover:text-[#0b1040]"><i data-ic="youtube" data-s="17"></i></a>
+          <a href="#" aria-label="Instagram" class="grid size-9 place-items-center rounded-full border border-white/20 bg-white/10 text-white transition duration-200 hover:-translate-y-0.5 hover:bg-teal hover:text-[#0b1040]"><i data-ic="instagram" data-s="17"></i></a>
+        </div>
+      </div>
+      <div><h4 class="mb-5 flex items-center gap-2.5 text-sm font-bold uppercase tracking-[.12em] text-white"><span class="h-4 w-1 rounded-full bg-gradient-to-b from-teal to-white/70"></span>Company</h4><ul class="grid gap-3"><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="about.html"><svg class="-ml-4 size-3 flex-none text-teal opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>About us</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="contact.html"><svg class="-ml-4 size-3 flex-none text-teal opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Contact us</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="#"><svg class="-ml-4 size-3 flex-none text-teal opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Terms & Conditions</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="#"><svg class="-ml-4 size-3 flex-none text-teal opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Privacy Policy</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="index.html#insights"><svg class="-ml-4 size-3 flex-none text-teal opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Blog</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="index.html#stories"><svg class="-ml-4 size-3 flex-none text-teal opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Media</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="index.html#careers"><svg class="-ml-4 size-3 flex-none text-teal opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Careers</a></li></ul></div>
+      <div>
+        <h4 class="mb-5 flex items-center gap-2.5 text-sm font-bold uppercase tracking-[.12em] text-white"><span class="h-4 w-1 rounded-full bg-gradient-to-b from-teal to-white/70"></span>Pharmacy</h4><ul class="grid gap-3"><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="#"><svg class="-ml-4 size-3 flex-none text-teal opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Ananda EClinic</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="#"><svg class="-ml-4 size-3 flex-none text-teal opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Smartz ERP</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="#"><svg class="-ml-4 size-3 flex-none text-teal opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Franchise</a></li><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="#network"><svg class="-ml-4 size-3 flex-none text-teal opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>BIZ</a></li></ul>
+        <h4 class="mb-5 flex items-center gap-2.5 text-sm font-bold uppercase tracking-[.12em] text-white mt-8"><span class="h-4 w-1 rounded-full bg-gradient-to-b from-teal to-white/70"></span>Telemedicine</h4><ul class="grid gap-3"><li><a class="group inline-flex items-center gap-1.5 text-sm text-slate-300 transition duration-200 hover:text-white" href="#"><svg class="-ml-4 size-3 flex-none text-teal opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>SAAS</a></li></ul>
+      </div>
+      <div>
+        <h4 class="mb-5 flex items-center gap-2.5 text-sm font-bold uppercase tracking-[.12em] text-white"><span class="h-4 w-1 rounded-full bg-gradient-to-b from-teal to-white/70"></span>Reach us</h4>
+        <address class="grid gap-4 not-italic">
+          <a href="mailto:support@medleymed.com" class="group/r flex items-start gap-3 text-sm leading-relaxed text-slate-200 items-center hover:text-white"><span class="grid size-9 flex-none place-items-center rounded-full bg-white/10 text-[#63dcec] ring-1 ring-white/15 transition duration-200 group-hover/r:bg-teal group-hover/r:text-[#0b1040]"><i data-ic="mail" data-s="16"></i></span>support@medleymed.com</a>
+          <a href="tel:+918928300500" class="group/r flex items-start gap-3 text-sm leading-relaxed text-slate-200 items-center hover:text-white"><span class="grid size-9 flex-none place-items-center rounded-full bg-white/10 text-[#63dcec] ring-1 ring-white/15 transition duration-200 group-hover/r:bg-teal group-hover/r:text-[#0b1040]"><i data-ic="phoneCall" data-s="16"></i></span>+91 8928 300 500</a>
+          <div class="group/r flex items-start gap-3 text-sm leading-relaxed text-slate-200"><span class="grid size-9 flex-none place-items-center rounded-full bg-white/10 text-[#63dcec] ring-1 ring-white/15 transition duration-200 group-hover/r:bg-teal group-hover/r:text-[#0b1040]"><i data-ic="pin" data-s="16"></i></span><span class="pt-1.5">2nd Floor, Unit 203 Gowra Palladium Hi-Tech City, Madhapur, Hyderabad, Telangana 500032</span></div>
+        </address>
+        <div class="mt-6 flex flex-wrap gap-2.5"><a href="#" class="inline-flex h-[2.7rem] items-center justify-center gap-2.5 rounded-[.85rem] border border-white/25 bg-[rgba(8,11,42,.6)] px-[.95rem] text-[.82rem] font-semibold text-white transition duration-200 hover:-translate-y-0.5" aria-label="Get it on Google Play"><svg viewBox="0 0 24 24" aria-hidden="true" width="22" height="22"><path fill="#FFD500" d="M22.018 13.298l-3.919 2.218-3.515-3.493 3.543-3.521 3.891 2.202a1.49 1.49 0 0 1 0 2.594z"/><path fill="#00C3FF" d="M1.337.924a1.486 1.486 0 0 0-.112.568v21.017c0 .217.045.419.124.6l11.155-11.087L1.337.924z"/><path fill="#2DDC7A" d="M13.544 10.989l3.258-3.238L3.45.195a1.466 1.466 0 0 0-.946-.179l11.04 10.973z"/><path fill="#FF3D5A" d="M13.544 13.056l-11 10.933c.298.036.612-.016.906-.183l13.324-7.54-3.23-3.21z"/></svg>Google Play</a><a href="#" class="inline-flex h-[2.7rem] items-center justify-center gap-2.5 rounded-[.85rem] border border-white/25 bg-[rgba(8,11,42,.6)] px-[.95rem] text-[.82rem] font-semibold text-white transition duration-200 hover:-translate-y-0.5" aria-label="Download on the App Store"><svg viewBox="0 0 24 24" aria-hidden="true" width="22" height="22"><path fill="#fff" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>App Store</a></div>
+      </div>
     </div>
-    <div><h4 class="font-semibold text-white mb-3">Company</h4><ul class="space-y-2"><li><a href="#about" class="hover:text-teal">About Us</a></li><li><a href="#contact" class="hover:text-teal">Contact Us</a></li><li><a href="#" class="hover:text-teal">Privacy Policy</a></li><li><a href="#" class="hover:text-teal">Terms and conditions</a></li></ul></div>
-    <div class="lg:col-span-1"><h4 class="font-semibold text-white mb-3">Reach us</h4>
-      <p class="flex gap-2"><span class="mt-0.5 text-teal"><i data-ic="pin" data-s="18"></i></span><span>Gowra Palladium, 2nd Floor, Unit 203, Madhapur, Hitec City, Hyderabad, Telangana-500081</span></p>
-      <p class="mt-3 flex items-center gap-2"><span class="text-teal"><i data-ic="phoneCall" data-s="18"></i></span>+91 950 295 2277</p><p class="mt-2 flex items-center gap-2"><span class="text-teal"><i data-ic="mail" data-s="18"></i></span>support@medleymednetwork.com</p></div>
-    <div><h4 class="font-semibold text-white mb-3">Follow us on</h4><div class="flex gap-3">
-      <a href="#" aria-label="LinkedIn" class="w-9 h-9 rounded-full bg-white/10 hover:bg-teal hover:text-navy flex items-center justify-center transition"><i data-ic="linkedin" data-s="17"></i></a>
-      <a href="#" aria-label="Facebook" class="w-9 h-9 rounded-full bg-white/10 hover:bg-teal hover:text-navy flex items-center justify-center transition"><i data-ic="facebook" data-s="17"></i></a>
-      <a href="#" aria-label="YouTube" class="w-9 h-9 rounded-full bg-white/10 hover:bg-teal hover:text-navy flex items-center justify-center transition"><i data-ic="youtube" data-s="17"></i></a>
-      <a href="#" aria-label="Instagram" class="w-9 h-9 rounded-full bg-white/10 hover:bg-teal hover:text-navy flex items-center justify-center transition"><i data-ic="instagram" data-s="17"></i></a></div></div>
-    <div><h4 class="font-semibold text-white mb-3">Our app</h4><div class="flex flex-wrap gap-2">
-      <a href="#" class="bg-black border border-white/30 rounded-lg px-3 py-1.5 text-xs inline-flex items-center gap-1.5 whitespace-nowrap"><i data-ic="play" data-s="13"></i>Google Play</a>
-      <a href="#" class="bg-black border border-white/30 rounded-lg px-3 py-1.5 text-xs inline-flex items-center gap-1.5 whitespace-nowrap"><i data-ic="phone" data-s="14"></i>App Store</a></div></div>
-  </div>
-  <div class="max-w-7xl mx-auto px-6 mt-12 py-6 border-t border-white/15 flex flex-col sm:flex-row justify-between text-xs">
-    <span>© 2026 Medleymed Network. All rights reserved.</span><span>Powering Growth Together</span>
+    <div class="mt-12 flex flex-col items-center justify-between gap-3 border-t border-white/[.14] py-6 text-center text-sm text-slate-300 sm:flex-row sm:text-left">
+      <span>© Medley Medical Solutions Pvt. Ltd. 2020. All Rights Reserved.</span>
+      <span class="flex items-center gap-5"><a href="#" class="transition hover:text-white">Privacy Policy</a><a href="#" class="transition hover:text-white">Terms &amp; Conditions</a></span>
+    </div>
   </div>
 </footer>
 
@@ -380,36 +462,45 @@ Object.assign(ICONS,{
  phoneCall:'<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>',
  linkedin:'<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>',
  facebook:'<path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>',
+ twitter:'<path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/>',
  youtube:'<path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/>',
  instagram:'<rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><path d="M17.5 6.5h.01"/>',
  play:'<path d="M6 3l14 9-14 9z"/>'
 });
+Object.assign(ICONS,{
+ check:'<path d="M20 6 9 17l-5-5"/>',arrow:'<path d="M5 12h14M12 5l7 7-7 7"/>',brief:'<rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
+ tag:'<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><circle cx="7" cy="7" r="1"/>',
+ users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
+ chart:'<path d="M3 3v18h18M18 17V9M13 17V5M8 17v-3"/>',zap:'<path d="M13 2 3 14h9l-1 8 10-12h-9z"/>',trend:'<path d="m22 7-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/>',
+ truck:'<path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2M15 18H9M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/>',
+ box:'<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="m3.27 6.96 8.73 5.05 8.73-5.05M12 22.08V12"/>',
+ cart:'<circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>',
+ card:'<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>',cpu:'<rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2M15 20v2M2 15h2M2 9h2M20 15h2M20 9h2M9 2v2M9 20v2"/>'
+});
 document.querySelectorAll('i[data-ic]').forEach(e=>{e.outerHTML=svgI(e.dataset.ic,+e.dataset.s||20)});
 
 /* ---------- Data-driven sections ---------- */
-const features = [
-  ['cart','Curated Selection'],['percent','Transparent Pricing'],['box','Ease of Ordering'],
-  ['card','Credit Facilities'],['truck','Delivery Tie-ups'],['star','Special Deals']
+const $=s=>document.querySelector(s);
+/* partners — SAMPLE logos (invented brands): replace the img of each entry with a real partner logo */
+const PARTNERS=[['Aurora Pharma','aurora-pharma'],['NEXA LABS','nexa-labs'],['Pulse Health','pulse-health'],['Zenith MEDS','zenith-meds'],['Lumina Care','lumina-care'],['HELIO pharma','helio-pharma'],['cura labs','cura-labs'],['Medico ONE','medico-one'],['APEX Remedies','apex-remedies'],['Savant Health','savant-health'],['Ripple Pharma','ripple-pharma'],['Orbit LABS','orbit-labs'],['Evergreen CARE','evergreen-care'],['VERTEX Drugs','vertex-drugs']].map(([n,f])=>({n,img:`assets/partners/${f}.svg`}));
+if(PARTNERS.length){const h=Math.ceil(PARTNERS.length/2);$('#partnerRows').innerHTML=[PARTNERS.slice(0,h),PARTNERS.slice(h)].map(row=>`<div class="flex flex-wrap items-center justify-center gap-x-8 gap-y-5">${row.map(x=>`<img src="${x.img}" alt="${x.n}" loading="lazy" class="h-10 w-auto max-w-[8.5rem] object-contain opacity-80 grayscale transition duration-300 hover:opacity-100 hover:grayscale-0">`).join('')}</div>`).join('')}else $('#partnerRows').remove();
+const STATS=[['10','K+','Pharmacies'],['500','+','Partners'],['1','M+','Products accessible'],[null,'','Network coverage','Pan-India']];
+$('#statsGrid').innerHTML=STATS.map(([n,suf,l,txt])=>`<div class="rounded-2xl border border-line bg-white px-4 py-7 text-center transition duration-300 hover:-translate-y-1 hover:border-accent/50 hover:shadow-card">${txt?`<b class="grad-dark block text-3xl font-extrabold tabular-nums md:text-4xl">${txt}</b>`:`<b class="count grad-dark block text-3xl font-extrabold tabular-nums md:text-4xl" data-to="${n}" data-suf="${suf}">0${suf}</b>`}<small class="mt-1.5 block text-sm font-medium text-slate-600">${l}</small></div>`).join('');
+$('#aboutCards').innerHTML=[['rocket','Our vision','To become the largest B2B technology platform in the healthcare space.'],['shield','Trusted by design','Verified partners, transparent pricing and dependable support.'],['users','Built on partnership','Manufacturers, partners and pharmacies growing together on one network.']].map(([ic,t,d],i)=>`<div class="m-card reveal flex items-start gap-4 border border-line border-l-[3px] border-l-accent px-6 py-5" style="transition-delay:${i*.08}s"><span class="ico-tile">${svgI(ic,22)}</span><div><h3 class="text-base font-bold">${t}</h3><p class="mt-1 text-sm leading-relaxed text-slate-600">${d}</p></div></div>`).join('');
+const B2B=[
+ {icon:'pill',img:'assets/pharmacy-hero.jpg',pos:'70% 20%',name:'Pharmacy',who:'For pharmacies & retailers',items:[['cart','Purchase','Order from a curated catalogue with transparent pricing and quick, easy ordering.']],points:['Curated product range','Transparent pricing','Easy order management']},
+ {icon:'truck',img:'assets/hero-s3.jpg',pos:'75% 25%',name:'Distributor',who:'For distributors & partners',items:[['tag','Sale','Reach more pharmacies and grow demand with confidence.'],['truck','Delivery Collection','Reliable last-mile tie-ups so medicines reach the counter on time.'],['box','Warehouse','Keep stock and inventory updates together in one clear view.']]}
 ];
-const grid = document.getElementById('featGrid');
-features.forEach(([ic,t],i)=>{
-  const d = document.createElement('div');
-  d.className='feat reveal p-6 text-center cursor-pointer';
-  d.style.transitionDelay=(i*0.12)+'s'; d.style.setProperty('--d',(i*0.12+0.3)+'s');
-  d.innerHTML=`<div class="relative w-14 h-14 mx-auto mb-3 rounded-2xl bg-gradient-to-br from-navy2/10 to-teal/20 flex items-center justify-center">
-      <span class="ring" style="--d:${i*0.4}s"></span><span class="ico relative text-navy2">${svgI(ic,28)}</span></div>
-    <div class="font-semibold text-sm relative">${t}</div>`;
-  grid.appendChild(d);
-  // 3D tilt
-  d.addEventListener('mousemove',e=>{const r=d.getBoundingClientRect();const x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
-    d.style.transform=`perspective(600px) rotateY(${x*18}deg) rotateX(${-y*18}deg) translateY(-6px)`;});
-  d.addEventListener('mouseleave',()=>d.style.transform='');
-});
+$('#b2bGrid').innerHTML=B2B.map((c,i)=>`<article class="m-card reveal flex flex-col overflow-hidden border border-line" style="transition-delay:${i*.1}s"><div class="photo-zoom relative h-56 overflow-hidden"><img class="size-full object-cover" style="object-position:${c.pos}" src="${c.img}" alt="" loading="lazy"><div class="absolute inset-0 bg-gradient-to-t from-[rgba(8,12,58,.6)] to-transparent"></div><span class="absolute left-4 top-4 rounded-full border border-white/25 bg-white/15 px-3 py-1 text-xs font-bold text-white backdrop-blur">${c.who}</span><div class="absolute bottom-4 left-5 flex items-center gap-3 text-white"><span class="grid size-11 place-items-center rounded-xl bg-white/15 backdrop-blur ring-1 ring-white/30">${svgI(c.icon,22)}</span><h3 class="text-2xl font-bold">${c.name}</h3></div></div><div class="flex flex-1 flex-col p-7"><div class="grid gap-3">${c.items.map(([ic,t,d])=>`<a href="#contact" class="group/i flex items-start gap-3 rounded-xl border border-line bg-page/60 p-3.5 transition duration-300 hover:-translate-y-0.5 hover:border-accent/50 hover:bg-white hover:shadow-card"><span class="grid size-9 flex-none place-items-center rounded-full bg-gradient-to-br from-accent to-[#2D8FD6] text-white">${svgI(ic,16)}</span><span class="min-w-0 flex-1"><b class="block text-sm font-semibold">${t}</b><small class="mt-0.5 block text-xs leading-relaxed text-slate-600">${d}</small></span>${svgI('arrow',15,'mt-1 flex-none text-slate-300 transition duration-300 group-hover/i:translate-x-1 group-hover/i:text-primary')}</a>`).join('')}</div>${c.points?`<ul class="mt-5 grid gap-2.5 border-t border-line pt-5 text-sm font-medium text-slate-700 sm:grid-cols-2">${c.points.map(x=>`<li class="flex items-center gap-2.5"><span class="grid size-5 place-items-center rounded-full bg-accent-soft text-accent-dark">${svgI('check',12)}</span>${x}</li>`).join('')}</ul>`:''}</div></article>`).join('');
+/* PharmaOS: animated automation flow + feature cards */
+const FLOW=[['cart','Order'],['box','Inventory'],['card','Billing'],['truck','Delivery']];
+$('#osFlow').innerHTML=FLOW.map(([ic,t],i)=>`${i?`<svg width="54" height="14" viewBox="0 0 54 14" class="text-teal max-md:rotate-90" aria-hidden="true"><path class="flow-line" d="M0 7h46" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/><path d="m42 2 6 5-6 5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`:''}<div class="flow-node relative inline-flex items-center gap-3 rounded-2xl border border-white/15 bg-white/[.07] px-5 py-3.5 backdrop-blur-md"><span class="grid size-10 place-items-center rounded-xl bg-gradient-to-br from-teal to-[#2D8FD6] text-white">${svgI(ic,20)}</span><b class="text-sm font-semibold">${t}</b><span class="flow-tick absolute -right-2 -top-2 grid size-6 place-items-center rounded-full bg-[#34d399] text-[#04210f] ring-2 ring-[#10174f]">${svgI('check',13)}</span></div>`).join('');
+const OS=[['zap','Smart ordering','AI-assisted ordering that helps you stock the right products at the right time.'],['box','Inventory sync','Stock levels stay in sync across counters, warehouses and partners.'],['card','Auto billing','Invoices and credit notes are generated automatically for every order.'],['truck','Delivery tracking','Follow every order from dispatch all the way to the pharmacy shelf.'],['chart','Live analytics','Dashboards for orders, stock and partner health in one clear view.'],['shield','Built-in compliance','Records and checks are part of every workflow, not an afterthought.']];
+$('#osGrid').innerHTML=OS.map(([ic,t,d],i)=>`<article class="reveal group rounded-2xl border border-white/10 bg-white/[.06] p-6 backdrop-blur-sm transition duration-300 hover:-translate-y-1.5 hover:border-teal/50 hover:bg-white/10" style="transition-delay:${i*.07}s"><span class="grid size-12 place-items-center rounded-xl bg-gradient-to-br from-teal to-[#2D8FD6] text-white shadow-[0_12px_24px_-10px_rgba(23,183,205,.8)] transition duration-300 group-hover:scale-110 group-hover:-rotate-6">${svgI(ic,22)}</span><h3 class="mt-5 text-lg font-bold">${t}</h3><p class="mt-2 text-sm leading-relaxed text-slate-300">${d}</p></article>`).join('');
+const STEPS=[['users','Join the network','Onboard as a pharmacy, partner or manufacturer with a quick verification.'],['cart','Discover & order','Browse a curated catalogue with transparent pricing and order in a few taps.'],['truck','Deliver & grow','Track deliveries, use credit lines and watch your business grow with live insights.']];
+$('#steps').innerHTML=STEPS.map(([ic,t,d],i)=>`<article class="m-card group reveal overflow-hidden p-7" style="transition-delay:${i*.12}s"><span class="absolute -right-1 -top-5 select-none text-[7.5rem] font-extrabold leading-none text-primary/[.06]" aria-hidden="true">0${i+1}</span><span class="ico-tile !size-14 !rounded-2xl">${svgI(ic,26)}</span><span class="mt-5 inline-flex rounded-full bg-accent-soft px-3 py-1 text-xs font-bold tracking-wider text-accent-dark">STEP 0${i+1}</span><h3 class="mt-3 text-xl font-bold">${t}</h3><p class="mt-2 text-sm leading-relaxed text-slate-600">${d}</p><span class="absolute inset-x-0 bottom-0 h-1 origin-left scale-x-0 bg-gradient-to-r from-accent to-primary transition duration-500 group-hover:scale-x-100"></span></article>`).join('');
 const ben=['Curated Product Range','Easy Order Management','Better Business Deals','Dedicated Support','Transparent & Reliable Platform','Growth Opportunities'];
-const bl=document.getElementById('benefits');
-ben.forEach((b,i)=>{const li=document.createElement('li');li.className='reveal flex items-center gap-2';li.style.transitionDelay=(i*.1)+'s';
-  li.innerHTML=`<svg width="22" height="22" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#17B7CD"/><path class="check" d="M7 12.5l3.5 3.5L17 9" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>${b}`;
-  bl.appendChild(li);});
+$('#benefits').innerHTML=ben.map(b=>`<li class="flex items-center gap-3 rounded-xl border border-line bg-white px-4 py-3 text-sm font-medium transition duration-300 hover:-translate-y-0.5 hover:border-accent/50 hover:bg-accent-soft/40"><span class="grid size-[1.4rem] flex-none place-items-center rounded-full bg-gradient-to-br from-accent to-[#2D8FD6] text-white">${svgI('check',13)}</span>${b}</li>`).join('');
 
 /* ---------- Testimonials carousel ---------- */
 const T=[
@@ -419,11 +510,8 @@ const T=[
 ];
 const track=document.getElementById('track'),dots=document.getElementById('dots');let idx=0;
 T.forEach((t,i)=>{
-  track.insertAdjacentHTML('beforeend',`<div class="shrink-0 w-full md:w-1/2 p-3"><div class="bg-white rounded-2xl shadow-lg p-6 h-full">
-    <div class="text-5xl text-teal leading-none">“</div><p class="text-sm text-slate-700 -mt-2">${t[2]}</p>
-    <div class="flex items-center gap-3 mt-5"><div class="w-11 h-11 rounded-full bg-gradient-to-br from-teal to-navy2 text-white flex items-center justify-center font-bold">${t[0][0]}</div>
-    <div><div class="font-semibold text-sm">${t[0]}</div><div class="text-xs text-slate-500">${t[1]}</div></div></div></div></div>`);
-  const b=document.createElement('button');b.className='w-2.5 h-2.5 rounded-full bg-slate-300 transition-all';b.onclick=()=>go(i);dots.appendChild(b);
+  track.insertAdjacentHTML('beforeend',`<div class="w-full shrink-0 p-3 md:w-1/2"><figure class="m-0 flex h-full flex-col gap-5 rounded-3xl border border-line bg-white p-7 shadow-card"><span class="grid size-11 place-items-center rounded-full bg-accent-soft pt-2 text-4xl font-extrabold leading-none text-accent" aria-hidden="true">“</span><p class="text-[.95rem] leading-relaxed text-slate-700">${t[2]}</p><figcaption class="mt-auto flex items-center gap-3 border-t border-line pt-5"><span class="grid size-11 place-items-center rounded-full bg-gradient-to-br from-accent to-primary font-bold text-white ring-4 ring-accent-soft">${t[0][0]}</span><span class="min-w-0"><b class="block text-sm font-semibold">${t[0]}</b><span class="text-xs text-slate-500">${t[1]}</span></span><span class="ml-auto inline-flex items-center gap-1 rounded-full bg-accent-soft px-2.5 py-1 text-[.7rem] font-bold text-accent-dark">${svgI('check',12)}Partner</span></figcaption></figure></div>`);
+  const b=document.createElement('button');b.className='size-2.5 rounded-full bg-slate-300 transition-all';b.setAttribute('aria-label','Testimonial '+(i+1));b.onclick=()=>go(i);dots.appendChild(b);
 });
 function go(i){const per=innerWidth>=768?2:1,max=T.length-per;idx=Math.max(0,Math.min(i,max));
   track.style.transform=`translateX(-${idx*(100/per)}%)`;
@@ -480,148 +568,97 @@ const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.targ
   io.unobserve(e.target)}}),{threshold:.15});
 document.querySelectorAll('.reveal,.reveal-l,.reveal-r').forEach(el=>io.observe(el));
 
-/* ---------- Three.js helper ---------- */
-function makeScene(canvas,fov,z){
-  const r=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});r.setPixelRatio(Math.min(devicePixelRatio,2));
-  const s=new THREE.Scene(),c=new THREE.PerspectiveCamera(fov,1,.1,100);c.position.z=z;
-  const fit=()=>{const w=canvas.parentElement.clientWidth,h=canvas.parentElement.clientHeight;r.setSize(w,h,false);c.aspect=w/h;c.updateProjectionMatrix()};
-  fit();addEventListener('resize',fit);
-  s.add(new THREE.AmbientLight(0xffffff,.7));const l=new THREE.DirectionalLight(0xffffff,1);l.position.set(3,4,5);s.add(l);
-  return {r,s,c,fit};
-}
-function visible(el){const b=el.getBoundingClientRect();return b.bottom>0&&b.top<innerHeight}
-
-
-/* ---------- 1. HERO: medicine-themed background (capsules, tablets, blister packs, crosses, DNA, molecules) ---------- */
+/* ---------- 1. HERO: "PharmaOS" — an AI core orchestrating the pharma workflow on a rotating orbit ---------- */
 (()=>{
   const cv=document.getElementById('heroCanvas');if(!cv)return;
-  const {r,s,c}=makeScene(cv,50,13);
-  const rnd=(a,b)=>a+Math.random()*(b-a);
-  const items=[];
-  const std=(color,o=.9)=>new THREE.MeshStandardMaterial({color,roughness:.28,metalness:.15,transparent:true,opacity:o});
-  // keep objects out of the text column + nav (screen-space "safe zones")
-  const wide=innerWidth>=768, tmp=new THREE.Vector3();c.updateMatrixWorld();
-  const blocked=p=>{tmp.copy(p).project(c);
-    if(tmp.y>.68||tmp.y<-.62)return true;           // navbar band + bottom wave band
-    if(wide)return tmp.x<-.06;                      // left text column
-    return Math.abs(tmp.x)<.72;                     // mobile: only the side edges stay free
-  };
-  const place=(g,sc)=>{
-    const p=new THREE.Vector3();let n=0;
-    do{p.set(rnd(-12,12),rnd(-6,6),rnd(-5,1.5));n++}while(blocked(p)&&n<60);
-    g.position.copy(p);g.scale.setScalar(sc);
-    g.rotation.set(rnd(0,6),rnd(0,6),rnd(0,6));
-    g.userData={y:g.position.y,x:g.position.x,sp:rnd(.25,.8),ph:rnd(0,6),rs:rnd(.003,.012)};
-    s.add(g);items.push(g);return g;
-  };
-  // two-tone capsule (r128 has no CapsuleGeometry, so build it)
-  const capsule=(c1,c2)=>{
-    const g=new THREE.Group(),R=.16,H=.3;
-    const cyl=new THREE.CylinderGeometry(R,R,H,20),sph=new THREE.SphereGeometry(R,20,12);
-    const a=new THREE.Mesh(cyl,std(c1)),b=new THREE.Mesh(cyl,std(c2));a.position.y=H/2;b.position.y=-H/2;
-    const sa=new THREE.Mesh(sph,std(c1)),sb=new THREE.Mesh(sph,std(c2));sa.position.y=H;sb.position.y=-H;
-    g.add(a,b,sa,sb);return g;
-  };
-  const tablet=col=>{const g=new THREE.Group();g.add(new THREE.Mesh(new THREE.CylinderGeometry(.3,.3,.12,28),std(col)));
-    const line=new THREE.Mesh(new THREE.BoxGeometry(.5,.14,.03),std(0xb8c7d9,.8));g.add(line);return g;};
-  const cross=col=>{const g=new THREE.Group(),m=new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:.55});
-    g.add(new THREE.Mesh(new THREE.BoxGeometry(.7,.22,.12),m),new THREE.Mesh(new THREE.BoxGeometry(.22,.7,.12),m));return g;};
-  const blister=()=>{const g=new THREE.Group();g.add(new THREE.Mesh(new THREE.BoxGeometry(1.1,.7,.06),std(0xcfeefa,.55)));
-    for(let i=0;i<3;i++)for(let j=0;j<2;j++){const p=new THREE.Mesh(new THREE.SphereGeometry(.12,14,10),std([0xff7a59,0xffffff,0xffc107][i]));p.position.set(-.35+i*.35,-.18+j*.36,.1);g.add(p);}return g;};
-  const bottle=()=>{const g=new THREE.Group();const b=new THREE.Mesh(new THREE.CylinderGeometry(.22,.22,.6,20),std(0xf59e0b,.85));
-    const cap=new THREE.Mesh(new THREE.CylinderGeometry(.24,.24,.16,20),std(0xffffff));cap.position.y=.38;
-    const lab=new THREE.Mesh(new THREE.CylinderGeometry(.225,.225,.28,20),std(0xffffff,.95));g.add(b,cap,lab);return g;};
-  const molecule=()=>{const g=new THREE.Group(),pos=[];
-    for(let i=0;i<5;i++){const p=new THREE.Vector3(rnd(-.5,.5),rnd(-.5,.5),rnd(-.3,.3));pos.push(p);
-      const sp=new THREE.Mesh(new THREE.SphereGeometry(rnd(.07,.13),14,10),new THREE.MeshBasicMaterial({color:i%2?0x17B7CD:0xffffff,transparent:true,opacity:.8}));sp.position.copy(p);g.add(sp);}
-    const lp=[];for(let i=1;i<5;i++)lp.push(pos[0],pos[i]);lp.push(pos[1],pos[2],pos[3],pos[4]);
-    g.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(lp),new THREE.LineBasicMaterial({color:0x7dd3fc,transparent:true,opacity:.6})));return g;};
-  const pc=[0xff7a59,0x17B7CD,0xffc107,0x7c4dff,0xffffff];
-  for(let i=0;i<10;i++)place(capsule(pc[i%5],pc[(i+2)%5]),rnd(.8,1.4));
-  for(let i=0;i<7;i++)place(tablet(pc[i%5]),rnd(.9,1.4));
-  for(let i=0;i<7;i++)place(cross(i%2?0x17B7CD:0xffffff),rnd(.7,1.5));
-  for(let i=0;i<3;i++)place(blister(),rnd(1,1.4));
-  for(let i=0;i<3;i++)place(bottle(),rnd(.9,1.3));
-  for(let i=0;i<5;i++)place(molecule(),rnd(1,1.8));
-
-  // DNA double helix
-  const dna=new THREE.Group(),A=0xffffff,B=0x17B7CD,steps=36;
-  for(let i=0;i<steps;i++){
-    const y=(i-steps/2)*.22,a=i*.5,x1=Math.cos(a)*.7,z1=Math.sin(a)*.7;
-    const s1=new THREE.Mesh(new THREE.SphereGeometry(.09,12,10),new THREE.MeshBasicMaterial({color:A,transparent:true,opacity:.85}));s1.position.set(x1,y,z1);
-    const s2=new THREE.Mesh(new THREE.SphereGeometry(.09,12,10),new THREE.MeshBasicMaterial({color:B,transparent:true,opacity:.85}));s2.position.set(-x1,y,-z1);
-    const rung=new THREE.Mesh(new THREE.CylinderGeometry(.02,.02,1.4,6),new THREE.MeshBasicMaterial({color:0x7dd3fc,transparent:true,opacity:.35}));
-    rung.position.set(0,y,0);rung.rotation.z=Math.PI/2;rung.rotation.y=-a;dna.add(s1,s2,rung);
+  const g=cv.getContext('2d'),hero=cv.parentElement,still=matchMedia('(prefers-reduced-motion: reduce)').matches,TAU=Math.PI*2;
+  const NODES=[['Orders','#17B7CD','cart'],['Inventory','#8f9bff','box'],['Billing','#2dd4e8','card'],['Delivery','#b39dff','truck'],['Analytics','#4aa8ff','chart'],['Compliance','#5eead4','shield']];
+  const ICON={cart:'M2 3h2l2.7 12.4a2 2 0 0 0 2 1.6h9.8a2 2 0 0 0 2-1.6L22 7H5.1',box:'M21 16V8l-9-5-9 5v8l9 5 9-5zM3.3 7 12 12l8.7-5M12 22V12',card:'M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zM2 10h20',
+    truck:'M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11h2M15 18H9M14 8h4l4 4v5h-2',chart:'M3 3v18h18M18 17V9M13 17V5M8 17v-3',shield:'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10zM9 12l2 2 4-4'};
+  const PATH={};for(const k in ICON)PATH[k]=new Path2D(ICON[k]);
+  let W=0,H=0,D=1,wide=true,cx=0,cy=0,R=150,cr=50,nr=23,nodes=[],packets=[],pulses=[],tok=0,acc=0,vis=true,last=performance.now(),T=0,coreFlash=0;
+  const hex=(c,a)=>{const n=parseInt(c.slice(1),16);return `rgba(${n>>16},${n>>8&255},${n&255},${a})`};
+  function layout(){
+    const r=hero.getBoundingClientRect();D=Math.min(devicePixelRatio||1,2);W=r.width;H=r.height;cv.width=W*D;cv.height=H*D;g.setTransform(D,0,0,D,0,0);
+    wide=W>=1100;
+    if(wide){
+      /* centre the orbit in the free space between the headline column and the login card */
+      const p=hero.querySelector('.reveal-l p'),c=hero.querySelector('#login');let L=W*.36,Rt=W*.62,mid=H*.5;
+      if(p&&c){const pr=p.getBoundingClientRect(),cr2=c.getBoundingClientRect();L=pr.right-r.left+10;Rt=cr2.left-r.left-10;mid=(cr2.top+cr2.bottom)/2-r.top}
+      cx=(L+Rt)/2;cy=mid;R=Math.max(90,Math.min((Rt-L)/2-34,H*.34));nr=Math.max(17,Math.min(23,R*.15));
+    }else{R=Math.min(W*.2,72);cx=W*.74;cy=Math.min(H*.2,150);nr=Math.max(10,R*.17)}
+    cr=R*.36;
+    nodes=NODES.map((n,i)=>({name:n[0],c:n[1],ic:n[2],a0:-Math.PI/2+i/NODES.length*TAU,x:0,y:0,flash:0}));
+    place();packets=[];
   }
-  // helixes live in the free centre strip and far-right edge, never behind the headline
-  const hw=Math.tan(25*Math.PI/180)*16*(innerWidth/innerHeight);
-  dna.position.set(wide?hw*.1:hw*.8,0,-3);dna.rotation.z=.25;dna.scale.setScalar(wide?1:.7);s.add(dna);
-  const dna2=dna.clone();dna2.position.set(hw*.95,0,-4);dna2.scale.setScalar(.8);dna2.rotation.z=-.3;dna2.visible=wide;s.add(dna2);
-
-  // rising bubbles / particles
-  const N=220,pg=new THREE.BufferGeometry(),pa=new Float32Array(N*3);
-  for(let i=0;i<N;i++){pa[i*3]=rnd(-14,14);pa[i*3+1]=rnd(-7,7);pa[i*3+2]=rnd(-6,2);}
-  pg.setAttribute('position',new THREE.BufferAttribute(pa,3));
-  s.add(new THREE.Points(pg,new THREE.PointsMaterial({color:0x9be7ff,size:.07,transparent:true,opacity:.6})));
-  const pts=s.children[s.children.length-1];
-
-  let mx=0,my=0;addEventListener('mousemove',e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5});
-  const clock=new THREE.Clock();
-  (function loop(){requestAnimationFrame(loop);if(!visible(cv))return;const t=clock.getElapsedTime();
-    items.forEach(g=>{g.rotation.x+=g.userData.rs;g.rotation.y+=g.userData.rs*1.3;
-      g.position.y=g.userData.y+Math.sin(t*g.userData.sp+g.userData.ph)*.35;
-      g.position.x=g.userData.x+Math.cos(t*g.userData.sp*.6+g.userData.ph)*.15;});
-    dna.rotation.y=t*.5;dna2.rotation.y=-t*.4;
-    const p=pts.geometry.attributes.position;for(let i=0;i<N;i++){let y=p.getY(i)+.01+(i%5)*.002;if(y>7)y=-7;p.setY(i,y);}p.needsUpdate=true;
-    s.rotation.y=mx*.25;s.rotation.x=my*.12;
-    r.render(s,c)})();
-})();
-
-/* ---------- 2. ABOUT: particle India map with network lines ---------- */
-(()=>{
-  const cv=document.getElementById('mapCanvas');const {r,s,c}=makeScene(cv,45,10);
-  const poly=[[74,37],[77,35.5],[79,34.5],[78.5,32.5],[79,31],[81,30],[80.1,28.8],[84,27.3],[88,27.2],[88.8,27.5],[88.1,26.5],[89.8,26.7],[92,27],[95,28.2],[97,28.3],[96,27],[95,26],[94.5,24.5],[93.5,23],[92.5,22],[92,24.5],[91,25.2],[89.8,25.3],[89,26],[88.5,24],[89,22],[87,21.5],[86.5,20],[85,19.3],[83,17.5],[81,16],[80.2,15],[80,13],[79.8,11],[78.8,9.3],[77.5,8.1],[76.5,9.5],[75.5,11.5],[74.8,13.5],[74,15.5],[73,18],[72.8,20.5],[72.5,21.5],[70,20.8],[69,22.3],[70.5,23],[68.2,23.7],[71,25],[70,27],[71.5,28],[74,31],[74.5,32.5],[73.5,34.5]];
-  const inside=(px,py)=>{let o=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const[a,b]=poly[i],[d,e]=poly[j];if((b>py)!=(e>py)&&px<(d-a)*(py-b)/(e-b)+a)o=!o}return o};
-  const pts=[];for(let lo=67;lo<98;lo+=.55)for(let la=7;la<38;la+=.55)if(inside(lo,la))pts.push(new THREE.Vector3((lo-82.5)*.2,(la-22)*.2,0));
-  const g=new THREE.Group();s.add(g);
-  const geo=new THREE.BufferGeometry().setFromPoints(pts);
-  g.add(new THREE.Points(geo,new THREE.PointsMaterial({color:0x7be3ff,size:.07,transparent:true,opacity:.95})));
-  // lines between near neighbours
-  const lp=[];for(let i=0;i<pts.length;i+=3)for(let j=i+1;j<pts.length;j+=4)if(pts[i].distanceTo(pts[j])<.75&&Math.random()<.35)lp.push(pts[i],pts[j]);
-  g.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(lp),new THREE.LineBasicMaterial({color:0x17B7CD,transparent:true,opacity:.28})));
-  // hub nodes pulsing
-  const hubs=[[78.4,17.4],[77.2,28.6],[72.8,19],[80.2,13],[88.3,22.5],[77.6,12.9]].map(([lo,la])=>{
-    const m=new THREE.Mesh(new THREE.SphereGeometry(.08,12,12),new THREE.MeshBasicMaterial({color:0xffffff}));
-    m.position.set((lo-82.5)*.2,(la-22)*.2,.05);const h=new THREE.Mesh(new THREE.RingGeometry(.1,.13,32),new THREE.MeshBasicMaterial({color:0x17B7CD,transparent:true,side:2}));
-    h.position.copy(m.position);g.add(m,h);return h});
-  g.rotation.x=-.25;
-  let mx=0;cv.addEventListener('mousemove',e=>{mx=(e.offsetX/cv.clientWidth-.5)});
-  const clock=new THREE.Clock();
-  (function loop(){requestAnimationFrame(loop);if(!visible(cv))return;const t=clock.getElapsedTime();
-    g.rotation.y=Math.sin(t*.5)*.35+mx*.5;
-    hubs.forEach((h,i)=>{const k=((t*.8+i*.3)%1);h.scale.setScalar(1+k*3);h.material.opacity=1-k});
-    r.render(s,c)})();
-})();
-
-/* ---------- 3. FEATURES: floating business-network nodes (icons) ---------- */
-(()=>{
-  const cv=document.getElementById('featCanvas');const {r,s,c}=makeScene(cv,50,12);
-  const nodes=[];const mats=[0x17B7CD,0x4d59d6,0x2D3691,0x7fe5f2];
-  const geos=[new THREE.IcosahedronGeometry(.28,0),new THREE.OctahedronGeometry(.3),new THREE.TorusGeometry(.25,.07,10,24),new THREE.BoxGeometry(.42,.42,.42)];
-  for(let i=0;i<26;i++){
-    const m=new THREE.Mesh(geos[i%4],new THREE.MeshStandardMaterial({color:mats[i%4],roughness:.35,metalness:.3,transparent:true,opacity:.75}));
-    m.position.set((Math.random()-.5)*22,(Math.random()-.5)*10,(Math.random()-.5)*5-2);
-    m.userData={v:new THREE.Vector3((Math.random()-.5)*.006,(Math.random()-.5)*.006,0),rs:Math.random()*.02+.005};s.add(m);nodes.push(m);
+  const rot=()=>T*.07;
+  function place(){nodes.forEach(n=>{const a=n.a0+rot();n.a=a;n.x=cx+Math.cos(a)*R;n.y=cy+Math.sin(a)*R})}
+  const pos=(p)=>{
+    if(p.k==='ring'){const a=nodes[p.i].a,b=nodes[(p.i+1)%nodes.length].a,da=((b-a)%TAU+TAU)%TAU,t=Math.min(1,p.t),an=a+da*(t*t*(3-2*t));return{x:cx+Math.cos(an)*R,y:cy+Math.sin(an)*R}}
+    const n=nodes[p.i],t0=p.k==='in'?1-p.t:p.t,t=t0*t0*(3-2*t0),sx=cx+(n.x-cx)*(cr/R*1.05),sy=cy+(n.y-cy)*(cr/R*1.05),ex=n.x+(cx-n.x)*(nr/R),ey=n.y+(cy-n.y)*(nr/R);
+    return{x:sx+(ex-sx)*t,y:sy+(ey-sy)*t}};
+  function step(dt){
+    T+=dt;acc+=dt;if(acc>1.35){acc=0;packets.push({k:'ring',i:tok,t:0,s:.42,c:nodes[tok].c,tr:[]});tok=(tok+1)%nodes.length}
+    place();nodes.forEach(n=>n.flash=Math.max(0,n.flash-dt*1.5));coreFlash=Math.max(0,coreFlash-dt*1.3);
+    for(let k=packets.length-1;k>=0;k--){const p=packets[k];p.t+=dt*p.s;const q=pos(p);p.tr.push(q);if(p.tr.length>14)p.tr.shift();
+      if(p.t>=1){packets.splice(k,1);
+        if(p.k==='ring'){const j=(p.i+1)%nodes.length;nodes[j].flash=1;packets.push({k:'in',i:j,t:0,s:.9,c:nodes[j].c,tr:[]})}
+        else if(p.k==='in'){coreFlash=1;pulses.push(T);const o=(p.i+2+Math.floor(Math.random()*(nodes.length-2)))%nodes.length;packets.push({k:'out',i:o,t:0,s:.9,c:'#ffffff',tr:[]})}
+        else nodes[p.i].flash=Math.max(nodes[p.i].flash,.85)}}
+    pulses=pulses.filter(s=>T-s<2.2);
   }
-  const lineGeo=new THREE.BufferGeometry();const lines=new THREE.LineSegments(lineGeo,new THREE.LineBasicMaterial({color:0x17B7CD,transparent:true,opacity:.3}));s.add(lines);
-  let sy=0;addEventListener('scroll',()=>sy=scrollY);
-  (function loop(){requestAnimationFrame(loop);if(!visible(cv))return;
-    const pos=[];nodes.forEach(n=>{n.position.add(n.userData.v);n.rotation.x+=n.userData.rs;n.rotation.y+=n.userData.rs;
-      if(Math.abs(n.position.x)>11)n.userData.v.x*=-1;if(Math.abs(n.position.y)>5)n.userData.v.y*=-1;});
-    for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++)if(nodes[i].position.distanceTo(nodes[j].position)<3.6)pos.push(nodes[i].position.x,nodes[i].position.y,nodes[i].position.z,nodes[j].position.x,nodes[j].position.y,nodes[j].position.z);
-    lineGeo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));
-    s.rotation.y=Math.sin(sy*.002)*.15;r.render(s,c)})();
+  function draw(){
+    g.clearRect(0,0,W,H);g.lineCap='round';
+    /* soft glow + a dot grid that fades out away from the core */
+    const bg=g.createRadialGradient(cx,cy,0,cx,cy,R*2.1);bg.addColorStop(0,'rgba(45,54,145,.45)');bg.addColorStop(.55,'rgba(23,183,205,.07)');bg.addColorStop(1,'rgba(23,183,205,0)');g.fillStyle=bg;g.fillRect(cx-R*2.2,cy-R*2.2,R*4.4,R*4.4);
+    const gs=wide?26:22,rg=R*1.95;for(let x=Math.floor((cx-rg)/gs)*gs;x<cx+rg;x+=gs)for(let y=Math.floor((cy-rg)/gs)*gs;y<cy+rg;y+=gs){const d=Math.hypot(x-cx,y-cy);if(d<rg){g.fillStyle=`rgba(255,255,255,${.2*(1-d/rg)})`;g.fillRect(x,y,1.3,1.3)}}
+    /* ticks, orbit rings */
+    const tr=R*1.2;g.lineWidth=1;for(let i=0;i<72;i++){const a=i/72*TAU-T*.05,l=i%6?4:8;g.strokeStyle=`rgba(143,219,230,${i%6?.22:.4})`;g.beginPath();g.moveTo(cx+Math.cos(a)*tr,cy+Math.sin(a)*tr);g.lineTo(cx+Math.cos(a)*(tr+l),cy+Math.sin(a)*(tr+l));g.stroke()}
+    g.lineWidth=1.3;g.strokeStyle='rgba(143,219,230,.28)';g.beginPath();g.arc(cx,cy,R,0,TAU);g.stroke();
+    g.setLineDash([3,9]);g.lineDashOffset=T*10;g.strokeStyle='rgba(143,155,255,.35)';g.beginPath();g.arc(cx,cy,R*.64,0,TAU);g.stroke();g.setLineDash([]);
+    /* spokes */
+    nodes.forEach(n=>{const gr=g.createLinearGradient(cx,cy,n.x,n.y);gr.addColorStop(0,'rgba(23,183,205,.38)');gr.addColorStop(1,hex(n.c,.1+n.flash*.45));g.strokeStyle=gr;g.lineWidth=1+n.flash*1.4;g.beginPath();g.moveTo(cx+(n.x-cx)*cr/R,cy+(n.y-cy)*cr/R);g.lineTo(n.x,n.y);g.stroke()});
+    /* pulse waves */
+    pulses.forEach(s=>{const a=(T-s)/2.2;g.strokeStyle=`rgba(23,183,205,${.4*(1-a)})`;g.lineWidth=1.6;g.beginPath();g.arc(cx,cy,cr*1.1+(R*1.02-cr*1.1)*a,0,TAU);g.stroke()});
+    /* comets */
+    g.globalCompositeOperation='lighter';
+    packets.forEach(p=>{const col=p.c;p.tr.forEach((q,i)=>{const f=(i+1)/p.tr.length;g.fillStyle=hex(col,.5*f*f);g.beginPath();g.arc(q.x,q.y,1.2+f*3.2,0,TAU);g.fill()});
+      const q=pos(p),gr=g.createRadialGradient(q.x,q.y,0,q.x,q.y,13);gr.addColorStop(0,hex(col,.95));gr.addColorStop(1,hex(col,0));g.fillStyle=gr;g.beginPath();g.arc(q.x,q.y,13,0,TAU);g.fill()});
+    const halo=g.createRadialGradient(cx,cy,cr*.3,cx,cy,cr*2.4);halo.addColorStop(0,`rgba(23,183,205,${.5+coreFlash*.3})`);halo.addColorStop(.5,'rgba(45,54,145,.28)');halo.addColorStop(1,'rgba(45,54,145,0)');g.fillStyle=halo;g.beginPath();g.arc(cx,cy,cr*2.4,0,TAU);g.fill();
+    g.globalCompositeOperation='source-over';
+    /* AI core */
+    g.save();g.beginPath();g.arc(cx,cy,cr,0,TAU);g.clip();
+    const hx=cx+Math.cos(T*.4)*cr*.35,hy=cy+Math.sin(T*.4)*cr*.35,orb=g.createRadialGradient(hx,hy,cr*.05,cx,cy,cr);orb.addColorStop(0,'#8ef0fb');orb.addColorStop(.5,'#1f8fd0');orb.addColorStop(1,'#2D3691');g.fillStyle=orb;g.fillRect(cx-cr,cy-cr,cr*2,cr*2);
+    const pts=[];for(let i=0;i<11;i++){const a=i*2.399+T*.5,rad=cr*(.22+.58*((i*37)%10)/10);pts.push({x:cx+Math.cos(a)*rad,y:cy+Math.sin(a*1.1+i)*rad*.85})}
+    g.strokeStyle='rgba(255,255,255,.5)';g.lineWidth=1;for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const d=Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y);if(d<cr*.75){g.globalAlpha=1-d/(cr*.75);g.beginPath();g.moveTo(pts[i].x,pts[i].y);g.lineTo(pts[j].x,pts[j].y);g.stroke()}}
+    g.globalAlpha=1;g.fillStyle='#fff';pts.forEach(p=>{g.beginPath();g.arc(p.x,p.y,1.8,0,TAU);g.fill()});g.restore();
+    g.strokeStyle='rgba(255,255,255,.55)';g.lineWidth=1.5;g.beginPath();g.arc(cx,cy,cr,0,TAU);g.stroke();
+    /* HUD arcs around the core */
+    [[1.3,.55,.9,'rgba(23,183,205,.9)'],[1.5,.38,-.65,'rgba(143,155,255,.8)'],[1.72,.22,.45,'rgba(94,234,212,.7)']].forEach(([m,len,sp,col],k)=>{g.strokeStyle=col;g.lineWidth=2;for(let s=0;s<3;s++){const a=T*sp+s*TAU/3+k;g.beginPath();g.arc(cx,cy,cr*m,a,a+len*1.4);g.stroke()}});
+    /* AI badge + name, inside the core (never collides with the orbiting labels) */
+    g.textAlign='center';g.textBaseline='middle';const by=wide?cy-9:cy;g.fillStyle='#17B7CD';g.beginPath();g.roundRect?g.roundRect(cx-15,by-9,30,18,9):g.rect(cx-15,by-9,30,18);g.fill();g.fillStyle='#0b1040';g.font='800 11px Inter,system-ui,sans-serif';g.fillText('AI',cx,by+.5);
+    if(wide){g.fillStyle='rgba(255,255,255,.95)';g.font='800 9px Inter,system-ui,sans-serif';if('letterSpacing' in g)g.letterSpacing='.14em';g.fillText('PHARMAOS',cx,cy+15);if('letterSpacing' in g)g.letterSpacing='0px'}
+    /* workflow nodes: round icon badges riding the orbit */
+    nodes.forEach(n=>{
+      if(n.flash>0){g.shadowColor=n.c;g.shadowBlur=22*n.flash}
+      g.fillStyle='rgba(12,15,60,.82)';g.beginPath();g.arc(n.x,n.y,nr,0,TAU);g.fill();g.shadowBlur=0;
+      g.strokeStyle=hex(n.c,.5+n.flash*.5);g.lineWidth=1.4+n.flash*1.2;g.beginPath();g.arc(n.x,n.y,nr,0,TAU);g.stroke();
+      const s=nr*1.0/12*.82;g.save();g.translate(n.x-12*s,n.y-12*s);g.scale(s,s);g.lineWidth=1.9/s*.9;g.lineJoin='round';g.strokeStyle=n.flash>.2?'#fff':hex(n.c,1);g.stroke(PATH[n.ic]);
+      if(n.ic==='cart'){g.beginPath();g.arc(9,20,1.2,0,TAU);g.arc(18,20,1.2,0,TAU);g.stroke()}if(n.ic==='truck'){g.beginPath();g.arc(7,18,2,0,TAU);g.arc(17,18,2,0,TAU);g.stroke()}g.restore();
+      if(n.flash>.5){g.fillStyle='#34d399';g.beginPath();g.arc(n.x+nr*.78,n.y-nr*.78,5,0,TAU);g.fill();g.strokeStyle='#04210f';g.lineWidth=1.5;g.beginPath();g.moveTo(n.x+nr*.78-2.4,n.y-nr*.78);g.lineTo(n.x+nr*.78-.6,n.y-nr*.78+2);g.lineTo(n.x+nr*.78+2.6,n.y-nr*.78-2);g.stroke()}
+      if(wide){const below=Math.sin(n.a)<.6,ly=below?n.y+nr+13:n.y-nr-13;g.font='600 11.5px Inter,system-ui,sans-serif';g.fillStyle=`rgba(255,255,255,${.7+n.flash*.3})`;g.fillText(n.name,n.x,ly)}});
+  }
+  function loop(now){requestAnimationFrame(loop);if(!vis||document.hidden){last=now;return}const dt=Math.min((now-last)/1000,.05);last=now;step(dt);draw()}
+  new IntersectionObserver(es=>es.forEach(e=>vis=e.isIntersecting)).observe(hero);
+  /* re-fit whenever the hero changes size — e.g. the login card grows/shrinks when you switch Mobile OTP ⇄ Password */
+  let rq=0;const refit=()=>{if(rq)return;rq=requestAnimationFrame(()=>{rq=0;layout();draw()})};
+  addEventListener('resize',refit);
+  if('ResizeObserver' in window){const ro=new ResizeObserver(refit);ro.observe(hero);const c=hero.querySelector('#login');if(c)ro.observe(c)}
+  layout();
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(refit);
+  if(still){T=3;place();draw()}else requestAnimationFrame(loop);
 })();
+
 </script>
 <script>(()=>{const n=document.getElementById('siteNav');const f=()=>n.classList.toggle('scrolled',scrollY>8);f();addEventListener('scroll',f,{passive:true})})();</script>
 </body>
