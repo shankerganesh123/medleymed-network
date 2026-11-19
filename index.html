@@ -197,6 +197,11 @@ tailwind.config={
   .cf-card.on{box-shadow:0 50px 80px -28px rgba(45,54,145,.75),0 0 0 2px rgba(23,183,205,.6),0 0 60px -12px rgba(23,183,205,.45)}
   .cf-card img{width:100%;height:100%;object-fit:cover;pointer-events:none;-webkit-user-drag:none;transform:scale(1.06);transition:transform 1.2s cubic-bezier(.2,.8,.2,1)}
   .cf-card.on img{transform:scale(1)}
+  .cf-card.on{cursor:pointer}
+  .cf-go{position:absolute;left:.9rem;bottom:.9rem;right:.9rem;display:none;align-items:center;justify-content:center;gap:.4rem;padding:.5rem .8rem;border-radius:.8rem;font-size:.8rem;font-weight:700;color:#fff;background:rgba(10,16,76,.72);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.25);opacity:0;transform:translateY(6px);transition:opacity .25s,transform .25s}
+  .cf-card.on .cf-go{display:flex}
+  .cf-card.on:hover .cf-go{opacity:1;transform:none}
+  @media(hover:none){.cf-card.on .cf-go{opacity:1;transform:none}}
   .cf-shade{position:absolute;inset:0;background:linear-gradient(0deg,rgba(10,14,60,.45),transparent 45%)}
   .cf-ico{position:absolute;left:.9rem;top:.9rem;width:2.5rem;height:2.5rem;border-radius:.8rem}
   .cf-labels{position:absolute;left:0;right:0;top:calc(var(--w)*1.5 + 1.6rem);height:11rem}
@@ -582,13 +587,13 @@ const MENU=[   // item = {t:title, d:sub-title, i:icon, h:href, items:[children]
  {t:'Blogs',h:'blogs.html'},
  {t:'Careers',h:'careers.html'}
 ];
-const ECO=[
- ['store','Pharmacies & Retailers','Discover curated products, transparent pricing and quick ordering — all in one app.'],
- ['users','Distributors & Partners','Reach thousands of pharmacies, manage stock and grow demand with confidence.'],
- ['pill','Manufacturers','Get your range in front of the right pharmacies with targeted deals and reach.'],
- ['truck','Delivery Partners','Reliable last-mile tie-ups so medicines reach the counter on time, every time.'],
- ['trend','Sales Force (SFA)','Field teams plan visits, capture orders and track performance in real time.'],
- ['chart','Analytics & Insights','Live dashboards for orders, stock updates and partner health in one view.']
+const ECO=[   // icon, title, text, key sent to the contact form (?partner=)
+ ['store','Pharmacies & Retailers','Discover curated products, transparent pricing and quick ordering — all in one app.','pharmacy'],
+ ['users','Distributors & Partners','Reach thousands of pharmacies, manage stock and grow demand with confidence.','distributor'],
+ ['pill','Manufacturers','Get your range in front of the right pharmacies with targeted deals and reach.','manufacturer'],
+ ['truck','Delivery Partners','Reliable last-mile tie-ups so medicines reach the counter on time, every time.','delivery'],
+ ['trend','Sales Force (SFA)','Field teams plan visits, capture orders and track performance in real time.','sfa'],
+ ['chart','Analytics & Insights','Live dashboards for orders, stock updates and partner health in one view.','analytics']
 ];
 const ECO_IMG=['assets/eco-1.jpg','assets/eco-2.jpg','assets/eco-3.jpg','assets/eco-4.jpg','assets/eco-5.jpg','assets/eco-6.jpg'];   // swap any of these for your own photos
 const STATS=[['store','10','K+','Pharmacies'],['users','500','+','Partners'],['pill','1','M+','Products accessible'],['globe',null,'','Network coverage','Pan-India']];
@@ -707,8 +712,8 @@ document.querySelectorAll('.card').forEach(c=>c.addEventListener('pointermove',e
    parked on the side the next move comes from, so cards only ever slide in/out — they never fly across or pop. */
 (()=>{
   const cf=$('#cf'),stage=$('#cfStage'),lab=$('#cfLabels'),dotsEl=$('#cfDots'),n=ECO.length,PERSP=1500;let act=0,ready=false,timer,hover=false,onScreen=false,queue;
-  stage.innerHTML=ECO.map(([ic,t],i)=>`<article class="cf-card" data-i="${i}" role="group" aria-roledescription="slide" aria-label="${i+1} of ${n}: ${t}"><img src="${ECO_IMG[i]}" alt="" decoding="async" draggable="false"><span class="cf-shade"></span><span class="ico-tile cf-ico">${svgI(ic,20)}</span></article>`).join('');
-  lab.innerHTML=ECO.map(([,t,d],i)=>`<div class="cf-label" data-i="${i}"><span class="num">0${i+1}<i>/ 0${n}</i></span><b>${t}</b><small>${d}</small><a href="contact.html">Learn more ${svgI('arrow',14)}</a></div>`).join('');
+  stage.innerHTML=ECO.map(([ic,t],i)=>`<article class="cf-card" data-i="${i}" role="group" aria-roledescription="slide" aria-label="${i+1} of ${n}: ${t}"><img src="${ECO_IMG[i]}" alt="" decoding="async" draggable="false"><span class="cf-shade"></span><span class="ico-tile cf-ico">${svgI(ic,20)}</span><span class="cf-go">Become a partner ${svgI('arrow',13)}</span></article>`).join('');
+  lab.innerHTML=ECO.map(([,t,d,k],i)=>`<div class="cf-label" data-i="${i}"><span class="num">0${i+1}<i>/ 0${n}</i></span><b>${t}</b><small>${d}</small><a href="contact.html?partner=${k}">Become a partner ${svgI('arrow',14)}</a></div>`).join('');
   dotsEl.innerHTML=ECO.map(([,t],i)=>`<button type="button" role="tab" aria-label="${t}" data-i="${i}"></button>`).join('');
   const cards=[...stage.children],labs=[...lab.children],dts=[...dotsEl.children];
   const pos=cards.map((_,i)=>{let d=((i-act)%n+n)%n;return d>n/2?d-n:d});          // start: -2…3
@@ -735,13 +740,14 @@ document.querySelectorAll('.card').forEach(c=>c.addEventListener('pointermove',e
   }
   const restart=()=>{clearInterval(timer);if(!reduce&&onScreen&&!hover)timer=setInterval(()=>step(1),4500)};
   $('#cfNext').onclick=next;$('#cfPrev').onclick=back;dts.forEach(b=>b.onclick=()=>goTo(+b.dataset.i));
-  cf.addEventListener('keydown',e=>{if(e.key==='ArrowRight'){e.preventDefault();next()}if(e.key==='ArrowLeft'){e.preventDefault();back()}});
+  cf.addEventListener('keydown',e=>{if(e.key==='ArrowRight'){e.preventDefault();next()}if(e.key==='ArrowLeft'){e.preventDefault();back()}if(e.key==='Enter'&&e.target===cf){e.preventDefault();goPartner(act)}});
   /* drag / swipe */
   let sx=null,moved=false;
   cf.addEventListener('pointerdown',e=>{sx=e.clientX;moved=false});
   addEventListener('pointermove',e=>{if(sx==null)return;const dx=e.clientX-sx;if(Math.abs(dx)>cards[0].offsetWidth*.32){moved=true;cf.classList.add('drag');dx<0?next():back();sx=e.clientX}});
   const end=()=>{sx=null;cf.classList.remove('drag')};addEventListener('pointerup',end);addEventListener('pointercancel',end);
-  cards.forEach(c=>c.addEventListener('click',()=>{if(moved){moved=false;return}goTo(+c.dataset.i)}));
+  const goPartner=i=>{location.href='contact.html?partner='+ECO[i][3]};
+  cards.forEach(c=>c.addEventListener('click',()=>{if(moved){moved=false;return}const i=+c.dataset.i;if(pos[i]===0)goPartner(i);else goTo(i)}));   /* centre tile = open the partner form · side tile = bring it to the centre */
   cf.addEventListener('pointerenter',()=>{hover=true;clearInterval(timer)});cf.addEventListener('pointerleave',()=>{hover=false;restart()});
   cf.addEventListener('focusin',()=>clearInterval(timer));cf.addEventListener('focusout',restart);
   /* fan the cards out the first time the section scrolls into view; pause when off screen */
@@ -753,7 +759,7 @@ document.querySelectorAll('.card').forEach(c=>c.addEventListener('pointermove',e
 const SEG={
   b2b:{label:'B2B',icon:'brief',title:'Business to Business',desc:'A digital marketplace where pharmacies and distributors trade directly — curated products, transparent pricing and dependable delivery.',cta:['Explore B2B','medleymed-network.html'],
     cards:[
-      {icon:'pill',name:'Pharmacy',who:'For pharmacies & retailers',items:[['cart','Purchase','Order from a curated catalogue with transparent pricing and quick, easy ordering.']]},
+      {icon:'pill',name:'Pharmacy',who:'For pharmacies & retailers',items:[['cart','Purchase','Order from a curated catalogue with transparent pricing and quick, easy ordering.']],points:['Curated product range','Transparent pricing','Easy order management']},
       {icon:'truck',name:'Distributor',who:'For distributors & partners',items:[['tag','Sale','Reach more pharmacies and grow demand with confidence.'],['truck','Delivery Collection','Reliable last-mile tie-ups so medicines reach the counter on time.'],['box','Warehouse','Keep stock and inventory updates together in one clear view.']]}],
     flow:['Manufacturer','Distributor','Pharmacy']},
   b2c:{label:'B2C',icon:'users',title:'Business to Consumer',desc:'Healthcare for everyday customers, made simple — order medicines, talk to a doctor and book lab tests online.',cta:['Explore B2C','b2c.html'],
@@ -769,9 +775,8 @@ const segBtns=[...segTabs.querySelectorAll('button')];
 function segPane(k){const v=SEG[k],cols=v.cards.length===3?'md:grid-cols-2 lg:grid-cols-3 md:[&>*:last-child:nth-child(odd)]:col-span-2 lg:[&>*:last-child:nth-child(odd)]:col-span-1':'md:grid-cols-2';
   return `<div class="seg-pane" id="seg-${k}" role="tabpanel" ${k===segCur?'':'hidden'}>
     <div class="flex flex-col items-start justify-between gap-5 border-b border-line pb-7 md:flex-row md:items-center md:gap-10"><div class="max-w-[40rem]"><h3 class="text-xl font-bold md:text-2xl">${v.title}</h3><p class="mt-2 text-sm leading-relaxed text-slate-600">${v.desc}</p></div><a href="${v.cta[1]}" class="btn btn-primary flex-none">${v.cta[0]} ${svgI('arrow',16)}</a></div>
-    <div class="mt-8 grid ${v.cards.every(c=>c.items.length===v.cards[0].items.length)?'items-stretch':'items-start'} gap-5 ${cols}">${v.cards.map(c=>`<article class="seg-card card group relative overflow-hidden border border-line p-7"><div class="flex items-center gap-4"><span class="ico-tile !size-14 !rounded-2xl">${svgI(c.icon,26)}</span><div><h4 class="text-xl font-bold">${c.name}</h4><span class="text-xs font-semibold uppercase tracking-wider text-accent-dark">${c.who}</span></div></div>
-      <div class="mt-6 grid gap-3">${c.items.map(([ic,t,d])=>`<a href="contact.html" class="group/i flex items-start gap-3 rounded-xl border border-line bg-page/60 p-3.5 transition duration-300 hover:-translate-y-0.5 hover:border-accent/50 hover:bg-white hover:shadow-card"><span class="grid size-9 flex-none place-items-center rounded-full bg-gradient-to-br from-accent to-[#2D8FD6] text-white">${svgI(ic,16)}</span><span class="min-w-0 flex-1"><b class="block text-sm font-semibold">${t}</b><small class="mt-0.5 block text-xs leading-relaxed text-slate-600">${d}</small></span>${svgI('arrow',15,'mt-1 flex-none text-slate-300 transition duration-300 group-hover/i:translate-x-1 group-hover/i:text-primary')}</a>`).join('')}</div></article>`).join('')}</div>
-    <div class="seg-flow mt-10 flex flex-col items-center gap-1.5 sm:flex-row sm:justify-center sm:gap-x-2 md:gap-x-3">${v.flow.map((x,i)=>`${i?`<svg width="46" height="14" viewBox="0 0 46 14" class="w-9 flex-none rotate-90 text-accent sm:w-7 sm:rotate-0 md:w-[46px]" aria-hidden="true"><path class="flow-line" d="M0 7h38" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/><path d="m34 2 6 5-6 5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`:''}<span class="inline-flex min-w-[13rem] items-center justify-center gap-2 whitespace-nowrap rounded-full border border-primary/10 bg-white px-4 py-2.5 text-sm font-semibold text-navy sm:min-w-0 sm:justify-start sm:px-4 md:px-5"><span class="grid size-6 place-items-center rounded-full bg-gradient-to-br from-accent to-primary text-[.7rem] font-bold text-white">${i+1}</span>${x}</span>`).join('')}</div>
+    <div class="mt-8 grid items-stretch gap-5 ${cols}">${v.cards.map(c=>`<article class="seg-card card group relative flex flex-col overflow-hidden border border-line p-7"><div class="flex items-center gap-4"><span class="ico-tile !size-14 !rounded-2xl">${svgI(c.icon,26)}</span><div><h4 class="text-xl font-bold">${c.name}</h4><span class="text-xs font-semibold uppercase tracking-wider text-accent-dark">${c.who}</span></div></div>
+      <div class="mt-6 grid gap-3">${c.items.map(([ic,t,d])=>`<a href="contact.html" class="group/i flex items-start gap-3 rounded-xl border border-line bg-page/60 p-3.5 transition duration-300 hover:-translate-y-0.5 hover:border-accent/50 hover:bg-white hover:shadow-card"><span class="grid size-9 flex-none place-items-center rounded-full bg-gradient-to-br from-accent to-[#2D8FD6] text-white">${svgI(ic,16)}</span><span class="min-w-0 flex-1"><b class="block text-sm font-semibold">${t}</b><small class="mt-0.5 block text-xs leading-relaxed text-slate-600">${d}</small></span>${svgI('arrow',15,'mt-1 flex-none text-slate-300 transition duration-300 group-hover/i:translate-x-1 group-hover/i:text-primary')}</a>`).join('')}</div>${c.points?`<div class="mt-auto pt-6"><ul class="grid gap-2.5 border-t border-line pt-5 text-sm font-medium text-slate-700">${c.points.map(x=>`<li class="flex items-center gap-2.5"><span class="grid size-5 flex-none place-items-center rounded-full bg-accent-soft text-accent-dark">${svgI('check',12)}</span>${x}</li>`).join('')}</ul></div>`:''}</article>`).join('')}</div>
   </div>`}
 segPanes.innerHTML=Object.keys(SEG).map(segPane).join('');
 function segMove(){const b=segBtns.find(x=>x.dataset.seg===segCur);segInd.style.width=b.offsetWidth+'px';segInd.style.transform=`translateX(${b.offsetLeft}px)`}

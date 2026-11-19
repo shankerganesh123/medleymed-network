@@ -678,7 +678,7 @@ const $=s=>document.querySelector(s),inr=n=>n.toLocaleString('en-IN',{minimumFra
 
 /* ---------- Sidebar (drawer on mobile, collapse on desktop) ---------- */
 const nav=[['home','Dashboard'],['users','Partners',['Summary','Add A New Partner','Partner Coverage','Partner Commissions','Credit Line','Higher Base Discount','Upload Customers']],['userRound','Customers',['New Customers','On Board Customers','Delivery Partners']],['user','Users'],['grid','Category',['Products','Deals','Upload Bill Details Configurations','Upload Products Configurations']],['megaphone','Marketing',['Upload Banner','Notification']],['sliders','Configurations',['Reset Password','Partner Config','User List','Enable Retailer','OTP List','Settings']],['message','Feedback Hub',['Activity Logs','Feedbacks','Raised Issues']],['file','Reports'],['box','Master Orders'],['building','Organisation'],['tag','Party Codes'],['pin','Clusters',['Clusters','Localities','Unassigned Pincodes','Countries','States','Cities']],['trend','SFA']];
-const HREF={'Dashboard':'dashboard.html','Summary':'partners-summary.html'};
+const HREF={'Dashboard':'dashboard.html','Summary':'partners-summary.html','Add A New Partner':'add-partner.html','Partner Coverage':'partner-coverage.html','Partner Commissions':'partner-commissions.html'};
 const ACTIVE=window.ACTIVE_PAGE||'Dashboard';
 nav.forEach(([i,t,kids],k)=>{
   const a=document.createElement('a');a.href=HREF[t]||'#';a.dataset.tip=t;a.setAttribute('aria-label',t);a.className='nav-item'+(!kids&&t===ACTIVE?' active':'');

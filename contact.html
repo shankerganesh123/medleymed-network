@@ -608,6 +608,7 @@ function enhanceSelect(sel,variant='light'){
 document.addEventListener('click',()=>selDDs.forEach(d=>d.close()));
 addEventListener('keydown',e=>{if(e.key==='Escape')selDDs.forEach(d=>d.close())});
 enhanceSelect($('#cType'),'light');
+(()=>{const m={pharmacy:'Pharmacy / Retailer',distributor:'Distributor / Partner',manufacturer:'Manufacturer',delivery:'Delivery partner',sfa:'Other',analytics:'Other'},p=new URLSearchParams(location.search).get('partner');if(m[p]){$('#cType').value=m[p];$('#cType').dispatchEvent(new Event('change',{bubbles:true}))}})();   /* arriving from a home-page tile pre-selects the right role */
 
 const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove('show'),2800)};
 $('#cPhone').addEventListener('input',e=>e.target.value=e.target.value.replace(/\D/g,''));
