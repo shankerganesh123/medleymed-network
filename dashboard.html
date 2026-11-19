@@ -331,15 +331,16 @@ tailwind.config={theme:{extend:{colors:{navy:'#0f1535',navy2:'#2D3691',teal:'#17
     background:radial-gradient(900px 620px at 50% 38%,#2D3691 0%,#151a52 55%,#0a0e2e 100%);transition:opacity .55s ease,visibility .55s}
   #splash.done{opacity:0;visibility:hidden;pointer-events:none}
   #splash::before{content:"";position:absolute;inset:0;opacity:.14;background-image:linear-gradient(rgba(255,255,255,.4) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.4) 1px,transparent 1px);background-size:44px 44px;-webkit-mask-image:radial-gradient(circle at 50% 40%,#000,transparent 70%);mask-image:radial-gradient(circle at 50% 40%,#000,transparent 70%)}
-  .splash-core{position:relative;display:flex;flex-direction:column;align-items:center;gap:1.15rem;transform:translateY(-4%)}
-  .splash-mark{position:relative;width:96px;height:96px;display:grid;place-items:center;animation:spIn .9s cubic-bezier(.2,.9,.3,1.25) both}
-  .splash-mark img{position:relative;width:84px;height:84px;animation:spFloat 2.4s ease-in-out .9s infinite;filter:drop-shadow(0 12px 30px rgba(23,183,205,.6))}
-  .splash-ring{position:absolute;inset:-12px;border-radius:50%;border:2px solid rgba(23,183,205,.6);animation:spPulse 2.1s ease-out infinite}
+  #splash{--mk:clamp(44px,8.5vmin,68px)}   /* the loader scales with the screen: ~44px on a small phone, ~68px on a large display */
+  .splash-core{position:relative;display:flex;flex-direction:column;align-items:center;gap:clamp(.7rem,2.2vmin,1rem);transform:translateY(-4%);padding:0 1rem;max-width:100%}
+  .splash-mark{position:relative;width:calc(var(--mk)*1.14);height:calc(var(--mk)*1.14);display:grid;place-items:center;animation:spIn .9s cubic-bezier(.2,.9,.3,1.25) both}
+  .splash-mark img{position:relative;width:var(--mk);height:var(--mk);animation:spFloat 2.4s ease-in-out .9s infinite;filter:drop-shadow(0 12px 30px rgba(23,183,205,.6))}
+  .splash-ring{position:absolute;inset:calc(var(--mk)*-.14);border-radius:50%;border:2px solid rgba(23,183,205,.6);animation:spPulse 2.1s ease-out infinite}
   .splash-ring.r2{animation-delay:.7s}
-  .splash-word{display:block;height:24px;width:auto;opacity:0;animation:spUp .6s .35s ease-out forwards}
-  .splash-bar{width:176px;height:4px;border-radius:99px;background:rgba(255,255,255,.14);overflow:hidden;opacity:0;animation:spUp .6s .5s ease-out forwards}
+  .splash-word{display:block;height:calc(var(--mk)*.26);width:auto;max-width:80vw;opacity:0;animation:spUp .6s .35s ease-out forwards}
+  .splash-bar{width:calc(var(--mk)*1.9);height:3px;border-radius:99px;background:rgba(255,255,255,.14);overflow:hidden;opacity:0;animation:spUp .6s .5s ease-out forwards}
   .splash-bar i{display:block;height:100%;width:42%;border-radius:inherit;background:linear-gradient(90deg,#17B7CD,#9aeaf5);animation:spBar 1.25s ease-in-out infinite}
-  .splash-tag{margin:0;font-size:.66rem;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.62);opacity:0;animation:spUp .6s .65s ease-out forwards}
+  .splash-tag{margin:0;font-size:clamp(.56rem,1.6vmin,.64rem);font-weight:600;letter-spacing:.26em;text-align:center;text-transform:uppercase;color:rgba(255,255,255,.62);opacity:0;animation:spUp .6s .65s ease-out forwards}
   @keyframes spIn{from{opacity:0;transform:scale(.35) rotate(-24deg)}to{opacity:1;transform:none}}
   @keyframes spFloat{50%{transform:translateY(-7px)}}
   @keyframes spPulse{0%{transform:scale(.78);opacity:.9}100%{transform:scale(1.75);opacity:0}}
@@ -406,6 +407,36 @@ tailwind.config={theme:{extend:{colors:{navy:'#0f1535',navy2:'#2D3691',teal:'#17
     body.collapsed .store-row{flex-direction:column;align-items:center;gap:.5rem}
     body.collapsed .store-badge{flex:none;width:2.6rem;height:2.6rem}
   }
+  /* ===== modern icon tiles — every tile that holds an icon (stat cards, section headers, quick actions, KPIs) ===== */
+  html .bg-cyan-50.text-teal2:has(>svg){
+    position:relative;overflow:hidden;border-radius:.9rem;color:var(--primary);
+    background:linear-gradient(145deg,#ffffff 0%,#d9f3fa 48%,#c4eaf5 100%);
+    border:1px solid rgba(23,183,205,.38);
+    box-shadow:0 10px 20px -10px rgba(23,183,205,.7),0 2px 5px rgba(45,54,145,.1),inset 0 1px 0 rgba(255,255,255,.95);
+    transition:transform .3s cubic-bezier(.3,1.4,.5,1),box-shadow .3s ease}
+  html .bg-cyan-50.text-teal2:has(>svg)::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(135deg,rgba(255,255,255,.65) 0%,rgba(255,255,255,0) 46%)}
+  html .bg-cyan-50.text-teal2:has(>svg) svg{position:relative;z-index:1;stroke-width:2;filter:drop-shadow(0 2px 3px rgba(23,183,205,.45));transition:transform .35s cubic-bezier(.3,1.5,.5,1)}
+  html .card:hover .bg-cyan-50.text-teal2:has(>svg),html .qa:hover .bg-cyan-50.text-teal2:has(>svg){transform:translateY(-3px);box-shadow:0 16px 26px -10px rgba(23,183,205,.85),0 3px 6px rgba(45,54,145,.12),inset 0 1px 0 rgba(255,255,255,.95)}
+  html .card:hover .bg-cyan-50.text-teal2:has(>svg) svg,html .qa:hover .bg-cyan-50.text-teal2:has(>svg) svg{transform:scale(1.14) rotate(-6deg)}
+  html[data-theme=dark] .bg-cyan-50.text-teal2:has(>svg){
+    color:#8beaf6;background:linear-gradient(145deg,rgba(23,183,205,.32),rgba(75,87,212,.26));border-color:rgba(23,183,205,.45);
+    box-shadow:0 10px 20px -10px rgba(0,0,0,.75),0 0 18px -6px rgba(23,183,205,.45),inset 0 1px 0 rgba(255,255,255,.16)}
+  html[data-theme=dark] .bg-cyan-50.text-teal2:has(>svg)::after{background:linear-gradient(135deg,rgba(255,255,255,.18) 0%,rgba(255,255,255,0) 46%)}
+  html[data-theme=dark] .bg-cyan-50.text-teal2:has(>svg) svg{filter:drop-shadow(0 2px 4px rgba(23,183,205,.6))}
+  /* sidebar icons get the same tile treatment */
+  html .nav-ic{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+  html .nav-item:hover .nav-ic{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.22)}
+  html .nav-item.active .nav-ic{border-color:transparent}
+  /* ===== Partners Summary page ===== */
+  .stk{font-weight:600;font-size:.82rem}.stk-sub{font-size:.7rem;margin-top:.1rem;opacity:.85}
+  .stk-red{color:#e5484d}.stk-amber{color:#c77700}.stk-green{color:#16a34a}
+  html[data-theme=dark] .stk-red{color:#ff7b80}html[data-theme=dark] .stk-amber{color:#fbbf24}html[data-theme=dark] .stk-green{color:#4ade80}
+  .ic-btn{width:2.1rem;height:2.1rem;display:inline-grid;place-items:center;border-radius:.65rem;color:var(--muted);transition:background .2s,color .2s,transform .2s}
+  .ic-btn:hover{background:var(--primary-soft);color:var(--link);transform:translateY(-1px)}
+  .ic-btn:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  #tbl tr.is-off td:not([data-l="Action"]):not([data-l="Edit"]){opacity:.55}
+  .toast{position:fixed;left:50%;bottom:1.5rem;z-index:80;transform:translate(-50%,20px);opacity:0;pointer-events:none;padding:.65rem 1.1rem;border-radius:.85rem;font-size:.85rem;font-weight:600;color:#fff;background:linear-gradient(135deg,#151a52,#2D3691);box-shadow:0 14px 30px -10px rgba(10,14,60,.6);transition:opacity .25s,transform .25s}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
   /* theme toggle */
   #themeBtn .t-sun{display:none}html[data-theme=dark] #themeBtn .t-sun{display:block}html[data-theme=dark] #themeBtn .t-moon{display:none}
   #themeBtn svg{transition:transform .5s cubic-bezier(.3,1.5,.5,1)}#themeBtn:hover svg{transform:rotate(25deg) scale(1.1)}
@@ -678,7 +709,7 @@ const $=s=>document.querySelector(s),inr=n=>n.toLocaleString('en-IN',{minimumFra
 
 /* ---------- Sidebar (drawer on mobile, collapse on desktop) ---------- */
 const nav=[['home','Dashboard'],['users','Partners',['Summary','Add A New Partner','Partner Coverage','Partner Commissions','Credit Line','Higher Base Discount','Upload Customers']],['userRound','Customers',['New Customers','On Board Customers','Delivery Partners']],['user','Users'],['grid','Category',['Products','Deals','Upload Bill Details Configurations','Upload Products Configurations']],['megaphone','Marketing',['Upload Banner','Notification']],['sliders','Configurations',['Reset Password','Partner Config','User List','Enable Retailer','OTP List','Settings']],['message','Feedback Hub',['Activity Logs','Feedbacks','Raised Issues']],['file','Reports'],['box','Master Orders'],['building','Organisation'],['tag','Party Codes'],['pin','Clusters',['Clusters','Localities','Unassigned Pincodes','Countries','States','Cities']],['trend','SFA']];
-const HREF={'Dashboard':'dashboard.html','Summary':'partners-summary.html','Add A New Partner':'add-partner.html','Partner Coverage':'partner-coverage.html','Partner Commissions':'partner-commissions.html'};
+const HREF={'Dashboard':'dashboard.html','Summary':'partners-summary.html','Add A New Partner':'add-partner.html','Partner Coverage':'partner-coverage.html','Partner Commissions':'partner-commissions.html','Credit Line':'credit-line.html','Higher Base Discount':'higher-base-discount.html','On Board Customers':'customers.html','Upload Customers':'customers.html?action=upload'};
 const ACTIVE=window.ACTIVE_PAGE||'Dashboard';
 nav.forEach(([i,t,kids],k)=>{
   const a=document.createElement('a');a.href=HREF[t]||'#';a.dataset.tip=t;a.setAttribute('aria-label',t);a.className='nav-item'+(!kids&&t===ACTIVE?' active':'');
@@ -707,7 +738,9 @@ const navTip=document.createElement('div');navTip.id='navTip';navTip.setAttribut
 function showTip(a){if(!document.body.classList.contains('collapsed')||!desk())return;const r=a.getBoundingClientRect();
   navTip.textContent=a.dataset.tip;navTip.style.top=(r.top+r.height/2)+'px';navTip.style.left=(r.right+14)+'px';navTip.classList.add('show')}
 function hideTip(){navTip.classList.remove('show')}
-document.querySelectorAll('.nav-item').forEach(a=>{a.addEventListener('mouseenter',()=>showTip(a));a.addEventListener('focus',()=>showTip(a));a.addEventListener('mouseleave',hideTip);a.addEventListener('blur',hideTip)});
+/* the app-store icons get the same tooltip as the menu items (instead of the browser's plain title bubble) */
+document.querySelectorAll('.store-badge').forEach(b=>{b.dataset.tip=b.getAttribute('aria-label')||b.title;b.removeAttribute('title')});
+document.querySelectorAll('.nav-item,.store-badge').forEach(a=>{a.addEventListener('mouseenter',()=>showTip(a));a.addEventListener('focus',()=>showTip(a));a.addEventListener('mouseleave',hideTip);a.addEventListener('blur',hideTip)});
 $('#navList').addEventListener('scroll',hideTip);
 addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();$('#globalSearch').focus()}});
 
