@@ -306,6 +306,7 @@ tailwind.config={theme:{extend:{colors:{navy:'#0f1535',navy2:'#2D3691',teal:'#17
   .nav-group.open>.sub{grid-template-rows:1fr}
   .sub-in{overflow:hidden;min-height:0}
   .sub ul{list-style:none;margin:.2rem 0 .45rem 1.5rem;padding:.25rem 0 .25rem .95rem;border-left:1px solid rgba(255,255,255,.18)}
+  .sub li+li{margin-top:.3rem}
   .sub-item{position:relative;display:block;padding:.45rem .75rem;border-radius:.65rem;font-size:.83rem;font-weight:500;color:#b4bdea;white-space:normal;line-height:1.3;overflow-wrap:anywhere;transition:background .2s,color .2s,transform .2s}
   .sub-item::before{content:"";position:absolute;left:-.95rem;top:50%;width:.55rem;height:1px;background:rgba(255,255,255,.18)}
   .sub-item:hover{color:#fff;background:rgba(255,255,255,.08);transform:translateX(2px)}
@@ -539,7 +540,7 @@ tailwind.config={theme:{extend:{colors:{navy:'#0f1535',navy2:'#2D3691',teal:'#17
     <button id="themeBtn" type="button" class="w-11 h-11 shrink-0 rounded-full bg-white shadow flex items-center justify-center" aria-label="Switch to dark mode" title="Toggle light / dark">
       <span class="t-moon"><i data-ic="moon"></i></span><span class="t-sun"><i data-ic="sun"></i></span>
     </button>
-    <button class="relative w-11 h-11 shrink-0 rounded-full bg-white shadow flex items-center justify-center" aria-label="Notifications"><i data-ic="bell"></i><span class="absolute -top-1 -right-1 bg-rose-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold">3</span></button>
+    <a href="notifications.html" class="relative w-11 h-11 shrink-0 rounded-full bg-white shadow flex items-center justify-center hover:scale-105 transition" aria-label="Notifications"><i data-ic="bell"></i><span id="bellBadge" class="absolute -top-1 -right-1 bg-rose-500 text-white text-[10px] min-w-5 h-5 px-1 rounded-full flex items-center justify-center font-bold">3</span></a>
     <div class="flex items-center gap-3 bg-white/90 rounded-full pl-1.5 pr-1.5 sm:pr-4 py-1.5 shadow cursor-pointer shrink-0">
       <div class="relative"><div class="w-9 h-9 rounded-full bg-gradient-to-br from-teal to-navy2 text-white flex items-center justify-center font-bold">A</div><span class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-400 border-2 border-white rounded-full"></span></div>
       <div class="hidden sm:block leading-tight"><div class="text-sm font-semibold">Hi Azad</div><div class="text-xs text-slate-500">Admin</div></div><span class="hidden sm:block text-xs">⌄</span>
@@ -623,11 +624,13 @@ tailwind.config={theme:{extend:{colors:{navy:'#0f1535',navy2:'#2D3691',teal:'#17
   <div class="modal" id="upModal" role="dialog" aria-modal="true" aria-labelledby="upT">
     <div class="card w-full max-w-lg p-6 sm:p-7">
       <div class="flex items-start justify-between gap-4">
-        <div><h2 id="upT" class="text-lg font-extrabold">Upload Customers</h2><p class="mt-1 text-sm text-slate-500">Upload a CSV in the download format. New customers are added, and ones with the same phone number are updated.</p></div>
+        <div><h2 id="upT" class="text-lg font-extrabold">Upload Customers</h2><p class="mt-1 text-sm text-slate-500">Choose the partner, then upload a CSV in the download format. New customers are added to that partner, and ones with the same phone number are updated.</p></div>
         <button id="upClose" type="button" class="ic-btn !w-8 !h-8" aria-label="Close"><i data-ic="x" data-s="16"></i></button>
       </div>
-      <label class="drop" id="drop"><input type="file" id="upFile" accept=".csv,text/csv"><span class="di"><i data-ic="upload" data-s="22"></i></span><span><b class="text-navy">Choose a CSV file</b> or drop it here</span><small>Start from “Download Format” · max 2 MB</small></label>
+      <div class="fld mt-5" id="upPF"><label class="lb" for="upPartner">Partner<span class="req" aria-hidden="true">*</span></label><select id="upPartner" class="ctl"><option value="">Select a partner</option></select><div class="err" role="alert">Select a partner for these customers</div></div>
+      <label class="drop" id="drop"><input type="file" id="upFile" accept=".csv,text/csv"><span class="di"><i data-ic="upload" data-s="22"></i></span><span><b class="text-navy">Choose a CSV file</b> or drop it here</span><small>Columns: Store Name, Phone No., MedleyId (optional) · max 2 MB</small></label>
       <div id="upRes" class="mt-4 grid gap-2" hidden></div>
+      <p id="upHint" class="mt-3 text-xs text-slate-500" hidden></p>
       <div class="mt-6 flex flex-col-reverse gap-2.5 sm:flex-row sm:justify-end"><button id="upCancel" type="button" class="btn-secondary">Cancel</button><button id="upApply" type="button" class="btn-primary" disabled><i data-ic="check" data-s="16"></i><span>Apply</span></button></div>
     </div>
   </div>
@@ -635,7 +638,7 @@ tailwind.config={theme:{extend:{colors:{navy:'#0f1535',navy2:'#2D3691',teal:'#17
 
 </div>
 
-<script>window.ACTIVE_PAGE=(new URLSearchParams(location.search).get('action')==='upload'?'Upload Customers':'On Board Customers')</script>
+<script>window.ACTIVE_PAGE=(new URLSearchParams(location.search).get('action')==='upload'?'Upload Customers':'Upload Customers')</script>
 <script>
 /* ---------- Icon set (stroke icons, consistent across the UI) ---------- */
 const ICONS={
@@ -695,7 +698,8 @@ const $=s=>document.querySelector(s),inr=n=>n.toLocaleString('en-IN',{minimumFra
 
 /* ---------- Sidebar (drawer on mobile, collapse on desktop) ---------- */
 const nav=[['home','Dashboard'],['users','Partners',['Summary','Add A New Partner','Partner Coverage','Partner Commissions','Credit Line','Higher Base Discount','Upload Customers']],['userRound','Customers',['New Customers','On Board Customers','Delivery Partners']],['user','Users'],['grid','Category',['Products','Deals','Upload Bill Details Configurations','Upload Products Configurations']],['megaphone','Marketing',['Upload Banner','Notification']],['sliders','Configurations',['Reset Password','Partner Config','User List','Enable Retailer','OTP List','Settings']],['message','Feedback Hub',['Activity Logs','Feedbacks','Raised Issues']],['file','Reports'],['box','Master Orders'],['building','Organisation'],['tag','Party Codes'],['pin','Clusters',['Clusters','Localities','Unassigned Pincodes','Countries','States','Cities']],['trend','SFA']];
-const HREF={'Dashboard':'dashboard.html','Summary':'partners-summary.html','Add A New Partner':'add-partner.html','Partner Coverage':'partner-coverage.html','Partner Commissions':'partner-commissions.html','Credit Line':'credit-line.html','Higher Base Discount':'higher-base-discount.html','On Board Customers':'customers.html','Upload Customers':'customers.html?action=upload'};
+const HREF={'Dashboard':'dashboard.html','Summary':'partners-summary.html','Add A New Partner':'add-partner.html','Partner Coverage':'partner-coverage.html','Partner Commissions':'partner-commissions.html','Credit Line':'credit-line.html','Higher Base Discount':'higher-base-discount.html','New Customers':'new-customers.html','On Board Customers':'onboard-customers.html','Delivery Partners':'delivery-partners.html','Upload Customers':'customers.html?action=upload','Notification':'notifications.html'};
+(()=>{try{const n=localStorage.getItem('mm-notif-unread'),b=document.getElementById('bellBadge');if(b&&n!==null){b.textContent=n;b.style.display=n==='0'?'none':''}}catch(e){}})();   /* header bell shows the live unread count */
 const ACTIVE=window.ACTIVE_PAGE||'Dashboard';
 nav.forEach(([i,t,kids],k)=>{
   const a=document.createElement('a');a.href=HREF[t]||'#';a.dataset.tip=t;a.setAttribute('aria-label',t);a.className='nav-item'+(!kids&&t===ACTIVE?' active':'');
@@ -927,15 +931,24 @@ addForm.addEventListener('submit',e=>{
 });
 
 /* ---------- Download Format ---------- */
-const HEAD=['Store Name','Phone No.','Partner','MedleyId'];
+const HEAD=['Store Name','Phone No.','MedleyId'];
 const csvLine=l=>l.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',');
 function dl(text,name){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:'text/csv'}));a.download=name;a.click()}
-$('#dlFmt').onclick=()=>{const c=CU[0];dl([csvLine(HEAD),csvLine([c.store,c.phone,c.partner,c.mid||''])].join('\n'),'customers-format.csv');toast('Format downloaded — MedleyId is optional')};
+$('#dlFmt').onclick=()=>{const c=CU[0];dl([csvLine(HEAD),csvLine([c.store,c.phone,c.mid||''])].join('\n'),'customers-format.csv');toast('Format downloaded — MedleyId is optional')};
 
 /* ---------- Upload ---------- */
 const upModal=$('#upModal'),fileIn=$('#upFile'),res=$('#upRes'),apply=$('#upApply');
 let pending=null;
-const closeUp=()=>{shut(upModal);fileIn.value='';res.hidden=true;res.innerHTML='';apply.disabled=true;pending=null};
+PARTNER_LIST.forEach(p=>{const o=document.createElement('option');o.value=p;o.textContent=p;$('#upPartner').appendChild(o)});
+enhanceSelect($('#upPartner'),'light');
+const upHint=$('#upHint');
+function syncApply(){
+  const has=!!pending&&(pending.add.length+pending.upd.length)>0,p=$('#upPartner').value;
+  apply.disabled=!(has&&p);
+  upHint.hidden=!(has&&!p);upHint.textContent=has&&!p?'Choose a partner above to enable Apply.':'';
+}
+$('#upPartner').addEventListener('change',()=>{$('#upPF').classList.remove('bad');syncApply()});
+const closeUp=()=>{shut(upModal);fileIn.value='';res.hidden=true;res.innerHTML='';apply.disabled=true;pending=null;$('#upPartner').value='';$('#upPF').classList.remove('bad');upHint.hidden=true};
 $('#upBtn').onclick=()=>{open(upModal);$('#drop').focus()};$('#upClose').onclick=closeUp;$('#upCancel').onclick=closeUp;
 upModal.addEventListener('click',e=>{if(e.target===upModal)closeUp()});
 const norm=h=>String(h).toLowerCase().replace(/[^a-z0-9]/g,'');
@@ -953,22 +966,20 @@ function inspect(text){
   const rows=parseCSV(text.replace(/^\uFEFF/,''));
   if(rows.length<2)return {err:'The file has no data rows.'};
   const cols=rows[0].map(h=>KEYMAP[norm(h)]);
-  for(const need of ['store','phone','partner'])if(!cols.includes(need))return {err:'These columns are required: Store Name, Phone No., Partner — use the download format.'};
+  for(const need of ['store','phone'])if(!cols.includes(need))return {err:'These columns are required: Store Name, Phone No. — use the download format.'};
   const add=[],upd=[],bad=[],seen=new Set();
   rows.slice(1).forEach((r,n)=>{
     const rec={};cols.forEach((k,i)=>{if(k)rec[k]=(r[i]||'').trim()});
     const line=n+2,ph=digits(rec.phone);
     if(rec.store.length<2){bad.push(`Row ${line}: Store Name is missing`);return}
     if(!validPhone(ph)){bad.push(`Row ${line} (${rec.store}): Phone No. must be a 10-digit mobile number`);return}
-    const partner=PARTNER_LIST.find(p=>p.toLowerCase()===rec.partner.toLowerCase());
-    if(!partner){bad.push(`Row ${line} (${rec.store}): Partner “${rec.partner}” was not found`);return}
     const mid=(rec.mid||'').toUpperCase();
     if(mid&&!/^MED\d{4}$/.test(mid)){bad.push(`Row ${line} (${rec.store}): MedleyId must look like MED0125`);return}
     const full=ph.length===10?'91'+ph:ph,key=canon(full);
     if(seen.has(key)){bad.push(`Row ${line} (${rec.store}): repeats a phone number from an earlier row`);return}
     seen.add(key);
     const ex=CU.find(c=>canon(c.phone)===key);
-    if(ex)upd.push({ex,store:rec.store,partner,mid:mid||null});else add.push({store:rec.store,phone:full,partner,mid:mid||null});
+    if(ex)upd.push({ex,store:rec.store,mid:mid||null});else add.push({store:rec.store,phone:full,mid:mid||null});
   });
   return {add,upd,bad,total:rows.length-1};
 }
@@ -986,7 +997,7 @@ function take(f){
       <div class="up-row"><span>New customers</span><span class="up-ok">${o.add.length}</span></div>
       <div class="up-row"><span>Existing ones to update</span><span class="up-ok">${o.upd.length}</span></div>
       ${o.bad.length?`<div class="up-row"><span>Will be skipped</span><span class="up-bad">${o.bad.length}</span></div><ul class="text-xs text-slate-500 grid gap-1 pl-1">${o.bad.slice(0,4).map(b=>`<li>• ${esc(b)}</li>`).join('')}${o.bad.length>4?`<li>…and ${o.bad.length-4} more</li>`:''}</ul>`:''}`;
-    apply.disabled=!(o.add.length+o.upd.length);
+    syncApply();
   };
   r.readAsText(f);
 }
@@ -996,20 +1007,20 @@ const drop=$('#drop');
 ['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('drag')}));
 drop.addEventListener('drop',e=>{const f=e.dataTransfer&&e.dataTransfer.files[0];if(f)take(f)});
 apply.onclick=()=>{
-  /* TODO: send the validated rows to your API */
+  const P=$('#upPartner').value;
+  if(!P){$('#upPF').classList.add('bad');$('#upPartner').closest('.dd').querySelector('.dd-btn').focus();return}
+  /* TODO: send the validated rows and the partner to your API */
   flash=new Set();const now=Date.now();
-  pending.upd.forEach(({ex,store,partner,mid})=>{ex.store=store;ex.partner=partner;ex.mid=mid;flash.add(canon(ex.phone))});
-  pending.add.forEach(c=>{CU.push({...c,at:now});flash.add(canon(c.phone))});
+  pending.upd.forEach(({ex,store,mid})=>{ex.store=store;ex.partner=P;ex.mid=mid;flash.add(canon(ex.phone))});
+  pending.add.forEach(c=>{CU.push({...c,partner:P,at:now});flash.add(canon(c.phone))});
   const na=pending.add.length,nu=pending.upd.length;
   closeUp();sortK='at';sortD=-1;page=1;render();renderKpis();
-  toast(`${na} added · ${nu} updated`);setTimeout(()=>{flash=new Set()},2600);
+  toast(`${na} added · ${nu} updated for ${P}`);setTimeout(()=>{flash=new Set()},2600);
 };
 
 (function(){const u=new URLSearchParams(location.search);if(u.get('q')){q=u.get('q');$('#qSearch').value=q;$('#globalSearch').value=q}if(['With MedleyId','No MedleyId'].includes(u.get('status')))stF=u.get('status')})();
 renderKpis();
 render();
-/* arriving from the sidebar's “Upload Customers” link opens the upload dialog straight away */
-if(new URLSearchParams(location.search).get('action')==='upload'){open(upModal);setTimeout(()=>$('#drop').focus(),60)}
 
 </script>
 </body>
